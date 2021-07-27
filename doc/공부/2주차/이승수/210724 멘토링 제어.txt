@@ -1,0 +1,50 @@
+오버슈팅
+목표치를 초과하는 현상
+
+피드백
+<->피드포워드
+
+비례제어는 백분율
+0~100
+
+P제어 = P제어, proportional band
+gain을 바꾸면 출력이 바뀜
+
+목표치에 도달하지 않아도 안정화가 된다
+-> Offset이 발생
+-> P제어의 단점
+
+적분 - 쌓는다
+
+P+I+D
+100보다 커지면
+0보다 작아지면 ?
+LowLimit
+HighLimit
+
+더 작아지거나 더 커지면 출력은 무조건 LowLimit, HighLimit으로 나감
+
+P가 메인, I와 D는 정확하게 해주기 위한 보조 역할
+
+I는 OFFSET, D는 Overshooting 상쇄
+
+PID + PI
+Cascade
+
+I했을 때 offset이 발생
+-> 이중적분(적분 두 번)
+
+LowLimig, HighLimit 벗어나면 에러를 누적하지 않음
+-> 적분X
+-> 리셋
+
+X - I가 강할 때 Y - P가 강할 때
+2,2가 최적
+
+외란에 빠르게 대응하기 위한 것 - D
+
+다음주
+프로그램으로 오픈루프 튜닝 기법
+지글러-니콜스 튜닝기법
+Ziegler-Nichols
+PI계산
