@@ -5,7 +5,9 @@
  
  사용 언어 : Structured Text (ST)
  
- 사용 프로그램 : TwinCAT
+ 사용 소프트웨어 : TwinCAT3 (The Windows Control and Automation Technology)
+ 
+ 사용 IDE : Visual Studio
  
  사용 하드웨어 : Beckhoff PLC
  
