@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="FB_OP" Id="{3036a70c-39e1-457c-ad91-e1e655924339}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_OP
+VAR_INPUT
+	inValue01:REAL;
+	inValue02:REAL;
+	operandNum:INT;
+END_VAR
+VAR_OUTPUT
+	outSum:REAL;
+	outMsg:WSTRING;
+END_VAR
+VAR
+	Val01_Local:REAL;
+	Val02_Local:REAL;
+	Sum_Local:REAL;
+	Sum_Local_Old:	REAL;
+	
+	nCnt :			INT;
+	bError_Local:	BOOL;
+	bError_Str:WSTRING;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Val01_Local:=inValue01;
+Val02_Local:=inValue02;
+CASE operandNum OF
+	1:
+		Sum_Local:=Val01_Local+Val02_Local;
+	2:
+		Sum_Local:=Val01_Local-Val02_Local;
+	3:
+		Sum_Local:=Val01_Local*Val02_Local;
+	4:
+		IF Val02_Local=0 THEN
+			nCnt := nCnt + 1;
+			Sum_Local := Sum_Local_Old;
+			
+			IF nCnt > 10 THEN
+				nCnt := 0;
+				bError_Local := TRUE;
+				bError_Str:="DevideByZeroErr";
+				(* ALARM *)
+			END_IF
+		ELSE
+				Sum_Local:=Val01_Local/Val02_Local;
+				bError_Local := FALSE;
+		END_IF
+END_CASE
+
+outSum:=Sum_Local_Old:= Sum_Local;
+IF bError_Local=FALSE THEN
+	bError_Str:="FINE";
+END_IF
+outMsg:=bError_Str;]]></ST>
+    </Implementation>
+    <LineIds Name="FB_OP">
+      <LineId Id="22" Count="2" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="64" Count="2" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="67" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="41" Count="1" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="90" Count="0" />
+      <LineId Id="73" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

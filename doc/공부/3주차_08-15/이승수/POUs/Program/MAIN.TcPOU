@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="MAIN" Id="{7bece724-d58b-4983-95ef-5605faaf80ff}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	DUT_TEST01:DUT_TEST;
+	ENUM:DUT_ENUM;
+	
+	bTest01:BOOL;
+	nResult:UINT;
+	nValue01:UINT;
+	
+	i:UINT;
+	nValue02:UINT;
+	
+	nArray:ARRAY [1..10] OF UINT;
+	
+	STEP:WORD:=0;
+	num1:INT;
+	num2:INT;
+	resultNum:REAL;
+	Result:REAL;
+	Value01:REAL;
+	Value02:REAL;
+	
+	bStart:BOOL;
+	timer:TON;
+	timer2:TON;
+	bLamp:BOOL;
+	bLamp2:BOOL;
+	fb_Plus:FB_PLUS;
+	fb_Minus:FB_MINUS;
+	fb_Multiply:FB_MULTIPLY;
+	num:INT;
+	fb_Op:FB_OP;
+	msg:WSTRING;
+	
+	fb_Op1,
+	fb_Op2,
+	fb_Op3,
+	fb_Op4,
+	fb_Op5,
+	fb_Op6,
+	fb_Op7,
+	fb_Op8,
+	fb_Op9,
+	fb_Op10:FB_OP;
+	
+	fbArray:ARRAY[1..10] OF FB_OP;
+	
+	arr:ARRAY[1..10,1..10] OF UINT;
+	
+	j:UINT;
+	cnt:UINT:=1;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*fb_Plus(inValue01:=Value01, inValue02:=Value02, outSum=>Result);
+fb_Minus(inValue01:=Value01, inValue02:=Value02, outSum=>Result);*)
+
+(*fb_Op(inValue01		:=	Value01,
+	  inValue02		:=	Value02,
+	  operandNum	:=	num,
+	  outSum		=>	Result,
+	  outMsg		=> 	msg
+	  );
+	  *)
+
+(*FOR i:=1 TO 10 BY 1 DO
+	  fbArray[i](inValue01		:=	Value01,
+	  			 inValue02		:=	Value02,
+				 operandNum	:=	num,
+		   	     outSum		=>	Result,
+	  			 outMsg		=> 	msg
+	  );
+	
+END_FOR*)
+cnt:=0;
+IF cnt <= 100 THEN
+	FOR i:=1 TO 10 BY 1 DO
+		FOR j:=1 TO 10 BY 1 DO
+			arr[i,j]:=cnt:=cnt+1;
+			//cnt:=cnt+1;
+		END_FOR
+	END_FOR
+END_IF
+]]></ST>
+    </Implementation>
+    <Action Name="PLUS" Id="{7e88a12e-b07b-486e-a531-040eabcbce97}">
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Action>
+    <LineIds Name="MAIN">
+      <LineId Id="123" Count="0" />
+      <LineId Id="228" Count="0" />
+      <LineId Id="234" Count="0" />
+      <LineId Id="231" Count="0" />
+      <LineId Id="239" Count="2" />
+      <LineId Id="247" Count="0" />
+      <LineId Id="242" Count="0" />
+      <LineId Id="278" Count="0" />
+      <LineId Id="270" Count="0" />
+      <LineId Id="273" Count="0" />
+      <LineId Id="279" Count="0" />
+      <LineId Id="274" Count="3" />
+      <LineId Id="269" Count="0" />
+      <LineId Id="271" Count="1" />
+      <LineId Id="297" Count="0" />
+      <LineId Id="283" Count="0" />
+      <LineId Id="300" Count="0" />
+      <LineId Id="302" Count="3" />
+      <LineId Id="298" Count="1" />
+      <LineId Id="285" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.PLUS">
+      <LineId Id="1" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

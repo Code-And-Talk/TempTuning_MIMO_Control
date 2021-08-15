@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="POU_MULTPLY" Id="{7e870540-0b56-4953-b691-6ecc0b2c616f}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM POU_MULTPLY
+VAR
+	Result:REAL;
+	Value01:REAL;
+	Value02:REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Result:=MAIN.Value01*MAIN.Value02;]]></ST>
+    </Implementation>
+    <LineIds Name="POU_MULTPLY">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

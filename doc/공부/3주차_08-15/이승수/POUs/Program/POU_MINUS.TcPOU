@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="POU_MINUS" Id="{c9ff0511-ce0d-4cd8-aec9-8b7f3711ba7e}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM POU_MINUS
+VAR
+	Result:REAL;
+	Value01:REAL;
+	Value02:REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Result:=MAIN.Value01-MAIN.Value02;]]></ST>
+    </Implementation>
+    <LineIds Name="POU_MINUS">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

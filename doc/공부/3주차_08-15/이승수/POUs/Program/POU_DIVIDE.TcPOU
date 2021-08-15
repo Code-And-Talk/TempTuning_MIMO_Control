@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="POU_DIVIDE" Id="{fb69de74-b83b-4c3c-98d4-e8185c7723da}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM POU_DIVIDE
+VAR
+	Result:REAL;
+	Value01:REAL;
+	Value02:REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF MAIN.Value02=0 THEN
+	;
+	ELSE
+		Result:=MAIN.Value01/MAIN.Value02;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="POU_DIVIDE">
+      <LineId Id="9" Count="0" />
+      <LineId Id="12" Count="2" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
