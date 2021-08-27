@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<TcLicenseInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2011/11/TcLicenseInfo">
+	<LicenseInfo>
+		<SystemId>{5AA543D8-35C3-D96C-9A6F-2A731E8AAC8B}</SystemId>
+		<IssueTime>2021-08-19T14:34:00</IssueTime>
+		<ExpireTime>2021-08-27T00:00:00</ExpireTime>
+		<LicenseKey>5e5044b16a5964c77b3a186287a9a9f69a4d8ef403ab08d8bc309878c11dbb404a15d21beb2c4ac0667d81a15ced89e0638bf7b0943c92ae1a5f3eeca05077400f954f89dd7d49237e381f779170eee6c249f5a6189afdc6ee8d6cfaa5e26083a62f77e5d4ee02eaa9bb9fb2aa35341c014fb4c99461be02583193dfba49a6cbfc69532b6c1774f6e96454d04b0d4c0e62288483563968341da2e55c1ef6d71720a3928cccdbbaef3ce732305a00ac3964cd5cfa7707dde0c2ca3b484a8e0b6fe461e8cbaabdbe65a35fb6749fbaa959d9c6c4cde58d0a8de3b4ba6972877432a280d965042831706ebe07cb640f829b7b0e97f473411299415dbb8d095da15b</LicenseKey>
+		<License>
+			<LicenseId>{777F1598-583B-4503-99BB-7C02E0ABD97E}</LicenseId>
+			<Name>TC3 Controller Toolbox</Name>
+			<OrderNo>TF4100</OrderNo>
+		</License>
+		<License>
+			<LicenseId>{1EEBBAAA-51E1-4750-9D6A-7B04116EA32B}</LicenseId>
+			<Name>TC3 Temperature-Controller</Name>
+			<OrderNo>TF4110</OrderNo>
+		</License>
+		<License>
+			<LicenseId>{4C256767-E6E6-4AF5-BD68-9F7ABAD0C200}</LicenseId>
+			<Name>TC3 ADS</Name>
+			<OrderNo>TC1000</OrderNo>
+		</License>
+		<License>
+			<LicenseId>{66689887-CCBD-452C-AC9A-039D997C6E66}</LicenseId>
+			<Name>TC3 PLC</Name>
+			<OrderNo>TC1200</OrderNo>
+		</License>
+		<License>
+			<LicenseId>{3FF18E97-7754-401B-93FB-70544DE28A13}</LicenseId>
+			<Name>TC3 IO</Name>
+			<OrderNo>TC1100</OrderNo>
+		</License>
+	</LicenseInfo>
+</TcLicenseInfo>

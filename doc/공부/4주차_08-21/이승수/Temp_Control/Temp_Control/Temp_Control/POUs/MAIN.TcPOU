@@ -1,0 +1,448 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="MAIN" Id="{e591b92d-02fc-493d-897c-d8225ccc0ad6}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	fMV_Out						:			LREAL;
+	fPV_Value					:			LREAL;
+	
+	tTime						:			TIME;
+	tTaskCycleTime				:			TIME := T#1MS;
+	tCtrlCycleTime				:			TIME := T#200MS;
+	
+	fbCTRL_PT2					: 			FB_CTRL_PT2;
+	stPTParams					: 			ST_CTRL_PT2_PARAMS;
+	
+	stCTRL_ParaController_Ex	:			ST_CTRL_ParaController;
+	stCTRL_ParaController_In	:			ST_CTRL_ParaController;
+	stCTRL_TempCtrlParameter	:			ST_CTRL_TempCtrlParameter;
+	
+	fbCTRL_TempController		:			FB_CTRL_TempController;
+		
+	eCTRL_STATE					:			E_CTRL_STATE;
+	
+	e_Heat_Mode					:			E_CTRL_ControlMode 			:= eCTRL_ControlMode_HEATING;
+	e_Fail_Action				:			E_CTRL_ReactionOnFailure 	:= eCTRL_ReactionOnFailure_NoFailure;
+	
+	bError						:			BOOL;
+	nErrorID					:			INT;
+	fMaxOvershoot				:			LREAL;
+	
+	bFirst						:			BOOL := TRUE;
+	
+	(* Ramp Parameter Set *)
+	bRampingUse					:			BOOL;	
+	fRampingRate				:			LREAL						:= 10.0;
+	
+	
+	(* =============== Setting Item 입력 =============== *)
+	
+	(* PID Set Parameter *)
+	(*	
+	P_Value						:			LREAL						:= 3;
+	I_Value						:			TIME						:= T#300S;
+	D_Value						:			TIME						:= T#50S;
+	*)
+	P_Value_ :LREAL;
+	I_Value_ :TIME;
+	D_Value_ :TIME;
+	
+	(* Power Limit Set *)
+	(*fPowerLimit					:			LREAL;*)
+	fPowerLimit_					:			LREAL;
+	
+	(* Manual Control 시 Power 출력값 *)
+	(*	
+	fSetManual					:			LREAL;
+	*)
+	fSetManual_					:			LREAL;
+	
+	(*	Heater Mode	*)
+	(* eCTRL_MODE					:			E_CTRL_MODE; *)		(* Auto Mode 동작은 2 : eCTRL_MODE_ACTIVE 설정 *)
+	eCTRL_MODE_					:			E_CTRL_MODE;
+	(*	온도 설정 입력	*)
+	(*
+	fSet_Value					:			LREAL;
+	*)
+	fSet_Value_					:			LREAL;
+	fLast_Set_Value             :           LREAL;
+	
+	(*bStart						:			BOOL;*)
+	bStart_						:			BOOL;
+	
+	(*	비상정지	*)
+	bEmergency_Stop				:			BOOL;
+	
+	(* =====================================Ramping ===============================*)
+	fbCTRL_RAMP_GENERATOR       :            FB_CTRL_RAMP_GENERATOR;
+	stCTRL_RAMP_GENERATOR_PARAMS :           ST_CTRL_RAMP_GENERATOR_PARAMS;
+	
+	fRampingOut : REAL;
+	
+END_VAR
+	
+(* ================ Simulation Constant Parameter =======================*)
+VAR CONSTANT
+	fKp							:			REAL := 16.5;
+	fInit_Temp					:			REAL := 23.5;
+	tTimeConstant				:			TIME := T#251.4S;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bFirst THEN
+	DEFAULT_PARA_SET();
+	bFirst		:= FALSE;
+END_IF
+
+SIMULATION();
+
+IF bEmergency_Stop THEN
+	eCTRL_MODE_ := eCTRL_MODE_IDLE;
+	bStart_ := TRUE;
+END_IF
+
+bStart_		:=	gbl.bStart;
+IF bStart_ THEN
+	fSet_Value_	:= gbl.fSet_Value;
+	fLast_Set_Value := fSet_Value_;
+	eCTRL_MODE_	:= gbl.eCTRL_MODE;
+	
+	(* PID Parameter Set *)
+	P_Value_:= gbl.P_Value;
+	I_Value_ := gbl.I_Value;
+	D_Value_ := gbl.D_Value;
+	IF P_Value_ <= 0 THEN
+		P_Value_ := 0.1;
+	END_IF
+	stCTRL_ParaController_Ex.KpHeat := P_Value_;				(* P_Value 최소값으로 0 사용 불가 *)
+	stCTRL_ParaController_Ex.TnHeat	:= I_Value_;
+	stCTRL_ParaController_Ex.TvHeat := D_Value_;
+	stCTRL_ParaController_Ex.TdHeat	:= T#1S;
+(*
+	(* Temp Controller Parameter Set *)
+	stCTRL_TempCtrlParameter.bEnableRamping		:=	bRampingUse;
+	stCTRL_TempCtrlParameter.fWVeloPos			:=	fRampingRate / 60.0;
+	stCTRL_TempCtrlParameter.fWVeloNeg			:=	fRampingRate / 60.0;
+	*)
+	fPowerLimit_:=gbl.fPowerLimit;
+	IF fPowerLimit_ > 100 THEN
+		fPowerLimit_ := 100;
+	END_IF
+	stCTRL_TempCtrlParameter.fYMax				:=	fPowerLimit_;
+	
+	fSet_Value_ := gbl.fTargetTemp;
+	bRampingUse := gbl.bRampingEnable;
+	fRampingRate := gbl.fRampingValue;
+	
+	stCTRL_RAMP_GENERATOR_PARAMS.fVeloNeg := fRampingRate / 60.0;
+	stCTRL_RAMP_GENERATOR_PARAMS.fVeloPos := fRampingRate / 60.0;
+	
+	fSetManual_	:= gbl.fSetManual;
+	IF fSetManual_ > 100 THEN
+		fSetManual_ := 100;
+	END_IF
+	stCTRL_TempCtrlParameter.fYManual			:=	fSetManual_;			(* Manual 사용을 원할경우 변수 입력 후  eCTRL_MODE 값을 Manual 선택 *) 
+	stCTRL_TempCtrlParameter.fYOnFailure		:=	fSet_Value_;
+	
+	
+	fbCTRL_TempController(eCtrlMode					:= eCTRL_MODE_,		(* Control Mode 입력 0 : IDLE, 2 : Active, 3 : Manual, 4 := Reset *)
+						  bSelSetpoint				:= FALSE,
+						  fw1						:= fSet_Value_,
+						  fw2						:= ,				(* 사용안함 *)
+						  fX						:= fPV_Value,		(* Temp Reading Value Input *)
+						  fyManual					:= fSetManual_,
+						  sParaControllerExternal	:= stCTRL_ParaController_Ex,
+						  sControllerParameter		:= stCTRL_TempCtrlParameter
+					 	 );
+	
+	bStart_ := gbl.bStart	:= FALSE;
+END_IF
+
+RAMPING();
+
+fbCTRL_TempController(
+					  fw1						:= fRampingOut,
+					  fX						:= fPV_Value,		(* Temp Reading Value Input *)
+					  sParaControllerExternal	:= stCTRL_ParaController_Ex,
+					  sControllerParameter		:= stCTRL_TempCtrlParameter,
+					  fYAnalog					=> fMV_Out,
+					  bYPWMPos					=> ,
+					  bYPWMNeg					=> ,
+					  dwAlarm					=> ,
+					  fMaxOverShoot				=> fMaxOvershoot,
+					  tStartUpTime				=> ,
+					  eCtrlState				=> eCTRL_STATE,
+					  sParaControllerInternal	=> stCTRL_ParaController_In,
+					  bError					=> bError,
+					  eErrorId					=> nErrorID
+					 );
+
+	
+	(*
+	(* PID Parameter Set *)
+	stCTRL_ParaController_Ex.KpHeat := P_Value;
+	stCTRL_ParaController_Ex.TnHeat	:= I_Value;
+	stCTRL_ParaController_Ex.TvHeat := D_Value;
+	stCTRL_ParaController_Ex.TdHeat	:= T#1S;
+	stCTRL_ParaController_Ex.KpCool := P_Value;
+	stCTRL_ParaController_Ex.TnCool	:= I_Value;
+	stCTRL_ParaController_Ex.TvCool := D_Value;
+	stCTRL_ParaController_Ex.TdCool	:= T#1S;
+			
+	
+	(* Temp Controller Parameter Set *)
+	stCTRL_TempCtrlParameter.bEnableRamping		:=	bRampingUse;
+	stCTRL_TempCtrlParameter.fWVeloPos			:=	fRampingRate / 60.0;
+	stCTRL_TempCtrlParameter.fWVeloNeg			:=	fRampingRate / 60.0;
+	
+	
+	IF fPowerLimit > 100 THEN
+		fPowerLimit := 100;
+	END_IF
+	stCTRL_TempCtrlParameter.fYMax				:=	fPowerLimit;
+	
+	
+	IF fSetManual > 100 THEN
+		fSetManual := 100;
+	END_IF
+	stCTRL_TempCtrlParameter.fYManual			:=	fSetManual;
+	stCTRL_TempCtrlParameter.fYOnFailure		:=	fSet_Value;
+	
+	fbCTRL_TempController(eCtrlMode					:= eCTRL_MODE,		(* Control Mode 입력 0 : IDLE, 2 : Active, 3 : Manual, 4 := Reset *)
+						  bSelSetpoint				:= FALSE,
+						  fw1						:= fSet_Value,
+						  fw2						:= fSet_Value,				(* 사용안함 *)
+						  fX						:= fPV_Value,		(* Temp Reading Value Input *)
+						  fyManual					:= fSetManual,
+						  sParaControllerExternal	:= stCTRL_ParaController_Ex,
+						  sControllerParameter		:= stCTRL_TempCtrlParameter,
+						  fYAnalog					=> fMV_Out,
+					  	  bYPWMPos					=> ,
+					  	  bYPWMNeg					=> ,
+					  	  dwAlarm					=> ,
+					  	  fMaxOverShoot				=> fMaxOvershoot,
+					  	  tStartUpTime				=> ,
+					  	  eCtrlState				=> eCTRL_STATE,
+					  	  sParaControllerInternal	=> stCTRL_ParaController_In,
+					  	  bError					=> bError,
+					  	  eErrorId					=> nErrorID
+					 	 );
+		
+	//bStart := FALSE;	
+*)
+]]></ST>
+    </Implementation>
+    <Action Name="DEFAULT_PARA_SET" Id="{32742922-d914-4f69-897d-c3f500d727ac}">
+      <Implementation>
+        <ST><![CDATA[
+stCTRL_TempCtrlParameter.iMode				:=	e_Heat_Mode;
+stCTRL_TempCtrlParameter.iReactionOnFailure :=	e_Fail_Action;
+stCTRL_TempCtrlParameter.dwAlarmSupp		:=	16#FF_FF_FF_FF;		(* alarm suppression  Default 사용 *)
+stCTRL_TempCtrlParameter.fWMin				:=	0.0;
+stCTRL_TempCtrlParameter.fWMax				:=	500;
+stCTRL_TempCtrlParameter.bEnableSoftStart	:=	FALSE;
+stCTRL_TempCtrlParameter.fWStartUp			:=	30.0;
+stCTRL_TempCtrlParameter.tStartUp			:=	T#1S;
+stCTRL_TempCtrlParameter.bStartUpRamping	:=	FALSE;
+stCTRL_TempCtrlParameter.fWStartUpVeloPos	:=	0.1;
+stCTRL_TempCtrlParameter.fWStartUpVeloNeg	:=	0.1;
+stCTRL_TempCtrlParameter.bFilter			:=	FALSE;
+stCTRL_TempCtrlParameter.tFilter			:=	T#0S;
+stCTRL_TempCtrlParameter.bDeadband			:=	FALSE;
+stCTRL_TempCtrlParameter.fEDeadband			:=	0.0;
+stCTRL_TempCtrlParameter.tPWMCycleTime		:=	T#1S;
+stCTRL_TempCtrlParameter.tPWMMinOffTime		:=	T#0S;
+stCTRL_TempCtrlParameter.tPWMMinOnTime		:=	T#0S;
+stCTRL_TempCtrlParameter.tPWMWaitingTime	:=	T#0S;
+stCTRL_TempCtrlParameter.fYThresholdOff		:=	0.0;
+stCTRL_TempCtrlParameter.fYThresholdOn		:=	0.0;
+stCTRL_TempCtrlParameter.TempLow			:=	-10.0;
+stCTRL_TempCtrlParameter.TempLowLow			:=	-5.0;
+stCTRL_TempCtrlParameter.TempHigh			:=	5.0;
+stCTRL_TempCtrlParameter.TempHighHigh		:=	10.0;
+stCTRL_TempCtrlParameter.TempAbsoluteHigh	:=	300.0;
+stCTRL_TempCtrlParameter.TempAbsoluteLow	:=	0.0;
+stCTRL_TempCtrlParameter.tCtrlCycleTime		:= 	tCtrlCycleTime;
+stCTRL_TempCtrlParameter.tTaskCycleTime		:= 	tTaskCycleTime;
+stCTRL_TempCtrlParameter.fYMin				:=	0.0;
+stCTRL_TempCtrlParameter.iControllerType	:= eCTRL_ControllerType_PID;
+stCTRL_TempCtrlParameter.iFilterType		:= eCTRL_FilterType_FIRSTORDER;
+stCTRL_TempCtrlParameter.bEnablePreController 	:= FALSE;
+stCTRL_TempCtrlParameter.bEnableZones 		:= FALSE;
+stCTRL_TempCtrlParameter.bEnableCVFilter 		:= FALSE;
+
+stCTRL_TempCtrlParameter.bSelCtrlParameterSet := TRUE;
+
+stCTRL_RAMP_GENERATOR_PARAMS.tCtrlCycleTime := tCtrlCycleTime;
+stCTRL_RAMP_GENERATOR_PARAMS.tTaskCycleTime := tTaskCycleTime;]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="RAMPING" Id="{b8ebc340-93e2-4b03-adf1-f98136fe49a0}">
+      <Implementation>
+        <ST><![CDATA[;
+
+IF bRampingUse THEN
+	fbCTRL_RAMP_GENERATOR(bEnable := bRampingUse,
+		fStart := fLast_Set_Value,
+		fTarget := fSet_Value_,
+		stParams := stCTRL_RAMP_GENERATOR_PARAMS,
+		fOut=>fRampingOut,
+		fVeloOut=>,
+		bValueReached=>,
+		eErrorId=>,
+		bError=>
+		)
+		
+	;
+	ELSE
+		fRampingOut := fSet_Value_;
+	
+		;
+END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="SIMULATION" Id="{002ff4db-0c57-48f1-bd78-50bc62b7e087}">
+      <Implementation>
+        <ST><![CDATA[
+stPTParams.tTaskCycleTime	:= tTaskCycleTime;
+stPTParams.tCtrlCycleTime	:= tCtrlCycleTime;
+stPTParams.tT1				:= stPTParams.tT2 := tTimeConstant;
+stPTParams.fKp				:= fKp;
+
+fbCTRL_PT2(
+			fIn			:= fMV_Out ,
+			eMode		:= eCtrl_MODE_ACTIVE,
+			stParams	:= stPTParams,
+			fOut		=> fPV_Value
+			);
+]]></ST>
+      </Implementation>
+    </Action>
+    <LineIds Name="MAIN">
+      <LineId Id="482" Count="0" />
+      <LineId Id="548" Count="0" />
+      <LineId Id="491" Count="0" />
+      <LineId Id="490" Count="0" />
+      <LineId Id="493" Count="1" />
+      <LineId Id="237" Count="1" />
+      <LineId Id="241" Count="0" />
+      <LineId Id="239" Count="1" />
+      <LineId Id="495" Count="1" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="744" Count="0" />
+      <LineId Id="711" Count="0" />
+      <LineId Id="832" Count="0" />
+      <LineId Id="637" Count="1" />
+      <LineId Id="742" Count="0" />
+      <LineId Id="745" Count="1" />
+      <LineId Id="633" Count="2" />
+      <LineId Id="502" Count="3" />
+      <LineId Id="510" Count="0" />
+      <LineId Id="512" Count="2" />
+      <LineId Id="500" Count="0" />
+      <LineId Id="515" Count="0" />
+      <LineId Id="743" Count="0" />
+      <LineId Id="517" Count="5" />
+      <LineId Id="708" Count="0" />
+      <LineId Id="712" Count="0" />
+      <LineId Id="714" Count="0" />
+      <LineId Id="713" Count="0" />
+      <LineId Id="715" Count="0" />
+      <LineId Id="709" Count="0" />
+      <LineId Id="707" Count="0" />
+      <LineId Id="523" Count="3" />
+      <LineId Id="516" Count="0" />
+      <LineId Id="527" Count="0" />
+      <LineId Id="529" Count="7" />
+      <LineId Id="547" Count="0" />
+      <LineId Id="528" Count="0" />
+      <LineId Id="497" Count="0" />
+      <LineId Id="499" Count="0" />
+      <LineId Id="498" Count="0" />
+      <LineId Id="720" Count="0" />
+      <LineId Id="719" Count="0" />
+      <LineId Id="550" Count="1" />
+      <LineId Id="553" Count="0" />
+      <LineId Id="555" Count="0" />
+      <LineId Id="557" Count="11" />
+      <LineId Id="549" Count="0" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="235" Count="0" />
+      <LineId Id="316" Count="0" />
+      <LineId Id="249" Count="0" />
+      <LineId Id="243" Count="0" />
+      <LineId Id="245" Count="0" />
+      <LineId Id="247" Count="0" />
+      <LineId Id="404" Count="0" />
+      <LineId Id="407" Count="2" />
+      <LineId Id="406" Count="0" />
+      <LineId Id="248" Count="0" />
+      <LineId Id="252" Count="1" />
+      <LineId Id="270" Count="0" />
+      <LineId Id="278" Count="1" />
+      <LineId Id="283" Count="0" />
+      <LineId Id="285" Count="0" />
+      <LineId Id="288" Count="4" />
+      <LineId Id="294" Count="0" />
+      <LineId Id="296" Count="1" />
+      <LineId Id="295" Count="0" />
+      <LineId Id="293" Count="0" />
+      <LineId Id="299" Count="1" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="211" Count="2" />
+      <LineId Id="257" Count="0" />
+      <LineId Id="214" Count="0" />
+      <LineId Id="220" Count="0" />
+      <LineId Id="410" Count="10" />
+      <LineId Id="221" Count="0" />
+      <LineId Id="208" Count="0" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="154" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.DEFAULT_PARA_SET">
+      <LineId Id="44" Count="0" />
+      <LineId Id="2" Count="1" />
+      <LineId Id="1" Count="0" />
+      <LineId Id="5" Count="1" />
+      <LineId Id="4" Count="0" />
+      <LineId Id="8" Count="3" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="17" Count="3" />
+      <LineId Id="22" Count="1" />
+      <LineId Id="25" Count="4" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="38" Count="2" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="48" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.RAMPING">
+      <LineId Id="1" Count="0" />
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="8" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="4" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.SIMULATION">
+      <LineId Id="2" Count="4" />
+      <LineId Id="8" Count="5" />
+      <LineId Id="1" Count="0" />
+      <LineId Id="18" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
