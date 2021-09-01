@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="slave_01" Id="{32cf564e-ebd5-448d-af55-d0148962f68b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION slave_01 : LREAL
+VAR_INPUT
+	s_fMV_Out	                         :		ARRAY[1..4] OF LREAL;
+	s_fRamp_Out                          :      ARRAY[1..4] OF LREAL;
+	s_fMaxOvershoot                      :		ARRAY[1..4] OF LREAL;
+	s_eCTRL_STATE                        : 		ARRAY[1..4] OF E_CTRL_STATE;
+	s_stCTRL_ParaController_In           : 		ARRAY[1..4] OF ST_CTRL_ParaController;
+	s_bError                             : 		ARRAY[1..4] OF BOOL;
+	s_nErrorID                           :		ARRAY[1..4] OF INT;
+END_VAR
+
+VAR
+	s_fPV_Value					:			ARRAY[1..4] OF LREAL;
+	fPV_Value_					:			ARRAY[1..4] OF LREAL;
+	
+	tTime						:			TIME;
+	tTaskCycleTime				:			TIME := T#1MS;
+	tCtrlCycleTime				:			TIME := T#200MS;
+	
+	fbCTRL_PT2				    : 			ARRAY[1..4] OF FB_CTRL_PT2;
+	stPTParams				    : 			ARRAY[1..4] OF ST_CTRL_PT2_PARAMS;
+	
+	stCTRL_ParaController_Ex	:			ARRAY[1..4] OF ST_CTRL_ParaController;
+	stCTRL_ParaController_In	:			ARRAY[1..4] OF ST_CTRL_ParaController;
+	stCTRL_TempCtrlParameter	:			ARRAY[1..4] OF ST_CTRL_TempCtrlParameter;
+	
+	fbCTRL_TempController		:			ARRAY[1..4] OF FB_CTRL_TempController;
+		
+	eCTRL_STATE					:			ARRAY[1..4] OF E_CTRL_STATE;
+	
+	e_Heat_Mode					:			E_CTRL_ControlMode 			:= eCTRL_ControlMode_HEATING;
+	e_Fail_Action				:			E_CTRL_ReactionOnFailure 	:= eCTRL_ReactionOnFailure_NoFailure;
+	
+	s_bFirst					:			BOOL := TRUE;
+	
+	(* Ramp Parameter Set *)
+	s_bRamp_Use				    :			BOOL;	
+	s_fRamp_Rate				:			ARRAY[1..4] OF LREAL := [10 , 10, 10 , 10 ];
+
+	
+	(* =============== Setting Item 입력 =============== *)
+	
+	(* PID Set Parameter *)
+	s_fP_Value						:			ARRAY[1..4] OF LREAL					;
+	s_tI_Value						:			ARRAY[1..4] OF TIME						;
+	s_tD_Value						:			ARRAY[1..4] OF TIME						;
+	
+	(* Power Limit Set *)
+	s_fPowLimit					:			ARRAY[1..4] OF LREAL;
+	
+	(* Manual Control 시 Power 출력값 *)
+	s_fSetManual					:			ARRAY[1..4] OF LREAL;
+	
+	(*	Heater Mode	*)
+	s_eCTRL_MODE					:			ARRAY[1..4] OF E_CTRL_MODE;			(* Auto Mode 동작은 2 : eCTRL_MODE_ACTIVE 설정 *)
+	
+	(*	온도 설정 입력	*)
+	s_fSet_Value					:			ARRAY[1..4] OF LREAL;
+	s_fLast_Set_Value            	:           ARRAY[1..4] OF LREAL;
+	s_bStart						:			BOOL;
+	
+	(*	비상정지	*)
+	bEmergency_Stop					:			BOOL;
+	
+	fbCTRL_RAMP_GENERATOR			 : ARRAY[1..4] OF FB_CTRL_RAMP_GENERATOR;
+	stCTRL_RAMP_GENERATOR_PARAMS     : ARRAY[1..4] OF ST_CTRL_RAMP_GENERATOR_PARAMS;
+	
+	System_step	: INT;
+	
+	i    :   INT ;
+END_VAR
+(* ================ Simulation Constant Parameter =======================*)
+VAR CONSTANT
+	fKp							:			ARRAY[1..4] OF REAL := [16.5, 17.5, 18.5, 19.5];
+	fInit_Temp					:			ARRAY[1..4] OF REAL := [23.5, 24.5, 23.9, 24.2];
+	tTimeConstant				:			ARRAY[1..4] OF TIME := [T#251.4S, T#301.4S, T#275.4S, T#292.4S];
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[slave.SIMULATION();
+
+IF bEmergency_Stop THEN
+	FOR i:=1 TO 4 BY 1 DO
+		s_fSet_Value[i] := 0;
+		s_fPowLimit[i] := 0;
+		s_eCTRL_MODE[i] := eCTRL_MODE_IDLE;
+	END_FOR
+
+		System_step :=0;
+END_IF
+
+IF s_bFirst THEN
+	slave.DEFAULT_PARA_SET();
+	s_bFirst := FALSE ;
+	System_step :=0;
+END_IF
+
+CASE System_step OF
+		
+	0:
+		IF sgbl.slave_bStart_ THEN
+			FOR i:=1 TO 4 BY 1 DO
+				s_fLast_Set_Value[i] := s_fSet_Value[i];
+				s_eCTRL_MODE[i] := sgbl.slave_eCTRL_MODE_[i];
+				System_step := 1;
+			END_FOR
+		ELSE
+			System_step := 10;
+		END_IF
+	
+	1:
+		FOR i:=1 TO 4 BY 1 DO
+			s_fP_Value[i] :=sgbl.slave_fP_Value_[i];
+			s_tI_Value[i] :=sgbl.slave_tI_Value_[i];
+			s_tD_Value[i] :=sgbl.slave_tD_Value_[i];
+			
+			IF s_fP_Value[i] <= 0 THEN
+				s_fP_Value[i] := 0.1;
+			ELSE
+				s_fP_Value[i] := s_fP_Value[i];
+			END_IF
+
+			stCTRL_ParaController_Ex[i].KpHeat := s_fP_Value[i];	
+			stCTRL_ParaController_Ex[i].TnHeat := s_tI_Value[i];
+			stCTRL_ParaController_Ex[i].TvHeat := s_tD_Value[i];
+			stCTRL_ParaController_Ex[i].TdHeat := T#1S;
+			
+			System_step := 2;
+			
+		END_FOR
+		
+		System_step := 2;
+
+	2:
+		s_fPowLimit:=sgbl.slave_fPowLimit_;
+		
+		FOR i:=1 TO 4 BY 1 DO
+			IF s_fPowLimit[i] > 100 THEN
+				s_fPowLimit[i] := 100;
+			ELSE 
+				s_fPowLimit[i] := s_fPowLimit[i];
+			END_IF
+		
+			stCTRL_TempCtrlParameter[i].fYMax :=   s_fPowLimit[i];
+		
+  
+			s_fSet_Value[i] := sgbl.slave_fTargetTemp[i];
+			s_bRamp_Use := sgbl.slave_bRamp_Enable;
+			s_fRamp_Rate := sgbl.slave_fRamp_Value;
+			
+			stCTRL_RAMP_GENERATOR_PARAMS[i].fVeloNeg := s_fRamp_Rate[i] / 60.0;
+			stCTRL_RAMP_GENERATOR_PARAMS[i].fVeloPos := s_fRamp_Rate[i] / 60.0;
+			
+			System_step := 3;
+		
+		END_FOR
+ 		
+		System_step := 3;
+	
+	3:
+		s_fSetManual   := sgbl.slave_fSetManual_;
+		
+		FOR i:=1 TO 4 BY 1 DO
+		
+			IF s_fSetManual[i] > 100 THEN
+				s_fSetManual[i] := 100;
+			ELSE
+				s_fSetManual := s_fSetManual;
+			END_IF
+
+			stCTRL_TempCtrlParameter[i].fYManual         :=   s_fSetManual[i];          
+			stCTRL_TempCtrlParameter[i].fYOnFailure      :=   s_fSet_Value[i];
+		END_FOR
+		
+		System_step := 4;
+  	
+	4:
+		FOR i:=1 TO 4 BY 1 DO
+			fbCTRL_TempController[i]( eCtrlMode               := sgbl.slave_eCTRL_MODE_[i],      
+									  bSelSetpoint            := FALSE,
+									  fw1                     := s_fSet_Value[i],
+									  fw2                     := ,            
+									  fX                      := s_fPV_Value[i],      
+									  fyManual                := s_fSetManual[i],
+									  sParaControllerExternal := stCTRL_ParaController_Ex[i],
+									  sControllerParameter    := stCTRL_TempCtrlParameter[i]
+									  );
+	  	END_FOR
+		
+		System_step := 10;
+	   
+		
+	10:					  
+		s_bStart := sgbl.slave_bStart_  := FALSE;
+		System_step := 0;
+		
+END_CASE
+
+slave.Ramping();
+
+FOR i:=1 TO 4 BY 1 DO 
+	fbCTRL_TempController[i](
+                 fw1                       := s_fRamp_Out[i],
+                 fX                        := s_fPV_Value[i],    
+                 sParaControllerExternal   := stCTRL_ParaController_Ex[i],
+                 sControllerParameter      := stCTRL_TempCtrlParameter[i],
+                 fYAnalog                   => s_fMV_Out[i],
+                 bYPWMPos                   => ,
+                 bYPWMNeg                   => ,
+                 dwAlarm                    => ,
+                 fMaxOverShoot              => s_fMaxOvershoot[i],
+                 tStartUpTime               => ,
+                 eCtrlState                 => eCTRL_STATE[i],
+                 sParaControllerInternal    => stCTRL_ParaController_In[i],
+                 bError                     => s_bError[i],
+                 eErrorId                   => s_nErrorID[i]
+                );
+END_FOR
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="slave_01">
+      <LineId Id="96" Count="139" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

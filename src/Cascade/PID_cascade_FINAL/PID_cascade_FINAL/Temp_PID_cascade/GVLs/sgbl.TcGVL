@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <GVL Name="sgbl" Id="{034fa2be-c15d-485f-be9e-a3b375f09899}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	
+	slave_bRamp_Enable         : BOOL;
+	
+	s_ramp_all : LREAL := 10;
+	s_targetTemp_all : LREAL := 30;
+	s_powLimit : LREAL := 90;
+	
+	
+	slave_fRamp_Value          : ARRAY[1..4] OF LREAL := [s_ramp_all, s_ramp_all, s_ramp_all, s_ramp_all] ;
+	slave_fTargetTemp          : ARRAY[1..4] OF LREAL  := [s_targetTemp_all, s_targetTemp_all, s_targetTemp_all, s_targetTemp_all ];
+	slave_fPowLimit_           : ARRAY[1..4] OF LREAL := [s_powLimit, s_powLimit, s_powLimit, s_powLimit];
+	slave_eCTRL_MODE_          : ARRAY[1..4] OF E_CTRL_MODE ;
+	slave_bStart_		       : BOOL;
+	slave_fP_Value_	           : ARRAY[1..4] OF LREAL := [3,3,3,3] ;
+	slave_tI_Value_		       : ARRAY[1..4] OF TIME  := [T#5S, T#5S, T#5S, T#5S] ;
+	slave_tD_Value_		       : ARRAY[1..4] OF TIME  := [T#50S, T#50S, T#50S, T#50S] ;
+	slave_fSetManual_		   : ARRAY[1..4] OF LREAL;
+	
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>
