@@ -3,7 +3,7 @@
   <POU Name="slave" Id="{9ab2669f-726a-4789-9ecc-1bd43afc795d}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM slave
 VAR
-	
+	s_bsimulation				:			BOOL;
 	s_fMV_Out					:			ARRAY[1..4] OF LREAL;
 	s_fPV_Value					:			ARRAY[1..4] OF LREAL;
 	fPV_Value_					:			ARRAY[1..4] OF LREAL;
@@ -62,12 +62,14 @@ VAR
 	(*	비상정지	*)
 	bEmergency_Stop					:			BOOL;
 	
-	fbCTRL_RAMP_GENERATOR			 : ARRAY[1..4] OF FB_CTRL_RAMP_GENERATOR;
-	stCTRL_RAMP_GENERATOR_PARAMS     : ARRAY[1..4] OF ST_CTRL_RAMP_GENERATOR_PARAMS;
+	fbCTRL_RAMP_GENERATOR			 :   ARRAY[1..4] OF FB_CTRL_RAMP_GENERATOR;
+	stCTRL_RAMP_GENERATOR_PARAMS     :   ARRAY[1..4] OF ST_CTRL_RAMP_GENERATOR_PARAMS;
 	
 	System_step	: INT;
 	
 	i    :   INT ;
+	
+	master_Zone_AVG	                 :   ARRAY[1..4] OF LREAL;
 	
 END_VAR
 
@@ -79,7 +81,9 @@ VAR CONSTANT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[SIMULATION();
+      <ST><![CDATA[IF s_bsimulation THEN
+	SIMULATION();
+END_IF
 
 IF bEmergency_Stop THEN
 	FOR i:=1 TO 4 BY 1 DO
@@ -87,7 +91,6 @@ IF bEmergency_Stop THEN
 		s_fPowLimit[i] := 0;
 		s_eCTRL_MODE[i] := eCTRL_MODE_IDLE;
 	END_FOR
-
 		System_step :=0;
 END_IF
 
@@ -296,7 +299,9 @@ END_IF]]></ST>
     </Action>
     <Action Name="SIMULATION" Id="{80689f6d-fc40-42f3-b7c8-65ca5280299d}">
       <Implementation>
-        <ST><![CDATA[FOR i:=1 TO 4 BY 1 DO
+        <ST><![CDATA[
+
+FOR i:=1 TO 4 BY 1 DO
 	stPTParams[i].tTaskCycleTime	:= tTaskCycleTime;
 	stPTParams[i].tCtrlCycleTime	:= tCtrlCycleTime;
 	stPTParams[i].tT1				:= stPTParams[i].tT2 := tTimeConstant[i];
@@ -308,25 +313,28 @@ END_IF]]></ST>
 					eMode		:= eCtrl_MODE_ACTIVE,
 					stParams	:= stPTParams[i],
 					fOut		=> fPV_Value_[i]
-					);		
-END_FOR
-
-FOR i := 1 TO 4 DO
+					);	
+					
 	IF fPV_Value_[i] <= fInit_Temp[i] THEN
 		s_fPV_Value[i] := fInit_Temp[i];
 	ELSE
 		s_fPV_Value[i] := fPV_Value_[i];
-	END_IF 
+	END_IF 	
+	
 END_FOR
+
 ]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="slave">
-      <LineId Id="89" Count="4" />
+      <LineId Id="318" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="321" Count="0" />
+      <LineId Id="90" Count="3" />
       <LineId Id="95" Count="0" />
       <LineId Id="239" Count="0" />
       <LineId Id="231" Count="0" />
-      <LineId Id="96" Count="47" />
+      <LineId Id="97" Count="46" />
       <LineId Id="230" Count="0" />
       <LineId Id="144" Count="6" />
       <LineId Id="152" Count="16" />
@@ -347,7 +355,16 @@ END_FOR
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="slave.SIMULATION">
-      <LineId Id="2" Count="21" />
+      <LineId Id="24" Count="1" />
+      <LineId Id="2" Count="1" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="5" Count="9" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="29" Count="3" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="23" Count="0" />
       <LineId Id="1" Count="0" />
     </LineIds>
   </POU>
