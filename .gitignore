@@ -1,0 +1,4 @@
+# TwinCAT 3 projects
+*.~u
+# User-specific files
+*.suo
