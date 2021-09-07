@@ -3,12 +3,17 @@
   <GVL Name="mgbl" Id="{76f52044-44fa-4847-aa89-50cabd58f1fc}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
+	master_bstart						 : BOOL;
 	master_Ramp_Enable                   : BOOL;
 	master_Ramp_Value                    : ARRAY[1..9] OF LREAL;
-	master_TargetTemp                    : ARRAY[1..9] OF LREAL;
-	master_PowLimit_                     : ARRAY[1..9] OF LREAL;
+	master_TargetTemp                    : LREAL;
+	master_PowLimit_                     : ARRAY[1..4] OF LREAL;
 	master_tuning_mode 	     			 : BOOL;
-	master_Zone_Temp_Range               : LREAL;    //zone 온도 최대 , 최소값의 범위 
+	master_integral_constant			 : ARRAY[1..4] OF LREAL;	//PI제어기 적분상수
+	master_pi_gain                       : ARRAY[1..4] OF LREAL;	//PI제어기 이득(gain)
+	master_Sampling_Time				 : LREAL;
+	master_Zone_Temp_Min_per             : LREAL;  //단위 : %
+	master_Zone_Temp_Max_per             : LREAL;  //단위 : %
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

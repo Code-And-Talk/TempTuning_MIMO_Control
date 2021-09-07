@@ -7,56 +7,68 @@ VAR
 	master_bstart					 : bool;
 	m_bRamp_Enable                   : BOOL;
 	m_fRamp_Value                    : ARRAY[1..9] OF LREAL;
-	m_fTargetTemp                    : ARRAY[1..4] OF LREAL;
-	m_fPowLimit_                     : ARRAY[1..9] OF LREAL;
-	m_btuning_mode 	     			 : BOOL;
-	m_Sapling_Time					 : LREAL;                    // Sampling time (적용시간 간격)
 	
-	// 글래스 온도 - 튜닝이 완료되었을 경우 글래스 온도는 s_set value와 같다고 가정
+	//slave가 완료되었을 경우 slave에서 받음
+    m_fTargetTemp                    : LREAL;
+	m_fPowLimit_                     : ARRAY[1..4] OF LREAL;
+	m_btuning_mode 	     			 : BOOL;
+	m_Sampling_Time					 : LREAL;                    // Sampling time (적용시간 간격)
+	m_integral_constant			 	 : ARRAY[1..4] OF LREAL;	//PI제어기 적분상수
+	m_pi_gain                        : ARRAY[1..4] OF LREAL;	//PI제어기 이득(gain)
+	
 	m_Set_Value						 : LREAL;
+	master_subTC_AVG                 : LREAL;                              		// 글래스 온도 평균(9개 평균 = g_bar)
 	
 (*-------------------------------------------- master 출력 변수 --------------------------------------------*)
 
-	master_Zone_AVG                :   ARRAY[1..4] OF LREAL;                	// 글래스 온도 평균(4개 더해서 4로 나눔)
-	master_subTC_AVG               :   LREAL;                              		// 글래스 온도 평균(9개 평균 = g_bar)
+	master_Zone_AVG                :   ARRAY[1..4] OF LREAL;                	// 글래스 온도 평균(4개 더해서 4로 나눔 )
+	
 	
 	mErr_Value                     :   ARRAY[1..4] OF LREAL;                    // 제어오차 (set_temp - msater_subTC_AVG);
 	mErr_integral_Val			   :   ARRAY[1..4] OF LREAL := [0 , 0, 0, 0 ];  // 오차의 적분(se , 초기값 = 0)
-	integral_constant			   :   ARRAY[1..4] OF LREAL;					//PI제어기 적분상수
-	pi_gain                        :   ARRAY[1..4] OF LREAL;					//PI제어기 이득(gain)
-	m_Zone_Temp_Range              :   LREAL;
-	m_Zone_Temp_Min                :   ARRAY[1..4] OF LREAL;
-	m_Zone_Temp_Max                :   ARRAY[1..4] OF LREAL;
+	
+	m_min_per					   :	LREAL;
+	m_max_per					   :	LREAL;
+	m_Zone_Temp_Min                :    LREAL;
+	m_Zone_Temp_Max                :    LREAL;
 	
 	i: INT;
 	
+	s_fSet_Value					:   ARRAY[1..4] OF LREAL;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF master_bstart THEN
-	// 글래스 온도가 다 다를 경우 평균 계산
-	master_subTC_AVG := m_Set_Value;
-	FOR i:=1 TO 4 BY 1 DO
-		m_fTargetTemp[i] := mgbl.master_TargetTemp[i];
-		m_fPowLimit_[i] := mgbl.master_PowLimit_[i];
-		m_Zone_Temp_Range := mgbl.master_Zone_Temp_Range;
-		
-		mErr_Value[i] := m_fTargetTemp[i] - master_subTC_AVG;
-		mErr_integral_Val[i] := mErr_integral_Val[i] + (mErr_Value[i] * m_Sapling_Time);
-		master_Zone_AVG[i] := (pi_gain[i] * mErr_Value[i] ) + ( pi_gain[i]/integral_constant[i] * mErr_integral_Val[i]) + m_fTargetTemp[i];
+      <ST><![CDATA[
+IF master_bstart THEN
 	
-		 m_Zone_Temp_Min[i] := master_Zone_AVG[i] - mgbl.master_Zone_Temp_Range;
-		 m_Zone_Temp_Max[i] := master_Zone_AVG[i] + mgbl.master_Zone_Temp_Range;
+	m_Sampling_Time 	 := mgbl.master_Sampling_Time;
+	m_integral_constant  := mgbl.master_integral_constant;
+	m_pi_gain    		 := mgbl.master_pi_gain;
+	m_fTargetTemp		 := mgbl.master_TargetTemp;
+	m_min_per		     := mgbl.master_Zone_Temp_Min_per;
+	m_max_per	         := mgbl.master_Zone_Temp_Max_per;
+	
+	FOR i:=1 TO 4 BY 1 DO
+		
+		m_fPowLimit_[i] := mgbl.master_PowLimit_[i];
+		
+		mErr_Value[i] := m_fTargetTemp - master_subTC_AVG;
+		mErr_integral_Val[i] := mErr_integral_Val[i] + (mErr_Value[i] * m_Sampling_Time);
+		master_Zone_AVG[i] := (m_pi_gain[i] * mErr_Value[i]) + (m_pi_gain[i]/m_integral_constant[i] * mErr_integral_Val[i]) + m_fTargetTemp;
 		 
-		IF master_Zone_AVG[i] < m_Zone_Temp_Min[i] THEN
-			master_Zone_AVG[i] := m_Zone_Temp_Min[i];
-			mErr_integral_Val[i] :=  mErr_integral_Val[i] - mErr_Value[i]* m_Sapling_Time;
-		ELSIF master_Zone_AVG[i] > m_Zone_Temp_Max[i] THEN
-			master_Zone_AVG[i] := m_Zone_Temp_Max[i]; 
-			mErr_integral_Val[i] :=  mErr_integral_Val[i] - mErr_Value[i]* m_Sapling_Time;
+		m_Zone_Temp_Min := master_Zone_AVG[i] - (master_Zone_AVG[i] * m_min_per / 100);
+		m_Zone_Temp_Max := master_Zone_AVG[i] + (master_Zone_AVG[i] * m_max_per / 100);
+		
+		IF master_Zone_AVG[i] < m_Zone_Temp_Min THEN
+			master_Zone_AVG[i] := m_Zone_Temp_Min;
+			mErr_integral_Val[i] :=  mErr_integral_Val[i] - mErr_Value[i]* m_Sampling_Time;
+		ELSIF master_Zone_AVG[i] > m_Zone_Temp_Max THEN
+			master_Zone_AVG[i] := m_Zone_Temp_Max; 
+			mErr_integral_Val[i] :=  mErr_integral_Val[i] - mErr_Value[i]* m_Sampling_Time;
 		END_IF
 		
 	END_FOR
+	 sgbl.slave_fTargetTemp := master_Zone_AVG;
 END_IF
 
 ]]></ST>
@@ -67,25 +79,27 @@ END_IF
       </Implementation>
     </Action>
     <LineIds Name="master">
+      <LineId Id="155" Count="0" />
       <LineId Id="28" Count="0" />
-      <LineId Id="27" Count="0" />
-      <LineId Id="5" Count="0" />
+      <LineId Id="156" Count="0" />
+      <LineId Id="142" Count="4" />
+      <LineId Id="153" Count="1" />
       <LineId Id="34" Count="0" />
-      <LineId Id="98" Count="3" />
+      <LineId Id="98" Count="1" />
+      <LineId Id="101" Count="0" />
       <LineId Id="35" Count="0" />
       <LineId Id="38" Count="0" />
       <LineId Id="44" Count="0" />
-      <LineId Id="56" Count="0" />
-      <LineId Id="47" Count="0" />
-      <LineId Id="57" Count="0" />
       <LineId Id="61" Count="0" />
+      <LineId Id="160" Count="2" />
       <LineId Id="49" Count="1" />
       <LineId Id="60" Count="0" />
       <LineId Id="58" Count="1" />
       <LineId Id="66" Count="0" />
       <LineId Id="51" Count="0" />
-      <LineId Id="48" Count="0" />
+      <LineId Id="157" Count="0" />
       <LineId Id="36" Count="0" />
+      <LineId Id="164" Count="0" />
       <LineId Id="67" Count="0" />
       <LineId Id="31" Count="0" />
       <LineId Id="33" Count="0" />
