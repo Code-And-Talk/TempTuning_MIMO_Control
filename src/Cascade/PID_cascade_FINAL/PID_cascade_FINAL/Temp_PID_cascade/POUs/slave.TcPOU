@@ -91,7 +91,7 @@ IF bEmergency_Stop THEN
 		s_fPowLimit[i] := 0;
 		s_eCTRL_MODE[i] := eCTRL_MODE_IDLE;
 	END_FOR
-		System_step :=0;
+	
 END_IF
 
 IF s_bFirst THEN
@@ -103,7 +103,9 @@ END_IF
 CASE System_step OF
 		
 	0:
-		IF sgbl.slave_bStart_ THEN
+		s_bStart := sgbl.slave_bStart_;
+		
+		IF s_bStart THEN
 			FOR i:=1 TO 4 BY 1 DO
 				s_fLast_Set_Value[i] := s_fSet_Value[i];
 				s_eCTRL_MODE[i] := sgbl.slave_eCTRL_MODE_[i];
@@ -146,12 +148,12 @@ CASE System_step OF
 				s_fPowLimit[i] := s_fPowLimit[i];
 			END_IF
 		
-			stCTRL_TempCtrlParameter[i].fYMax :=   s_fPowLimit[i];
+			stCTRL_TempCtrlParameter[i].fYMax := s_fPowLimit[i];
 		
   
-			s_fSet_Value[i] := sgbl.slave_fTargetTemp[i];
-			s_bRamp_Use := sgbl.slave_bRamp_Enable;
-			s_fRamp_Rate := sgbl.slave_fRamp_Value;
+			s_fSet_Value[i] :=  sgbl.slave_fTargetTemp[i];
+			s_bRamp_Use     :=  sgbl.slave_bRamp_Enable;
+			s_fRamp_Rate    :=  sgbl.slave_fRamp_Value;
 			
 			stCTRL_RAMP_GENERATOR_PARAMS[i].fVeloNeg := s_fRamp_Rate[i] / 60.0;
 			stCTRL_RAMP_GENERATOR_PARAMS[i].fVeloPos := s_fRamp_Rate[i] / 60.0;
@@ -194,7 +196,6 @@ CASE System_step OF
 		
 		System_step := 10;
 	   
-		
 	10:					  
 		s_bStart   := FALSE;
 		System_step := 0;
@@ -220,9 +221,7 @@ FOR i:=1 TO 4 BY 1 DO
                  bError                     => s_bError,
                  eErrorId                   => s_nErrorID
                 );
-END_FOR
-
-]]></ST>
+END_FOR]]></ST>
     </Implementation>
     <Action Name="DEFAULT_PARA_SET" Id="{d227d564-1dc7-4f9c-9a58-3b59ce4af21d}">
       <Implementation>
@@ -334,7 +333,9 @@ END_FOR
       <LineId Id="95" Count="0" />
       <LineId Id="239" Count="0" />
       <LineId Id="231" Count="0" />
-      <LineId Id="97" Count="46" />
+      <LineId Id="97" Count="11" />
+      <LineId Id="400" Count="1" />
+      <LineId Id="109" Count="34" />
       <LineId Id="230" Count="0" />
       <LineId Id="144" Count="6" />
       <LineId Id="152" Count="16" />
@@ -342,9 +343,8 @@ END_FOR
       <LineId Id="227" Count="0" />
       <LineId Id="169" Count="0" />
       <LineId Id="171" Count="5" />
-      <LineId Id="178" Count="47" />
-      <LineId Id="241" Count="0" />
-      <LineId Id="5" Count="0" />
+      <LineId Id="178" Count="20" />
+      <LineId Id="200" Count="25" />
     </LineIds>
     <LineIds Name="slave.DEFAULT_PARA_SET">
       <LineId Id="2" Count="40" />
