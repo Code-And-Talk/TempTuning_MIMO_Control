@@ -1,0 +1,13 @@
+C:\Users\Admin\source\repos\TwinCAT_ADS\bin\Debug\TwinCAT_ADS.exe.config
+C:\Users\Admin\source\repos\TwinCAT_ADS\bin\Debug\TwinCAT_ADS.exe
+C:\Users\Admin\source\repos\TwinCAT_ADS\bin\Debug\TwinCAT_ADS.pdb
+C:\Users\Admin\source\repos\TwinCAT_ADS\bin\Debug\TwinCAT.Ads.dll
+C:\Users\Admin\source\repos\TwinCAT_ADS\bin\Debug\TwinCAT.Ads.xml
+C:\Users\Admin\source\repos\TwinCAT_ADS\obj\Debug\TwinCAT_ADS.csproj.AssemblyReference.cache
+C:\Users\Admin\source\repos\TwinCAT_ADS\obj\Debug\TwinCAT_ADS.Form1.resources
+C:\Users\Admin\source\repos\TwinCAT_ADS\obj\Debug\TwinCAT_ADS.Properties.Resources.resources
+C:\Users\Admin\source\repos\TwinCAT_ADS\obj\Debug\TwinCAT_ADS.csproj.GenerateResource.cache
+C:\Users\Admin\source\repos\TwinCAT_ADS\obj\Debug\TwinCAT_ADS.csproj.CoreCompileInputs.cache
+C:\Users\Admin\source\repos\TwinCAT_ADS\obj\Debug\TwinCAT_ADS.csproj.CopyComplete
+C:\Users\Admin\source\repos\TwinCAT_ADS\obj\Debug\TwinCAT_ADS.exe
+C:\Users\Admin\source\repos\TwinCAT_ADS\obj\Debug\TwinCAT_ADS.pdb
