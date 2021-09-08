@@ -28,7 +28,7 @@ VAR
 	e_Fail_Action				:			E_CTRL_ReactionOnFailure 	:= eCTRL_ReactionOnFailure_NoFailure;
 		
 	s_bError					:			BOOL;
-	s_nErrorID					:			INT;
+	s_nErrorID					:			E_CTRL_ERRORCODES;
 	s_fMaxOvershoot				:			LREAL;
 	
 	s_bFirst					:			BOOL := TRUE;
@@ -60,7 +60,7 @@ VAR
 	s_bStart						:			BOOL;
 	
 	(*	비상정지	*)
-	bEmergency_Stop					:			BOOL;
+	bEmergency_Stop					:			ARRAY[1..4] OF BOOL ;
 	
 	fbCTRL_RAMP_GENERATOR			 :   ARRAY[1..4] OF FB_CTRL_RAMP_GENERATOR;
 	stCTRL_RAMP_GENERATOR_PARAMS     :   ARRAY[1..4] OF ST_CTRL_RAMP_GENERATOR_PARAMS;
@@ -85,14 +85,26 @@ END_VAR
 	SIMULATION();
 END_IF
 
-IF bEmergency_Stop THEN
-	FOR i:=1 TO 4 BY 1 DO
+FOR i:=1 TO 4 BY 1 DO
+	IF bEmergency_Stop[i] THEN
 		s_fSet_Value[i] := 0;
 		s_fPowLimit[i] := 0;
 		s_eCTRL_MODE[i] := eCTRL_MODE_IDLE;
-	END_FOR
-	
-END_IF
+		fbCTRL_TempController[i]( eCtrlMode               := s_eCTRL_MODE[i],      
+				  bSelSetpoint            := FALSE,
+				  fw1                     := s_fSet_Value[i],
+				  fw2                     := ,            
+				  fX                      := s_fPV_Value[i],      
+				  fyManual                := s_fSetManual[i],
+				  sParaControllerExternal := stCTRL_ParaController_Ex[i],
+				  sControllerParameter    := stCTRL_TempCtrlParameter[i]
+				  );
+	ELSE
+		s_fSet_Value[i] := sgbl.slave_fTargetTemp[i];
+		s_fPowLimit[i] := sgbl.slave_fPowLimit_[i];
+		s_eCTRL_MODE[i] := sgbl.slave_eCTRL_MODE_[i];
+	END_IF
+END_FOR
 
 IF s_bFirst THEN
 	DEFAULT_PARA_SET();
@@ -108,7 +120,7 @@ CASE System_step OF
 		IF s_bStart THEN
 			FOR i:=1 TO 4 BY 1 DO
 				s_fLast_Set_Value[i] := s_fSet_Value[i];
-				s_eCTRL_MODE[i] := sgbl.slave_eCTRL_MODE_[i];
+				//s_eCTRL_MODE[i] := sgbl.slave_eCTRL_MODE_[i];
 				System_step := 1;
 			END_FOR
 		ELSE
@@ -139,7 +151,7 @@ CASE System_step OF
 		System_step := 2;
 
 	2:
-		s_fPowLimit:=sgbl.slave_fPowLimit_;
+		//s_fPowLimit:=sgbl.slave_fPowLimit_;
 		
 		FOR i:=1 TO 4 BY 1 DO
 			IF s_fPowLimit[i] > 100 THEN
@@ -151,7 +163,7 @@ CASE System_step OF
 			stCTRL_TempCtrlParameter[i].fYMax := s_fPowLimit[i];
 		
   
-			s_fSet_Value[i] :=  sgbl.slave_fTargetTemp[i];
+			//s_fSet_Value[i] :=  sgbl.slave_fTargetTemp[i];
 			s_bRamp_Use     :=  sgbl.slave_bRamp_Enable;
 			s_fRamp_Rate    :=  sgbl.slave_fRamp_Value;
 			
@@ -221,7 +233,9 @@ FOR i:=1 TO 4 BY 1 DO
                  bError                     => s_bError,
                  eErrorId                   => s_nErrorID
                 );
-END_FOR]]></ST>
+END_FOR
+
+]]></ST>
     </Implementation>
     <Action Name="DEFAULT_PARA_SET" Id="{d227d564-1dc7-4f9c-9a58-3b59ce4af21d}">
       <Implementation>
@@ -329,11 +343,19 @@ END_FOR
       <LineId Id="318" Count="0" />
       <LineId Id="89" Count="0" />
       <LineId Id="321" Count="0" />
-      <LineId Id="90" Count="3" />
+      <LineId Id="492" Count="0" />
+      <LineId Id="90" Count="1" />
+      <LineId Id="93" Count="0" />
       <LineId Id="95" Count="0" />
       <LineId Id="239" Count="0" />
-      <LineId Id="231" Count="0" />
-      <LineId Id="97" Count="11" />
+      <LineId Id="513" Count="7" />
+      <LineId Id="512" Count="0" />
+      <LineId Id="494" Count="0" />
+      <LineId Id="500" Count="1" />
+      <LineId Id="498" Count="0" />
+      <LineId Id="98" Count="1" />
+      <LineId Id="493" Count="0" />
+      <LineId Id="100" Count="8" />
       <LineId Id="400" Count="1" />
       <LineId Id="109" Count="34" />
       <LineId Id="230" Count="0" />
@@ -345,6 +367,8 @@ END_FOR
       <LineId Id="171" Count="5" />
       <LineId Id="178" Count="20" />
       <LineId Id="200" Count="25" />
+      <LineId Id="481" Count="0" />
+      <LineId Id="480" Count="0" />
     </LineIds>
     <LineIds Name="slave.DEFAULT_PARA_SET">
       <LineId Id="2" Count="40" />

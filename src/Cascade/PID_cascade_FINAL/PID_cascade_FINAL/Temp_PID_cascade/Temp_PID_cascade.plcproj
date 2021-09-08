@@ -37,12 +37,6 @@
     <Compile Include="POUs\slave.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\slave_01.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\tuning.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />

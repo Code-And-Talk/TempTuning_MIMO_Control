@@ -5,7 +5,7 @@
 VAR_GLOBAL
 	master_bstart						 : BOOL;
 	master_Ramp_Enable                   : BOOL;
-	master_Ramp_Value                    : ARRAY[1..9] OF LREAL;
+	master_Ramp_Value                    : ARRAY[1..4] OF LREAL;
 	master_TargetTemp                    : LREAL;
 	master_PowLimit_                     : ARRAY[1..4] OF LREAL;
 	master_tuning_mode 	     			 : BOOL;

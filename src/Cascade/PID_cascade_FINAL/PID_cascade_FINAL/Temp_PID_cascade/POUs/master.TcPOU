@@ -4,11 +4,15 @@
     <Declaration><![CDATA[PROGRAM master
 VAR
 (*-------------------------------------------- master 입력 변수 --------------------------------------------*)	
+	m_bsimulation					 : BOOL;
 	master_bstart					 : bool;
 	m_bRamp_Enable                   : BOOL;
-	m_fRamp_Value                    : ARRAY[1..9] OF LREAL;
+	m_fRamp_Value                    : ARRAY[1..4] OF LREAL;
+	m_fMV_Out						 : ARRAY[1..4] OF LREAL;
+	m_fPV_Value						 : ARRAY[1..4] OF LREAL;
+	m_fPV_Value_					 : ARRAY[1..4] OF LREAL;
 	
-	//slave가 완료되었을 경우 slave에서 받음
+	
     m_fTargetTemp                    : LREAL;
 	m_fPowLimit_                     : ARRAY[1..4] OF LREAL;
 	m_btuning_mode 	     			 : BOOL;
@@ -17,6 +21,10 @@ VAR
 	m_pi_gain                        : ARRAY[1..4] OF LREAL;	//PI제어기 이득(gain)
 	
 	m_Set_Value						 : LREAL;
+	m_fLast_Set_Value            	 : ARRAY[1..4] OF LREAL;
+		
+	
+	(*slave가 완료되었을 경우 slave에서 받음*)
 	master_subTC_AVG                 : LREAL;                              		// 글래스 온도 평균(9개 평균 = g_bar)
 	
 (*-------------------------------------------- master 출력 변수 --------------------------------------------*)
@@ -34,8 +42,28 @@ VAR
 	
 	i: INT;
 	
-	s_fSet_Value					:   ARRAY[1..4] OF LREAL;
+	fbCTRL_RAMP_GENERATOR			 :   ARRAY[1..4] OF FB_CTRL_RAMP_GENERATOR;
+	stCTRL_RAMP_GENERATOR_PARAMS     :   ARRAY[1..4] OF ST_CTRL_RAMP_GENERATOR_PARAMS;
+	
+	tTime						:			TIME;
+	tTaskCycleTime				:			TIME := T#1MS;
+	tCtrlCycleTime				:			TIME := T#200MS;
+	
+	fbCTRL_PT2				    : 			ARRAY[1..4] OF FB_CTRL_PT2;
+	stPTParams				    : 			ARRAY[1..4] OF ST_CTRL_PT2_PARAMS;
+	
+		(* Ramp Parameter Set *)
+	m_bRamp_Use				    :			BOOL;	
+	m_fRamp_Rate				:			ARRAY[1..4] OF LREAL := [10 , 10, 10 , 10 ];
+	m_fRamp_Out 			    : 			ARRAY[1..4] OF LREAL;	
 END_VAR
+(* ================ Simulation Constant Parameter =======================*)
+VAR CONSTANT
+	m_fKp							:			ARRAY[1..4] OF REAL := [16.5, 17.5, 18.5, 19.5];
+	m_fInit_Temp					:			ARRAY[1..4] OF REAL := [23.5, 24.5, 23.9, 24.2];
+	m_tTimeConstant					:			ARRAY[1..4] OF TIME := [T#251.4S, T#301.4S, T#275.4S, T#292.4S];
+END_VAR
+
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
@@ -51,7 +79,6 @@ IF master_bstart THEN
 	FOR i:=1 TO 4 BY 1 DO
 		
 		m_fPowLimit_[i] := mgbl.master_PowLimit_[i];
-		
 		mErr_Value[i] := m_fTargetTemp - master_subTC_AVG;
 		mErr_integral_Val[i] := mErr_integral_Val[i] + (mErr_Value[i] * m_Sampling_Time);
 		master_Zone_AVG[i] := (m_pi_gain[i] * mErr_Value[i]) + (m_pi_gain[i]/m_integral_constant[i] * mErr_integral_Val[i]) + m_fTargetTemp;
@@ -75,7 +102,58 @@ END_IF
     </Implementation>
     <Action Name="RAMPING" Id="{61abb805-2c73-414c-961c-5d3ed33b63a1}">
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+;
+IF m_bRamp_Use THEN
+	FOR i:=1 TO 4 BY 1 DO
+		fbCTRL_RAMP_GENERATOR[i]( bEnable   := m_bRamp_Use,
+								fStart   := m_fLast_Set_Value[i],
+								fTarget  := m_Set_Value[i],
+								stParams := stCTRL_RAMP_GENERATOR_PARAMS[i],
+								fOut   => m_fRamp_Out[i],
+								fVeloOut  => ,
+								bValueReached => ,
+								eErrorId => ,
+								bError =>
+								)
+	;
+	END_FOR					
+
+ELSE
+	FOR i:=1 TO 4 BY 1 DO
+		m_fRamp_Out[i] := m_Set_Value[i];
+	;
+	END_FOR
+END_IF]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="SIMULATION" Id="{af2aa546-01ee-4557-85a2-6a7748b696ea}">
+      <Implementation>
+        <ST><![CDATA[
+
+FOR i:=1 TO 4 BY 1 DO
+	stPTParams[i].tTaskCycleTime	:= tTaskCycleTime;
+	stPTParams[i].tCtrlCycleTime	:= tCtrlCycleTime;
+	stPTParams[i].tT1				:= stPTParams[i].tT2 := m_tTimeConstant[i];
+	stPTParams[i].fKp				:= m_fKp[i];
+
+
+	fbCTRL_PT2[i](
+					fIn			:= m_fMV_Out[i] ,
+					eMode		:= eCtrl_MODE_ACTIVE,
+					stParams	:= stPTParams[i],
+					fOut		=> m_fPV_Value_[i]
+					);	
+					
+	IF m_fPV_Value_[i] <= m_fInit_Temp[i] THEN
+		m_fPV_Value[i] := m_fInit_Temp[i];
+	ELSE
+		m_fPV_Value[i] := m_fPV_Value_[i];
+	END_IF 	
+	
+END_FOR
+
+]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="master">
@@ -86,7 +164,6 @@ END_IF
       <LineId Id="153" Count="1" />
       <LineId Id="34" Count="0" />
       <LineId Id="98" Count="1" />
-      <LineId Id="101" Count="0" />
       <LineId Id="35" Count="0" />
       <LineId Id="38" Count="0" />
       <LineId Id="44" Count="0" />
@@ -105,6 +182,11 @@ END_IF
       <LineId Id="33" Count="0" />
     </LineIds>
     <LineIds Name="master.RAMPING">
+      <LineId Id="2" Count="21" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="master.SIMULATION">
+      <LineId Id="2" Count="23" />
       <LineId Id="1" Count="0" />
     </LineIds>
   </POU>

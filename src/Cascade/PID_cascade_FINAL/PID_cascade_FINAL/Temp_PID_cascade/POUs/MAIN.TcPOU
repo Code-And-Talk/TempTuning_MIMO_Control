@@ -4,14 +4,79 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 	
+	(*와치독 1*)
+	hr : HRESULT;
+	
+	
+	(*와치독 2*)
+	fbWatchdog     : FB_PcWatchdog_BAPI;
+    nWatchdogTimeS : UDINT := 10;  (* 10s *)
+	fbTimer        : TON := (IN := TRUE, PT := T#0S);
+	
+	tune_Set : BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[//slave();
-master();]]></ST>
+      <ST><![CDATA[(* 와치독 1 예. *)
+hr := F_VN_StartRelWatchdog(1000, hr); // 10ms
+
+(*와치독 2 예.*)
+fbTimer();
+
+IF fbTimer.Q THEN
+    fbWatchdog(
+        sNetID         := '', 
+        nWatchdogTimeS := nWatchdogTimeS, 
+        bExecute       := TRUE, 
+        tTimeout       := T#5S, 
+    );
+    
+    IF NOT fbWatchdog.bBusy THEN
+        
+        fbWatchdog(bExecute := FALSE);
+    
+        (* restart timer*)
+        fbTimer(IN := FALSE);
+        fbTimer(IN := TRUE, PT := T#1S); (* refresh watchdog every s *)
+    END_IF
+END_IF
+
+
+
+
+
+(* tune set :  true -> master, slave호출
+   tune set :  false -> slave만 호출
+IF tune_Set THEN
+	master();
+	slave();
+ELSE
+	slave();
+END_IF
+*)]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="11" Count="0" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="106" Count="1" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="67" Count="9" />
+      <LineId Id="80" Count="5" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="104" Count="0" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="101" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="29" Count="0" />
       <LineId Id="17" Count="0" />
     </LineIds>
   </POU>
