@@ -115,16 +115,15 @@ END_IF
 CASE System_step OF
 		
 	0:
-		s_bStart := sgbl.slave_bStart_;
 		
-		IF s_bStart THEN
+		IF sgbl.slave_bStart_ THEN
 			FOR i:=1 TO 4 BY 1 DO
 				s_fLast_Set_Value[i] := s_fSet_Value[i];
 				//s_eCTRL_MODE[i] := sgbl.slave_eCTRL_MODE_[i];
 				System_step := 1;
 			END_FOR
 		ELSE
-			System_step := 10;
+			System_step := 0;
 		END_IF
 	
 	1:
@@ -209,7 +208,7 @@ CASE System_step OF
 		System_step := 10;
 	   
 	10:					  
-		s_bStart   := FALSE;
+		sgbl.slave_bStart_ := FALSE;
 		System_step := 0;
 		
 END_CASE
@@ -356,7 +355,7 @@ END_FOR
       <LineId Id="98" Count="1" />
       <LineId Id="493" Count="0" />
       <LineId Id="100" Count="8" />
-      <LineId Id="400" Count="1" />
+      <LineId Id="401" Count="0" />
       <LineId Id="109" Count="34" />
       <LineId Id="230" Count="0" />
       <LineId Id="144" Count="6" />

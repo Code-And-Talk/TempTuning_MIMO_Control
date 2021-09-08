@@ -24,7 +24,7 @@ VAR
 	(*slave가 완료되었을 경우 slave에서 받음*)
 	master_subTC_AVG                 : LREAL;                              		// 글래스 온도 평균(9개 평균 = g_bar)
 	
-(*---------------------------------Substrate Simulation----------------------------------------------- *)
+(*----------------------------------------Substrate Simulation----------------------------------------------- *)
 	fMV_Out						     : ARRAY[1..4] OF LREAL;
 	fMV_Out_Sub					     : ARRAY[1..9] OF LREAL;
 	fPV_Value_Sub					 : ARRAY[1..9] OF LREAL;
