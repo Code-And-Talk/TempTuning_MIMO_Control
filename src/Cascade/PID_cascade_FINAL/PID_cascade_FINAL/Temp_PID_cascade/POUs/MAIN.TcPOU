@@ -2,81 +2,87 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
   <POU Name="MAIN" Id="{c7996b60-7a70-413b-abcb-6b6ff75a050d}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
-VAR
+VAR	
+	onTimer : TON;
+	OffTimer :TOF;
+	timerStart : BOOL;
+	reverseSignal : BOOL;
+	bWatch : BOOL;
 	
-	(*와치독 1*)
-	hr : HRESULT;
-	
-	
-	(*와치독 2*)
-	fbWatchdog     : FB_PcWatchdog_BAPI;
-    nWatchdogTimeS : UDINT := 10;  (* 10s *)
-	fbTimer        : TON := (IN := TRUE, PT := T#0S);
-	
-	tune_Set : BOOL;
+	onTimer_tune  : TON;
+	OffTimer_tune :TOF;
+	reverseSignal_tune : BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[(* 와치독 1 예. *)
-hr := F_VN_StartRelWatchdog(1000, hr); // 10ms
+      <ST><![CDATA[
+(* watch dogs : 10s 간격으로 on/ off *)
 
-(*와치독 2 예.*)
-fbTimer();
-
-IF fbTimer.Q THEN
-    fbWatchdog(
-        sNetID         := '', 
-        nWatchdogTimeS := nWatchdogTimeS, 
-        bExecute       := TRUE, 
-        tTimeout       := T#5S, 
-    );
-    
-    IF NOT fbWatchdog.bBusy THEN
-        
-        fbWatchdog(bExecute := FALSE);
-    
-        (* restart timer*)
-        fbTimer(IN := FALSE);
-        fbTimer(IN := TRUE, PT := T#1S); (* refresh watchdog every s *)
-    END_IF
+IF timerStart THEN
+   onTimer(IN := OffTimer.Q, PT := T#10S);
+   IF onTimer.Q THEN
+      reverseSignal := FALSE;
+      bWatch := FALSE;
+   ELSE
+      reverseSignal := TRUE;
+      bWatch := TRUE;
+   END_IF
+   OffTimer(IN := reverseSignal, PT := T#10S);
 END_IF
 
 
+(* 
+mgbl.master_tuning_mode = tune set
+tune set :  true -> master, slave호출
+tune set :  false -> slave만 호출
+*)
 
-
-
-(* tune set :  true -> master, slave호출
-   tune set :  false -> slave만 호출
-IF tune_Set THEN
+IF mgbl.master_tuning_mode THEN
 	master();
 	slave();
+	
+  (* 튜닝 시간 설정 = mgbl.master_tuning_time *)
+    onTimer_tune(IN := OffTimer_tune.Q, PT := mgbl.master_tuning_time*60000);
+    IF onTimer_tune.Q THEN
+	  mgbl.master_tuning_mode := FALSE;
+	  reverseSignal_tune := FALSE;
+	ELSE
+	  reverseSignal_tune := TRUE;
+    END_IF
+    OffTimer_tune(IN := reverseSignal_tune, PT := mgbl.master_tuning_time*60000);
 ELSE
 	slave();
 END_IF
-*)]]></ST>
+
+]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="108" Count="0" />
-      <LineId Id="106" Count="1" />
-      <LineId Id="62" Count="0" />
-      <LineId Id="65" Count="0" />
-      <LineId Id="67" Count="9" />
-      <LineId Id="80" Count="5" />
-      <LineId Id="87" Count="0" />
-      <LineId Id="63" Count="0" />
+      <LineId Id="167" Count="1" />
+      <LineId Id="126" Count="0" />
+      <LineId Id="144" Count="9" />
       <LineId Id="104" Count="0" />
-      <LineId Id="103" Count="0" />
-      <LineId Id="101" Count="0" />
       <LineId Id="64" Count="0" />
       <LineId Id="35" Count="0" />
       <LineId Id="27" Count="0" />
+      <LineId Id="166" Count="0" />
+      <LineId Id="165" Count="0" />
       <LineId Id="93" Count="0" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="131" Count="0" />
       <LineId Id="92" Count="0" />
       <LineId Id="32" Count="0" />
       <LineId Id="34" Count="0" />
+      <LineId Id="173" Count="0" />
+      <LineId Id="208" Count="0" />
+      <LineId Id="174" Count="1" />
+      <LineId Id="184" Count="0" />
+      <LineId Id="206" Count="1" />
+      <LineId Id="205" Count="0" />
+      <LineId Id="181" Count="1" />
       <LineId Id="28" Count="0" />
       <LineId Id="33" Count="0" />
       <LineId Id="29" Count="0" />
+      <LineId Id="132" Count="0" />
       <LineId Id="17" Count="0" />
     </LineIds>
   </POU>

@@ -3,7 +3,6 @@
   <POU Name="slave" Id="{9ab2669f-726a-4789-9ecc-1bd43afc795d}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM slave
 VAR
-	s_bsimulation				:			BOOL;
 	s_fMV_Out					:			ARRAY[1..4] OF LREAL;
 	s_fPV_Value					:			ARRAY[1..4] OF LREAL;
 	fPV_Value_					:			ARRAY[1..4] OF LREAL;
@@ -81,7 +80,8 @@ VAR CONSTANT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF s_bsimulation THEN
+      <ST><![CDATA[
+IF sgbl.slave_bsimulation THEN
 	SIMULATION();
 END_IF
 
@@ -234,8 +234,7 @@ FOR i:=1 TO 4 BY 1 DO
                  eErrorId                   => s_nErrorID
                 );
 END_FOR
-
-]]></ST>
+mgbl.master_fMV_Out:= s_fPV_Value;]]></ST>
     </Implementation>
     <Action Name="DEFAULT_PARA_SET" Id="{d227d564-1dc7-4f9c-9a58-3b59ce4af21d}">
       <Implementation>
@@ -340,6 +339,7 @@ END_FOR
       </Implementation>
     </Action>
     <LineIds Name="slave">
+      <LineId Id="600" Count="0" />
       <LineId Id="318" Count="0" />
       <LineId Id="89" Count="0" />
       <LineId Id="321" Count="0" />
@@ -367,7 +367,6 @@ END_FOR
       <LineId Id="171" Count="5" />
       <LineId Id="178" Count="20" />
       <LineId Id="200" Count="25" />
-      <LineId Id="481" Count="0" />
       <LineId Id="480" Count="0" />
     </LineIds>
     <LineIds Name="slave.DEFAULT_PARA_SET">
