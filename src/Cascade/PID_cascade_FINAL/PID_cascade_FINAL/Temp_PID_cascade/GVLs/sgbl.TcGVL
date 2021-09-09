@@ -3,7 +3,7 @@
   <GVL Name="sgbl" Id="{034fa2be-c15d-485f-be9e-a3b375f09899}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
-	
+	slave_bsimulation		   : BOOL;
 	slave_bRamp_Enable         : BOOL;
 	
 	s_ramp_all : LREAL := 10;
