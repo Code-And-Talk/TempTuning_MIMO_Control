@@ -57,25 +57,19 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Master.cs">
+    <Compile Include="PID.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Master.Designer.cs">
-      <DependentUpon>Master.cs</DependentUpon>
+    <Compile Include="PID.Designer.cs">
+      <DependentUpon>PID.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Slave.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Slave.Designer.cs">
-      <DependentUpon>Slave.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Master.resx">
-      <DependentUpon>Master.cs</DependentUpon>
+    <EmbeddedResource Include="PID.resx">
+      <DependentUpon>PID.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -86,9 +80,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Slave.resx">
-      <DependentUpon>Slave.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
