@@ -13,48 +13,63 @@ namespace Temp_UI_Example
 {
     public partial class Form1 : Form
     {
-        Master child1 = new Master();
-        Slave child2 = new Slave();
+        // 통신 객체 정의
+        private TcAdsClient ads = new TcAdsClient();
+
+        // ADS 정보를 읽기 위한 인터페이스 정의, 값을 읽어오기 위함
+        private ITcAdsSymbol pot = null;
         public Form1()
         {
+
             InitializeComponent();
+            Run();
+        }
+        private void Run()
+        {
+            // TwinCAT 연동
+            ads.Connect(851);
+
+            if (ads.IsConnected == true)
+            {
+                MessageBox.Show("연결 성공");
+            }
+            else
+            {
+                MessageBox.Show("연결 실패");
+            }
+        }
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            // PID 팝업 창 띄우기
+            PID pid = new PID();
+            pid.Show();
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(comboBox1.SelectedIndex > 0)
+            {
+                TempTunetbox1.Enabled = false;
+                TempTunetbox2.Enabled = false;
+                TempTunetbox3.Enabled = false;
+                TempTunetbox4.Enabled = false;
+                TempTunetbox5.Enabled = false;
+                TempTunetbox6.Enabled = false;
+            }
+            else
+            {
+                TempTunetbox1.Enabled = true;
+                TempTunetbox2.Enabled = true;
+                TempTunetbox3.Enabled = true;
+                TempTunetbox4.Enabled = true;
+                TempTunetbox5.Enabled = true;
+                TempTunetbox6.Enabled = true;
+            }
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
-            // FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            // 사용하면 작업표시줄도 안나옴
+            // 화면 크기 최대화
             WindowState = FormWindowState.Maximized;
-
-            child1.TopLevel = false;
-            child2.TopLevel = false;
-
-            this.Controls.Add(child1);
-            this.Controls.Add(child2);
-
-            child1.Parent = this.panel1;
-            child2.Parent = this.panel1;
-
-            child1.Text = child2.Text = "";
-            child1.ControlBox = child2.ControlBox = false;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            // [1번폼] 메뉴를 클릭했을 때
-
-            child2.Hide();
-
-            child1.Show();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            // [2번폼] 메뉴를 클릭했을 때
-
-            child1.Hide();
-
-            child2.Show();
         }
     }
 }
