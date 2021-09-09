@@ -14,7 +14,7 @@ VAR_GLOBAL
 	slave_fRamp_Value          : ARRAY[1..4] OF LREAL := [s_ramp_all, s_ramp_all, s_ramp_all, s_ramp_all] ;
 	slave_fTargetTemp          : ARRAY[1..4] OF LREAL  := [s_targetTemp_all, s_targetTemp_all, s_targetTemp_all, s_targetTemp_all ];
 	slave_fPowLimit_           : ARRAY[1..4] OF LREAL := [s_powLimit, s_powLimit, s_powLimit, s_powLimit];
-	slave_eCTRL_MODE_          : ARRAY[1..4] OF E_CTRL_MODE ;
+	slave_eCTRL_MODE_          : ARRAY[1..4] OF E_CTRL_MODE ; (*고정값 - UI에서 *)
 	slave_bStart_		       : BOOL;
 	slave_fP_Value_	           : ARRAY[1..4] OF LREAL := [3,3,3,3] ;
 	slave_tI_Value_		       : ARRAY[1..4] OF TIME  := [T#5S, T#5S, T#5S, T#5S] ;

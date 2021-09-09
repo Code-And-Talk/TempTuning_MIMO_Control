@@ -18,17 +18,16 @@ END_VAR
       <ST><![CDATA[
 (* watch dogs : 10s 간격으로 on/ off *)
 
-IF timerStart THEN
-   onTimer(IN := OffTimer.Q, PT := T#10S);
-   IF onTimer.Q THEN
-      reverseSignal := FALSE;
-      bWatch := FALSE;
-   ELSE
-      reverseSignal := TRUE;
-      bWatch := TRUE;
-   END_IF
-   OffTimer(IN := reverseSignal, PT := T#10S);
+onTimer(IN := OffTimer.Q, PT := T#10S);
+IF onTimer.Q THEN
+  reverseSignal := FALSE;
+  mgbl.master_bWatch := FALSE;
+ELSE
+  reverseSignal := TRUE;
+  mgbl.master_bWatch := TRUE;
 END_IF
+OffTimer(IN := reverseSignal, PT := T#10S);
+
 
 
 (* 
@@ -58,8 +57,8 @@ END_IF
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="167" Count="1" />
-      <LineId Id="126" Count="0" />
-      <LineId Id="144" Count="9" />
+      <LineId Id="221" Count="0" />
+      <LineId Id="145" Count="8" />
       <LineId Id="104" Count="0" />
       <LineId Id="64" Count="0" />
       <LineId Id="35" Count="0" />

@@ -60,10 +60,15 @@ VAR
 	fbCTRL_PT2				    : 			ARRAY[1..4] OF FB_CTRL_PT2;
 	stPTParams				    : 			ARRAY[1..4] OF ST_CTRL_PT2_PARAMS;
 	
+	glass_max 					:			LREAL ;
+	glass_min 					:			LREAL ;
+	
 (* ------------------------------------------Ramp Parameter Set-------------------------------------- *)
 	m_bRamp_Use				    :			BOOL;	
 	m_fRamp_Rate				:			ARRAY[1..4] OF LREAL := [10 , 10, 10 , 10 ];
 	m_fRamp_Out 			    : 			ARRAY[1..4] OF LREAL;	
+	
+	
 END_VAR
 (* ==================================== Simulation Constant Parameter ===================================*)
 VAR CONSTANT
@@ -84,8 +89,17 @@ m_min_per		     := mgbl.master_Zone_Temp_Min_per;
 m_max_per	         := mgbl.master_Zone_Temp_Max_per;
 fMV_Out				 := mgbl.master_fMV_Out;
 master_subTC 		 := 0 ;
+
+glass_max := fPV_Value_Sub[1];
+glass_min := fPV_Value_Sub[1];
 FOR i:=1 TO 9 BY 1 DO
-	master_subTC := master_subTC + fMV_Out_Sub[i];
+	master_subTC := master_subTC + fPV_Value_Sub[i];
+	
+	IF fPV_Value_Sub[i] > glass_max THEN
+		 glass_max := fPV_Value_Sub[i];
+	ELSIF fPV_Value_Sub[i] < glass_min THEN
+		glass_min := fPV_Value_Sub[i];
+	END_IF
 END_FOR
 
 master_subTC_AVG := master_subTC /9;
@@ -97,8 +111,8 @@ FOR i:=1 TO 4 BY 1 DO
 	mErr_integral_Val[i] := mErr_integral_Val[i] + (mErr_Value[i] * m_Sampling_Time);
 	master_Zone_AVG[i] := (m_pi_gain[i] * mErr_Value[i]) + (m_pi_gain[i]/m_integral_constant[i] * mErr_integral_Val[i]) + m_fTargetTemp;
 	 
-	m_Zone_Temp_Min := master_Zone_AVG[i] - (master_Zone_AVG[i] * m_min_per / 100);
-	m_Zone_Temp_Max := master_Zone_AVG[i] + (master_Zone_AVG[i] * m_max_per / 100);
+	m_Zone_Temp_Min := master_subTC_AVG - (master_subTC_AVG * m_min_per / 100);
+	m_Zone_Temp_Max := master_subTC_AVG + (master_subTC_AVG * m_max_per / 100);
 	
 	IF master_Zone_AVG[i] < m_Zone_Temp_Min THEN
 		master_Zone_AVG[i] := m_Zone_Temp_Min;
@@ -241,8 +255,15 @@ END_FOR]]></ST>
       <LineId Id="153" Count="0" />
       <LineId Id="261" Count="0" />
       <LineId Id="154" Count="0" />
+      <LineId Id="354" Count="0" />
+      <LineId Id="346" Count="1" />
       <LineId Id="254" Count="0" />
       <LineId Id="257" Count="0" />
+      <LineId Id="343" Count="0" />
+      <LineId Id="336" Count="0" />
+      <LineId Id="344" Count="0" />
+      <LineId Id="348" Count="1" />
+      <LineId Id="345" Count="0" />
       <LineId Id="256" Count="0" />
       <LineId Id="260" Count="0" />
       <LineId Id="258" Count="1" />
@@ -251,7 +272,7 @@ END_FOR]]></ST>
       <LineId Id="35" Count="0" />
       <LineId Id="38" Count="0" />
       <LineId Id="44" Count="0" />
-      <LineId Id="61" Count="0" />
+      <LineId Id="356" Count="0" />
       <LineId Id="160" Count="2" />
       <LineId Id="49" Count="1" />
       <LineId Id="60" Count="0" />
