@@ -24,6 +24,7 @@ VAR
 	(*slave가 완료되었을 경우 slave에서 받음*)
 	master_subTC_AVG                 : LREAL;                              		// 글래스 온도 평균(9개 평균 = g_bar)
 	
+	tWait_Time						:	TON;
 (*----------------------------------------Substrate Simulation----------------------------------------------- *)
 	fMV_Out						     : ARRAY[1..4] OF LREAL;
 	fMV_Out_Sub					     : ARRAY[1..9] OF LREAL;
@@ -40,6 +41,8 @@ VAR
 	master_Zone_AVG                :   ARRAY[1..4] OF LREAL;                	// 글래스 온도 평균(4개 더해서 4로 나눔 )
 	master_subTC 				   :   LREAL;
 	
+	Substrate_AvgTemp			   : ARRAY[1..4] OF LREAL;
+	
 	mErr_Value                     :   ARRAY[1..4] OF LREAL;                    // 제어오차 (set_temp - msater_subTC_AVG);
 	mErr_integral_Val			   :   ARRAY[1..4] OF LREAL := [0 , 0, 0, 0 ];  // 오차의 적분(se , 초기값 = 0)
 	
@@ -47,6 +50,8 @@ VAR
 	m_max_per					   :	LREAL;
 	m_Zone_Temp_Min                :    LREAL;
 	m_Zone_Temp_Max                :    LREAL;
+	
+	m_Last_Zone_Temp_AVG		   :	ARRAY[1..4] OF LREAL; 
 	
 	i: INT;
 	
@@ -79,7 +84,15 @@ END_VAR
 
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[Substrate_Simulation();
+      <ST><![CDATA[IF NOT mgbl.master_tuning_mode THEN
+	RETURN;
+END_IF
+
+IF sgbl.slave_bsimulation THEN
+	Substrate_Simulation();
+END_IF
+
+Substrate_AVG();
 
 m_Sampling_Time 	 := mgbl.master_Sampling_Time;
 m_integral_constant  := mgbl.master_integral_constant;
@@ -89,42 +102,59 @@ m_min_per		     := mgbl.master_Zone_Temp_Min_per;
 m_max_per	         := mgbl.master_Zone_Temp_Max_per;
 fMV_Out				 := mgbl.master_fMV_Out;
 master_subTC 		 := 0 ;
+tWait_Time(IN := TRUE, PT := LREAL_TO_TIME(m_Sampling_Time) * 1000);
 
-glass_max := fPV_Value_Sub[1];
-glass_min := fPV_Value_Sub[1];
-FOR i:=1 TO 9 BY 1 DO
-	master_subTC := master_subTC + fPV_Value_Sub[i];
+IF tWait_Time.Q THEN
+	tWait_Time(IN := FALSE);
 	
-	IF fPV_Value_Sub[i] > glass_max THEN
-		 glass_max := fPV_Value_Sub[i];
-	ELSIF fPV_Value_Sub[i] < glass_min THEN
-		glass_min := fPV_Value_Sub[i];
+	glass_max := 0;
+	glass_min := 1000;
+	master_subTC := 0;
+
+	FOR i:=1 TO 9 BY 1 DO
+		master_subTC := master_subTC + fPV_Value_Sub[i];
+		glass_max := MAX(glass_max, fPV_Value_Sub[i]);
+		glass_min := MIN(glass_min, fPV_Value_Sub[i]);
+	END_FOR
+		
+	master_subTC_AVG := master_subTC /9;
+	
+	IF m_fTargetTemp > 0 THEN
+				
+		FOR i:=1 TO 4 BY 1 DO
+			
+			m_fPowLimit_[i] := mgbl.master_PowLimit_[i];
+			mErr_Value[i] := m_fTargetTemp - Substrate_AvgTemp[i];
+			mErr_integral_Val[i] := mErr_integral_Val[i] + (mErr_Value[i] * m_Sampling_Time);
+			master_Zone_AVG[i] := (m_pi_gain[i] * mErr_Value[i]) + (m_pi_gain[i]/m_integral_constant[i] * mErr_integral_Val[i]) + m_fTargetTemp;
+			 
+			m_Zone_Temp_Min := slave.s_fLast_Set_Value[i]- (slave.s_fLast_Set_Value[i] * m_min_per / 100);
+			m_Zone_Temp_Max := slave.s_fLast_Set_Value[i]+ (slave.s_fLast_Set_Value[i] * m_max_per / 100);
+			
+			(*
+			m_Zone_Temp_Min := 140;
+			m_Zone_Temp_Max := 160;
+			*)
+			
+			m_Last_Zone_Temp_AVG[i] := master_Zone_AVG[i];
+			
+			IF master_Zone_AVG[i] < m_Zone_Temp_Min THEN
+				master_Zone_AVG[i] := m_Zone_Temp_Min;
+				mErr_integral_Val[i] :=  mErr_integral_Val[i] - mErr_Value[i]* m_Sampling_Time;
+			ELSIF master_Zone_AVG[i] > m_Zone_Temp_Max THEN
+				master_Zone_AVG[i] := m_Zone_Temp_Max; 
+				mErr_integral_Val[i] :=  mErr_integral_Val[i] - mErr_Value[i]* m_Sampling_Time;
+			ELSE 
+				 master_Zone_AVG[i] :=  master_Zone_AVG[i];
+			END_IF
+			
+		END_FOR
+		
+		sgbl.slave_fTargetTemp := master_Zone_AVG;
+	
 	END_IF
-END_FOR
-
-master_subTC_AVG := master_subTC /9;
-
-FOR i:=1 TO 4 BY 1 DO
 	
-	m_fPowLimit_[i] := mgbl.master_PowLimit_[i];
-	mErr_Value[i] := m_fTargetTemp - master_subTC_AVG;
-	mErr_integral_Val[i] := mErr_integral_Val[i] + (mErr_Value[i] * m_Sampling_Time);
-	master_Zone_AVG[i] := (m_pi_gain[i] * mErr_Value[i]) + (m_pi_gain[i]/m_integral_constant[i] * mErr_integral_Val[i]) + m_fTargetTemp;
-	 
-	m_Zone_Temp_Min := master_subTC_AVG - (master_subTC_AVG * m_min_per / 100);
-	m_Zone_Temp_Max := master_subTC_AVG + (master_subTC_AVG * m_max_per / 100);
-	
-	IF master_Zone_AVG[i] < m_Zone_Temp_Min THEN
-		master_Zone_AVG[i] := m_Zone_Temp_Min;
-		mErr_integral_Val[i] :=  mErr_integral_Val[i] - mErr_Value[i]* m_Sampling_Time;
-	ELSIF master_Zone_AVG[i] > m_Zone_Temp_Max THEN
-		master_Zone_AVG[i] := m_Zone_Temp_Max; 
-		mErr_integral_Val[i] :=  mErr_integral_Val[i] - mErr_Value[i]* m_Sampling_Time;
-	END_IF
-	
-END_FOR
-
-sgbl.slave_fTargetTemp := master_Zone_AVG;
+END_IF
 
 
 ]]></ST>
@@ -139,7 +169,7 @@ IF m_bRamp_Use THEN
 								fStart   := m_fLast_Set_Value[i],
 								fTarget  := m_Set_Value[i],
 								stParams := stCTRL_RAMP_GENERATOR_PARAMS[i],
-								fOut   => m_fRamp_Out[i],
+								fOut    => m_fRamp_Out[i],
 								fVeloOut  => ,
 								bValueReached => ,
 								eErrorId => ,
@@ -183,6 +213,14 @@ FOR i:=1 TO 4 BY 1 DO
 END_FOR
 
 ]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="Substrate_AVG" Id="{ec6bcec0-5768-4543-8f3c-c653a35ce223}">
+      <Implementation>
+        <ST><![CDATA[Substrate_AvgTemp[1] := (fPV_Value_Sub[1] + fPV_Value_Sub[2] + fPV_Value_Sub[4] + fPV_Value_Sub[5]) / 4; 
+Substrate_AvgTemp[2] := (fPV_Value_Sub[2] + fPV_Value_Sub[3] + fPV_Value_Sub[5] + fPV_Value_Sub[6]) / 4; 
+Substrate_AvgTemp[3] := (fPV_Value_Sub[4] + fPV_Value_Sub[5] + fPV_Value_Sub[7] + fPV_Value_Sub[8]) / 4; 
+Substrate_AvgTemp[4] := (fPV_Value_Sub[5] + fPV_Value_Sub[6] + fPV_Value_Sub[8] + fPV_Value_Sub[9]) / 4; ]]></ST>
       </Implementation>
     </Action>
     <Action Name="Substrate_Simulation" Id="{108ac06f-2968-4bd6-8d2a-f38f7f2d45c0}">
@@ -250,38 +288,15 @@ END_FOR]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="master">
-      <LineId Id="155" Count="1" />
+      <LineId Id="445" Count="5" />
+      <LineId Id="155" Count="0" />
+      <LineId Id="451" Count="1" />
+      <LineId Id="156" Count="0" />
       <LineId Id="142" Count="4" />
       <LineId Id="153" Count="0" />
       <LineId Id="261" Count="0" />
       <LineId Id="154" Count="0" />
-      <LineId Id="354" Count="0" />
-      <LineId Id="346" Count="1" />
-      <LineId Id="254" Count="0" />
-      <LineId Id="257" Count="0" />
-      <LineId Id="343" Count="0" />
-      <LineId Id="336" Count="0" />
-      <LineId Id="344" Count="0" />
-      <LineId Id="348" Count="1" />
-      <LineId Id="345" Count="0" />
-      <LineId Id="256" Count="0" />
-      <LineId Id="260" Count="0" />
-      <LineId Id="258" Count="1" />
-      <LineId Id="34" Count="0" />
-      <LineId Id="98" Count="1" />
-      <LineId Id="35" Count="0" />
-      <LineId Id="38" Count="0" />
-      <LineId Id="44" Count="0" />
-      <LineId Id="356" Count="0" />
-      <LineId Id="160" Count="2" />
-      <LineId Id="49" Count="1" />
-      <LineId Id="60" Count="0" />
-      <LineId Id="58" Count="1" />
-      <LineId Id="66" Count="0" />
-      <LineId Id="51" Count="0" />
-      <LineId Id="157" Count="0" />
-      <LineId Id="36" Count="0" />
-      <LineId Id="264" Count="0" />
+      <LineId Id="453" Count="51" />
       <LineId Id="164" Count="0" />
       <LineId Id="67" Count="0" />
       <LineId Id="31" Count="0" />
@@ -293,6 +308,10 @@ END_FOR]]></ST>
     </LineIds>
     <LineIds Name="master.SIMULATION">
       <LineId Id="2" Count="23" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="master.Substrate_AVG">
+      <LineId Id="2" Count="2" />
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="master.Substrate_Simulation">
