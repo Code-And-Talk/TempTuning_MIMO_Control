@@ -70,15 +70,15 @@ namespace Temp_UI_Example
             this.ST7 = new System.Windows.Forms.Label();
             this.ST8 = new System.Windows.Forms.Label();
             this.ST6 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
-            this.label31 = new System.Windows.Forms.Label();
+            this.ST9 = new System.Windows.Forms.Label();
+            this.ST11 = new System.Windows.Forms.Label();
+            this.ST10 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.label44 = new System.Windows.Forms.Label();
-            this.label45 = new System.Windows.Forms.Label();
+            this.ST12 = new System.Windows.Forms.Label();
             this.label49 = new System.Windows.Forms.Label();
             this.TB25 = new System.Windows.Forms.TextBox();
             this.TB26 = new System.Windows.Forms.TextBox();
@@ -588,38 +588,38 @@ namespace Temp_UI_Example
             this.ST6.Text = "double";
             this.ST6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label29
+            // ST9
             // 
-            this.label29.BackColor = System.Drawing.Color.Silver;
-            this.label29.Font = new System.Drawing.Font("굴림", 15F);
-            this.label29.Location = new System.Drawing.Point(1064, 314);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(98, 32);
-            this.label29.TabIndex = 148;
-            this.label29.Text = "double";
-            this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ST9.BackColor = System.Drawing.Color.Silver;
+            this.ST9.Font = new System.Drawing.Font("굴림", 15F);
+            this.ST9.Location = new System.Drawing.Point(1064, 314);
+            this.ST9.Name = "ST9";
+            this.ST9.Size = new System.Drawing.Size(98, 32);
+            this.ST9.TabIndex = 148;
+            this.ST9.Text = "double";
+            this.ST9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label30
+            // ST11
             // 
-            this.label30.BackColor = System.Drawing.Color.Silver;
-            this.label30.Font = new System.Drawing.Font("굴림", 15F);
-            this.label30.Location = new System.Drawing.Point(1064, 390);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(98, 32);
-            this.label30.TabIndex = 149;
-            this.label30.Text = "double";
-            this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ST11.BackColor = System.Drawing.Color.Silver;
+            this.ST11.Font = new System.Drawing.Font("굴림", 15F);
+            this.ST11.Location = new System.Drawing.Point(1064, 390);
+            this.ST11.Name = "ST11";
+            this.ST11.Size = new System.Drawing.Size(98, 32);
+            this.ST11.TabIndex = 149;
+            this.ST11.Text = "double";
+            this.ST11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label31
+            // ST10
             // 
-            this.label31.BackColor = System.Drawing.Color.Silver;
-            this.label31.Font = new System.Drawing.Font("굴림", 15F);
-            this.label31.Location = new System.Drawing.Point(1064, 352);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(98, 32);
-            this.label31.TabIndex = 150;
-            this.label31.Text = "double";
-            this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ST10.BackColor = System.Drawing.Color.Silver;
+            this.ST10.Font = new System.Drawing.Font("굴림", 15F);
+            this.ST10.Location = new System.Drawing.Point(1064, 352);
+            this.ST10.Name = "ST10";
+            this.ST10.Size = new System.Drawing.Size(98, 32);
+            this.ST10.TabIndex = 150;
+            this.ST10.Text = "double";
+            this.ST10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label32
             // 
@@ -676,16 +676,16 @@ namespace Temp_UI_Example
             this.label44.Text = "Max - Min";
             this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label45
+            // ST12
             // 
-            this.label45.BackColor = System.Drawing.Color.Silver;
-            this.label45.Font = new System.Drawing.Font("굴림", 15F);
-            this.label45.Location = new System.Drawing.Point(1064, 429);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(98, 32);
-            this.label45.TabIndex = 165;
-            this.label45.Text = "double";
-            this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ST12.BackColor = System.Drawing.Color.Silver;
+            this.ST12.Font = new System.Drawing.Font("굴림", 15F);
+            this.ST12.Location = new System.Drawing.Point(1064, 429);
+            this.ST12.Name = "ST12";
+            this.ST12.Size = new System.Drawing.Size(98, 32);
+            this.ST12.TabIndex = 165;
+            this.ST12.Text = "double";
+            this.ST12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label49
             // 
@@ -1047,14 +1047,14 @@ namespace Temp_UI_Example
             this.Controls.Add(this.TB24);
             this.Controls.Add(this.label49);
             this.Controls.Add(this.label44);
-            this.Controls.Add(this.label45);
+            this.Controls.Add(this.ST12);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label33);
             this.Controls.Add(this.label34);
             this.Controls.Add(this.label32);
-            this.Controls.Add(this.label31);
-            this.Controls.Add(this.label30);
-            this.Controls.Add(this.label29);
+            this.Controls.Add(this.ST10);
+            this.Controls.Add(this.ST11);
+            this.Controls.Add(this.ST9);
             this.Controls.Add(this.ST7);
             this.Controls.Add(this.ST8);
             this.Controls.Add(this.ST6);
@@ -1148,15 +1148,15 @@ namespace Temp_UI_Example
         private System.Windows.Forms.Label ST7;
         private System.Windows.Forms.Label ST8;
         private System.Windows.Forms.Label ST6;
-        private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label ST9;
+        private System.Windows.Forms.Label ST11;
+        private System.Windows.Forms.Label ST10;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label44;
-        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.Label ST12;
         private System.Windows.Forms.Label label49;
         private System.Windows.Forms.TextBox TB25;
         private System.Windows.Forms.TextBox TB26;
