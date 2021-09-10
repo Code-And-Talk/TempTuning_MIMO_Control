@@ -18,8 +18,9 @@ namespace Temp_UI_Example
         private TcAdsClient ads = new TcAdsClient();
 
         // ADS 정보를 읽기 위한 인터페이스 정의, 값을 읽어오기 위함
-        private ITcAdsSymbol[] pot = new ITcAdsSymbol[] { null, null, null, null };
-        double[] Act_Temp = new double[4];
+        private ITcAdsSymbol[] pot = new ITcAdsSymbol[25];
+        double[] Act_Temp = new double[25];
+        int cnt = 1;
 
         Thread thread1;
         bool bThreadStart = false;
@@ -66,10 +67,47 @@ namespace Temp_UI_Example
             {
                 for(int i = 0; i < 4; i++)
                 {
-                    pot[i] = ads.ReadSymbolInfo($"MAIN.Ar[{i}]");
-                    Act_Temp[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
-                    this.Controls["textBox" + i].Text = Act_Temp[i].ToString();
-                    Thread.Sleep(100);
+                    if (cnt == 5)
+                    {
+                        cnt = 1;
+                    }
+                    else
+                    {
+                        pot[i] = ads.ReadSymbolInfo($"slave.s_fPV_Value[{cnt}]");
+                        Act_Temp[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
+                        this.Controls["tB" + i].Text = Act_Temp[i].ToString();
+                        Thread.Sleep(100);
+                    }
+                }
+
+                for (int i = 4; i < 8; i++)
+                {
+                    if (cnt == 5)
+                    {
+                        cnt = 1;
+                    }
+                    else
+                    {
+                        pot[i] = ads.ReadSymbolInfo($"slave.s_fRamp_Out[{cnt}]");
+                        Act_Temp[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
+                        this.Controls["tB" + i].Text = Act_Temp[i].ToString();
+                        Thread.Sleep(100);
+                    }
+                }
+
+                for (int i = 8; i < 12; i++)
+                {
+                    if (cnt == 5)
+                    {
+                        cnt = 1;
+                    }
+                    else
+                    {
+                        pot[i] = ads.ReadSymbolInfo($"slave.s_fMV_Out[{cnt}]");
+                        Act_Temp[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
+                        this.Controls["tB" + i].Text = Act_Temp[i].ToString();
+                        Thread.Sleep(100);
+                    }
                 }
             }
         }

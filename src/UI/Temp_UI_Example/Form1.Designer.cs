@@ -32,7 +32,7 @@ namespace Temp_UI_Example
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox28 = new System.Windows.Forms.TextBox();
+            this.TB12 = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -48,28 +48,28 @@ namespace Temp_UI_Example
             this.label19 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox10 = new System.Windows.Forms.TextBox();
-            this.textBox11 = new System.Windows.Forms.TextBox();
-            this.textBox12 = new System.Windows.Forms.TextBox();
-            this.textBox16 = new System.Windows.Forms.TextBox();
-            this.textBox17 = new System.Windows.Forms.TextBox();
-            this.textBox25 = new System.Windows.Forms.TextBox();
-            this.textBox26 = new System.Windows.Forms.TextBox();
-            this.textBox27 = new System.Windows.Forms.TextBox();
+            this.TB15 = new System.Windows.Forms.TextBox();
+            this.TB14 = new System.Windows.Forms.TextBox();
+            this.TB13 = new System.Windows.Forms.TextBox();
+            this.TB17 = new System.Windows.Forms.TextBox();
+            this.TB18 = new System.Windows.Forms.TextBox();
+            this.TB19 = new System.Windows.Forms.TextBox();
+            this.TB16 = new System.Windows.Forms.TextBox();
+            this.TB21 = new System.Windows.Forms.TextBox();
+            this.TB22 = new System.Windows.Forms.TextBox();
+            this.TB23 = new System.Windows.Forms.TextBox();
+            this.TB20 = new System.Windows.Forms.TextBox();
             this.label22 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
+            this.ST2 = new System.Windows.Forms.Label();
+            this.ST1 = new System.Windows.Forms.Label();
+            this.ST4 = new System.Windows.Forms.Label();
+            this.ST5 = new System.Windows.Forms.Label();
+            this.ST3 = new System.Windows.Forms.Label();
+            this.ST7 = new System.Windows.Forms.Label();
+            this.ST8 = new System.Windows.Forms.Label();
+            this.ST6 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
@@ -80,29 +80,29 @@ namespace Temp_UI_Example
             this.label44 = new System.Windows.Forms.Label();
             this.label45 = new System.Windows.Forms.Label();
             this.label49 = new System.Windows.Forms.Label();
-            this.textBox24 = new System.Windows.Forms.TextBox();
-            this.textBox29 = new System.Windows.Forms.TextBox();
-            this.textBox30 = new System.Windows.Forms.TextBox();
-            this.textBox31 = new System.Windows.Forms.TextBox();
+            this.TB25 = new System.Windows.Forms.TextBox();
+            this.TB26 = new System.Windows.Forms.TextBox();
+            this.TB27 = new System.Windows.Forms.TextBox();
+            this.TB24 = new System.Windows.Forms.TextBox();
             this.TempTunetbox1 = new System.Windows.Forms.TextBox();
             this.TempTunetbox2 = new System.Windows.Forms.TextBox();
             this.TempTunetbox3 = new System.Windows.Forms.TextBox();
             this.TempTunetbox4 = new System.Windows.Forms.TextBox();
             this.TempTunetbox5 = new System.Windows.Forms.TextBox();
             this.TempTunetbox6 = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.textBox35 = new System.Windows.Forms.TextBox();
-            this.textBox36 = new System.Windows.Forms.TextBox();
-            this.textBox37 = new System.Windows.Forms.TextBox();
-            this.textBox38 = new System.Windows.Forms.TextBox();
-            this.textBox0 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.textBox13 = new System.Windows.Forms.TextBox();
-            this.textBox14 = new System.Windows.Forms.TextBox();
+            this.ST0 = new System.Windows.Forms.Label();
+            this.TB5 = new System.Windows.Forms.TextBox();
+            this.TB6 = new System.Windows.Forms.TextBox();
+            this.TB7 = new System.Windows.Forms.TextBox();
+            this.TB10 = new System.Windows.Forms.TextBox();
+            this.TB1 = new System.Windows.Forms.TextBox();
+            this.TB2 = new System.Windows.Forms.TextBox();
+            this.TB3 = new System.Windows.Forms.TextBox();
+            this.TB0 = new System.Windows.Forms.TextBox();
+            this.TB8 = new System.Windows.Forms.TextBox();
+            this.TB9 = new System.Windows.Forms.TextBox();
+            this.TB11 = new System.Windows.Forms.TextBox();
+            this.TB4 = new System.Windows.Forms.TextBox();
             this.label36 = new System.Windows.Forms.Label();
             this.label37 = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -141,18 +141,18 @@ namespace Temp_UI_Example
             this.label5.Text = "Power Set";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // textBox28
+            // TB12
             // 
-            this.textBox28.BackColor = System.Drawing.SystemColors.Info;
-            this.textBox28.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox28.Location = new System.Drawing.Point(434, 96);
-            this.textBox28.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox28.Multiline = true;
-            this.textBox28.Name = "textBox28";
-            this.textBox28.Size = new System.Drawing.Size(92, 39);
-            this.textBox28.TabIndex = 75;
-            this.textBox28.Text = "입력";
-            this.textBox28.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB12.BackColor = System.Drawing.SystemColors.Info;
+            this.TB12.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB12.Location = new System.Drawing.Point(434, 96);
+            this.TB12.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB12.Multiline = true;
+            this.TB12.Name = "TB12";
+            this.TB12.Size = new System.Drawing.Size(92, 39);
+            this.TB12.TabIndex = 75;
+            this.TB12.Text = "입력";
+            this.TB12.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label18
             // 
@@ -320,148 +320,148 @@ namespace Temp_UI_Example
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
-            // textBox7
+            // TB15
             // 
-            this.textBox7.BackColor = System.Drawing.SystemColors.Info;
-            this.textBox7.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox7.Location = new System.Drawing.Point(434, 250);
-            this.textBox7.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox7.Multiline = true;
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(92, 39);
-            this.textBox7.TabIndex = 125;
-            this.textBox7.Text = "입력";
-            this.textBox7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB15.BackColor = System.Drawing.SystemColors.Info;
+            this.TB15.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB15.Location = new System.Drawing.Point(434, 250);
+            this.TB15.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB15.Multiline = true;
+            this.TB15.Name = "TB15";
+            this.TB15.Size = new System.Drawing.Size(92, 39);
+            this.TB15.TabIndex = 125;
+            this.TB15.Text = "입력";
+            this.TB15.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox5
+            // TB14
             // 
-            this.textBox5.BackColor = System.Drawing.SystemColors.Info;
-            this.textBox5.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox5.Location = new System.Drawing.Point(434, 198);
-            this.textBox5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox5.Multiline = true;
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(92, 39);
-            this.textBox5.TabIndex = 126;
-            this.textBox5.Text = "입력";
-            this.textBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB14.BackColor = System.Drawing.SystemColors.Info;
+            this.TB14.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB14.Location = new System.Drawing.Point(434, 198);
+            this.TB14.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB14.Multiline = true;
+            this.TB14.Name = "TB14";
+            this.TB14.Size = new System.Drawing.Size(92, 39);
+            this.TB14.TabIndex = 126;
+            this.TB14.Text = "입력";
+            this.TB14.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox6
+            // TB13
             // 
-            this.textBox6.BackColor = System.Drawing.SystemColors.Info;
-            this.textBox6.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox6.Location = new System.Drawing.Point(434, 147);
-            this.textBox6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox6.Multiline = true;
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(92, 39);
-            this.textBox6.TabIndex = 127;
-            this.textBox6.Text = "입력";
-            this.textBox6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB13.BackColor = System.Drawing.SystemColors.Info;
+            this.TB13.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB13.Location = new System.Drawing.Point(434, 146);
+            this.TB13.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB13.Multiline = true;
+            this.TB13.Name = "TB13";
+            this.TB13.Size = new System.Drawing.Size(92, 39);
+            this.TB13.TabIndex = 127;
+            this.TB13.Text = "입력";
+            this.TB13.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox10
+            // TB17
             // 
-            this.textBox10.BackColor = System.Drawing.SystemColors.Info;
-            this.textBox10.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox10.Location = new System.Drawing.Point(539, 147);
-            this.textBox10.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox10.Multiline = true;
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(92, 39);
-            this.textBox10.TabIndex = 131;
-            this.textBox10.Text = "입력";
-            this.textBox10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB17.BackColor = System.Drawing.SystemColors.Info;
+            this.TB17.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB17.Location = new System.Drawing.Point(539, 147);
+            this.TB17.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB17.Multiline = true;
+            this.TB17.Name = "TB17";
+            this.TB17.Size = new System.Drawing.Size(92, 39);
+            this.TB17.TabIndex = 131;
+            this.TB17.Text = "입력";
+            this.TB17.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox11
+            // TB18
             // 
-            this.textBox11.BackColor = System.Drawing.SystemColors.Info;
-            this.textBox11.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox11.Location = new System.Drawing.Point(539, 198);
-            this.textBox11.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox11.Multiline = true;
-            this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(92, 39);
-            this.textBox11.TabIndex = 130;
-            this.textBox11.Text = "입력";
-            this.textBox11.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB18.BackColor = System.Drawing.SystemColors.Info;
+            this.TB18.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB18.Location = new System.Drawing.Point(539, 198);
+            this.TB18.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB18.Multiline = true;
+            this.TB18.Name = "TB18";
+            this.TB18.Size = new System.Drawing.Size(92, 39);
+            this.TB18.TabIndex = 130;
+            this.TB18.Text = "입력";
+            this.TB18.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox12
+            // TB19
             // 
-            this.textBox12.BackColor = System.Drawing.SystemColors.Info;
-            this.textBox12.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox12.Location = new System.Drawing.Point(539, 250);
-            this.textBox12.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox12.Multiline = true;
-            this.textBox12.Name = "textBox12";
-            this.textBox12.Size = new System.Drawing.Size(92, 39);
-            this.textBox12.TabIndex = 129;
-            this.textBox12.Text = "입력";
-            this.textBox12.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB19.BackColor = System.Drawing.SystemColors.Info;
+            this.TB19.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB19.Location = new System.Drawing.Point(539, 250);
+            this.TB19.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB19.Multiline = true;
+            this.TB19.Name = "TB19";
+            this.TB19.Size = new System.Drawing.Size(92, 39);
+            this.TB19.TabIndex = 129;
+            this.TB19.Text = "입력";
+            this.TB19.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox16
+            // TB16
             // 
-            this.textBox16.BackColor = System.Drawing.SystemColors.Info;
-            this.textBox16.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox16.Location = new System.Drawing.Point(539, 96);
-            this.textBox16.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox16.Multiline = true;
-            this.textBox16.Name = "textBox16";
-            this.textBox16.Size = new System.Drawing.Size(92, 39);
-            this.textBox16.TabIndex = 128;
-            this.textBox16.Text = "입력";
-            this.textBox16.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB16.BackColor = System.Drawing.SystemColors.Info;
+            this.TB16.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB16.Location = new System.Drawing.Point(539, 96);
+            this.TB16.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB16.Multiline = true;
+            this.TB16.Name = "TB16";
+            this.TB16.Size = new System.Drawing.Size(92, 39);
+            this.TB16.TabIndex = 128;
+            this.TB16.Text = "입력";
+            this.TB16.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox17
+            // TB21
             // 
-            this.textBox17.BackColor = System.Drawing.SystemColors.Info;
-            this.textBox17.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox17.Location = new System.Drawing.Point(644, 147);
-            this.textBox17.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox17.Multiline = true;
-            this.textBox17.Name = "textBox17";
-            this.textBox17.Size = new System.Drawing.Size(92, 39);
-            this.textBox17.TabIndex = 135;
-            this.textBox17.Text = "입력";
-            this.textBox17.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB21.BackColor = System.Drawing.SystemColors.Info;
+            this.TB21.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB21.Location = new System.Drawing.Point(644, 147);
+            this.TB21.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB21.Multiline = true;
+            this.TB21.Name = "TB21";
+            this.TB21.Size = new System.Drawing.Size(92, 39);
+            this.TB21.TabIndex = 135;
+            this.TB21.Text = "입력";
+            this.TB21.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox25
+            // TB22
             // 
-            this.textBox25.BackColor = System.Drawing.SystemColors.Info;
-            this.textBox25.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox25.Location = new System.Drawing.Point(644, 198);
-            this.textBox25.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox25.Multiline = true;
-            this.textBox25.Name = "textBox25";
-            this.textBox25.Size = new System.Drawing.Size(92, 39);
-            this.textBox25.TabIndex = 134;
-            this.textBox25.Text = "입력";
-            this.textBox25.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB22.BackColor = System.Drawing.SystemColors.Info;
+            this.TB22.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB22.Location = new System.Drawing.Point(644, 198);
+            this.TB22.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB22.Multiline = true;
+            this.TB22.Name = "TB22";
+            this.TB22.Size = new System.Drawing.Size(92, 39);
+            this.TB22.TabIndex = 134;
+            this.TB22.Text = "입력";
+            this.TB22.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox26
+            // TB23
             // 
-            this.textBox26.BackColor = System.Drawing.SystemColors.Info;
-            this.textBox26.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox26.Location = new System.Drawing.Point(644, 250);
-            this.textBox26.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox26.Multiline = true;
-            this.textBox26.Name = "textBox26";
-            this.textBox26.Size = new System.Drawing.Size(92, 39);
-            this.textBox26.TabIndex = 133;
-            this.textBox26.Text = "입력";
-            this.textBox26.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB23.BackColor = System.Drawing.SystemColors.Info;
+            this.TB23.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB23.Location = new System.Drawing.Point(644, 250);
+            this.TB23.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB23.Multiline = true;
+            this.TB23.Name = "TB23";
+            this.TB23.Size = new System.Drawing.Size(92, 39);
+            this.TB23.TabIndex = 133;
+            this.TB23.Text = "입력";
+            this.TB23.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox27
+            // TB20
             // 
-            this.textBox27.BackColor = System.Drawing.SystemColors.Info;
-            this.textBox27.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox27.Location = new System.Drawing.Point(644, 96);
-            this.textBox27.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox27.Multiline = true;
-            this.textBox27.Name = "textBox27";
-            this.textBox27.Size = new System.Drawing.Size(92, 39);
-            this.textBox27.TabIndex = 132;
-            this.textBox27.Text = "입력";
-            this.textBox27.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB20.BackColor = System.Drawing.SystemColors.Info;
+            this.TB20.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB20.Location = new System.Drawing.Point(644, 96);
+            this.TB20.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB20.Multiline = true;
+            this.TB20.Name = "TB20";
+            this.TB20.Size = new System.Drawing.Size(92, 39);
+            this.TB20.TabIndex = 132;
+            this.TB20.Text = "입력";
+            this.TB20.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label22
             // 
@@ -500,93 +500,93 @@ namespace Temp_UI_Example
             this.label13.Text = "Substrate Temp";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label15
+            // ST2
             // 
-            this.label15.BackColor = System.Drawing.Color.Coral;
-            this.label15.Font = new System.Drawing.Font("굴림", 15F);
-            this.label15.Location = new System.Drawing.Point(1064, 51);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(98, 77);
-            this.label15.TabIndex = 140;
-            this.label15.Text = "double";
-            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ST2.BackColor = System.Drawing.Color.Coral;
+            this.ST2.Font = new System.Drawing.Font("굴림", 15F);
+            this.ST2.Location = new System.Drawing.Point(1064, 51);
+            this.ST2.Name = "ST2";
+            this.ST2.Size = new System.Drawing.Size(98, 77);
+            this.ST2.TabIndex = 140;
+            this.ST2.Text = "double";
+            this.ST2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label16
+            // ST1
             // 
-            this.label16.BackColor = System.Drawing.Color.Coral;
-            this.label16.Font = new System.Drawing.Font("굴림", 15F);
-            this.label16.Location = new System.Drawing.Point(959, 51);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(98, 77);
-            this.label16.TabIndex = 141;
-            this.label16.Text = "double";
-            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ST1.BackColor = System.Drawing.Color.Coral;
+            this.ST1.Font = new System.Drawing.Font("굴림", 15F);
+            this.ST1.Location = new System.Drawing.Point(959, 51);
+            this.ST1.Name = "ST1";
+            this.ST1.Size = new System.Drawing.Size(98, 77);
+            this.ST1.TabIndex = 141;
+            this.ST1.Text = "double";
+            this.ST1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label23
+            // ST4
             // 
-            this.label23.BackColor = System.Drawing.Color.Coral;
-            this.label23.Font = new System.Drawing.Font("굴림", 15F);
-            this.label23.Location = new System.Drawing.Point(959, 134);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(98, 77);
-            this.label23.TabIndex = 144;
-            this.label23.Text = "double";
-            this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ST4.BackColor = System.Drawing.Color.Coral;
+            this.ST4.Font = new System.Drawing.Font("굴림", 15F);
+            this.ST4.Location = new System.Drawing.Point(959, 134);
+            this.ST4.Name = "ST4";
+            this.ST4.Size = new System.Drawing.Size(98, 77);
+            this.ST4.TabIndex = 144;
+            this.ST4.Text = "double";
+            this.ST4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label24
+            // ST5
             // 
-            this.label24.BackColor = System.Drawing.Color.Coral;
-            this.label24.Font = new System.Drawing.Font("굴림", 15F);
-            this.label24.Location = new System.Drawing.Point(1064, 134);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(98, 77);
-            this.label24.TabIndex = 143;
-            this.label24.Text = "double";
-            this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ST5.BackColor = System.Drawing.Color.Coral;
+            this.ST5.Font = new System.Drawing.Font("굴림", 15F);
+            this.ST5.Location = new System.Drawing.Point(1064, 134);
+            this.ST5.Name = "ST5";
+            this.ST5.Size = new System.Drawing.Size(98, 77);
+            this.ST5.TabIndex = 143;
+            this.ST5.Text = "double";
+            this.ST5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label25
+            // ST3
             // 
-            this.label25.BackColor = System.Drawing.Color.Coral;
-            this.label25.Font = new System.Drawing.Font("굴림", 15F);
-            this.label25.Location = new System.Drawing.Point(854, 134);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(98, 77);
-            this.label25.TabIndex = 142;
-            this.label25.Text = "double";
-            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ST3.BackColor = System.Drawing.Color.Coral;
+            this.ST3.Font = new System.Drawing.Font("굴림", 15F);
+            this.ST3.Location = new System.Drawing.Point(854, 134);
+            this.ST3.Name = "ST3";
+            this.ST3.Size = new System.Drawing.Size(98, 77);
+            this.ST3.TabIndex = 142;
+            this.ST3.Text = "double";
+            this.ST3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label26
+            // ST7
             // 
-            this.label26.BackColor = System.Drawing.Color.Coral;
-            this.label26.Font = new System.Drawing.Font("굴림", 15F);
-            this.label26.Location = new System.Drawing.Point(959, 218);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(98, 77);
-            this.label26.TabIndex = 147;
-            this.label26.Text = "double";
-            this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ST7.BackColor = System.Drawing.Color.Coral;
+            this.ST7.Font = new System.Drawing.Font("굴림", 15F);
+            this.ST7.Location = new System.Drawing.Point(959, 218);
+            this.ST7.Name = "ST7";
+            this.ST7.Size = new System.Drawing.Size(98, 77);
+            this.ST7.TabIndex = 147;
+            this.ST7.Text = "double";
+            this.ST7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label27
+            // ST8
             // 
-            this.label27.BackColor = System.Drawing.Color.Coral;
-            this.label27.Font = new System.Drawing.Font("굴림", 15F);
-            this.label27.Location = new System.Drawing.Point(1064, 218);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(98, 77);
-            this.label27.TabIndex = 146;
-            this.label27.Text = "double";
-            this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ST8.BackColor = System.Drawing.Color.Coral;
+            this.ST8.Font = new System.Drawing.Font("굴림", 15F);
+            this.ST8.Location = new System.Drawing.Point(1064, 218);
+            this.ST8.Name = "ST8";
+            this.ST8.Size = new System.Drawing.Size(98, 77);
+            this.ST8.TabIndex = 146;
+            this.ST8.Text = "double";
+            this.ST8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label28
+            // ST6
             // 
-            this.label28.BackColor = System.Drawing.Color.Coral;
-            this.label28.Font = new System.Drawing.Font("굴림", 15F);
-            this.label28.Location = new System.Drawing.Point(854, 218);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(98, 77);
-            this.label28.TabIndex = 145;
-            this.label28.Text = "double";
-            this.label28.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ST6.BackColor = System.Drawing.Color.Coral;
+            this.ST6.Font = new System.Drawing.Font("굴림", 15F);
+            this.ST6.Location = new System.Drawing.Point(854, 218);
+            this.ST6.Name = "ST6";
+            this.ST6.Size = new System.Drawing.Size(98, 77);
+            this.ST6.TabIndex = 145;
+            this.ST6.Text = "double";
+            this.ST6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label29
             // 
@@ -698,57 +698,57 @@ namespace Temp_UI_Example
             this.label49.Text = "Tune Time";
             this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // textBox24
+            // TB25
             // 
-            this.textBox24.BackColor = System.Drawing.Color.Silver;
-            this.textBox24.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox24.Location = new System.Drawing.Point(749, 147);
-            this.textBox24.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox24.Multiline = true;
-            this.textBox24.Name = "textBox24";
-            this.textBox24.Size = new System.Drawing.Size(92, 39);
-            this.textBox24.TabIndex = 186;
-            this.textBox24.Text = "double";
-            this.textBox24.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB25.BackColor = System.Drawing.Color.Silver;
+            this.TB25.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB25.Location = new System.Drawing.Point(749, 147);
+            this.TB25.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB25.Multiline = true;
+            this.TB25.Name = "TB25";
+            this.TB25.Size = new System.Drawing.Size(92, 39);
+            this.TB25.TabIndex = 186;
+            this.TB25.Text = "double";
+            this.TB25.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox29
+            // TB26
             // 
-            this.textBox29.BackColor = System.Drawing.Color.Silver;
-            this.textBox29.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox29.Location = new System.Drawing.Point(749, 198);
-            this.textBox29.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox29.Multiline = true;
-            this.textBox29.Name = "textBox29";
-            this.textBox29.Size = new System.Drawing.Size(92, 39);
-            this.textBox29.TabIndex = 185;
-            this.textBox29.Text = "double";
-            this.textBox29.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB26.BackColor = System.Drawing.Color.Silver;
+            this.TB26.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB26.Location = new System.Drawing.Point(749, 198);
+            this.TB26.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB26.Multiline = true;
+            this.TB26.Name = "TB26";
+            this.TB26.Size = new System.Drawing.Size(92, 39);
+            this.TB26.TabIndex = 185;
+            this.TB26.Text = "double";
+            this.TB26.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox30
+            // TB27
             // 
-            this.textBox30.BackColor = System.Drawing.Color.Silver;
-            this.textBox30.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox30.Location = new System.Drawing.Point(749, 250);
-            this.textBox30.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox30.Multiline = true;
-            this.textBox30.Name = "textBox30";
-            this.textBox30.Size = new System.Drawing.Size(92, 39);
-            this.textBox30.TabIndex = 184;
-            this.textBox30.Text = "double";
-            this.textBox30.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB27.BackColor = System.Drawing.Color.Silver;
+            this.TB27.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB27.Location = new System.Drawing.Point(749, 250);
+            this.TB27.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB27.Multiline = true;
+            this.TB27.Name = "TB27";
+            this.TB27.Size = new System.Drawing.Size(92, 39);
+            this.TB27.TabIndex = 184;
+            this.TB27.Text = "double";
+            this.TB27.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox31
+            // TB24
             // 
-            this.textBox31.BackColor = System.Drawing.Color.Silver;
-            this.textBox31.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox31.Location = new System.Drawing.Point(749, 96);
-            this.textBox31.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox31.Multiline = true;
-            this.textBox31.Name = "textBox31";
-            this.textBox31.Size = new System.Drawing.Size(92, 39);
-            this.textBox31.TabIndex = 183;
-            this.textBox31.Text = "double";
-            this.textBox31.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB24.BackColor = System.Drawing.Color.Silver;
+            this.TB24.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB24.Location = new System.Drawing.Point(749, 96);
+            this.TB24.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB24.Multiline = true;
+            this.TB24.Name = "TB24";
+            this.TB24.Size = new System.Drawing.Size(92, 39);
+            this.TB24.TabIndex = 183;
+            this.TB24.Text = "double";
+            this.TB24.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // TempTunetbox1
             // 
@@ -828,172 +828,172 @@ namespace Temp_UI_Example
             this.TempTunetbox6.Text = "INT";
             this.TempTunetbox6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // label14
+            // ST0
             // 
-            this.label14.BackColor = System.Drawing.Color.Coral;
-            this.label14.Font = new System.Drawing.Font("굴림", 15F);
-            this.label14.Location = new System.Drawing.Point(854, 51);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(98, 77);
-            this.label14.TabIndex = 139;
-            this.label14.Text = "double";
-            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ST0.BackColor = System.Drawing.Color.Coral;
+            this.ST0.Font = new System.Drawing.Font("굴림", 15F);
+            this.ST0.Location = new System.Drawing.Point(854, 51);
+            this.ST0.Name = "ST0";
+            this.ST0.Size = new System.Drawing.Size(98, 77);
+            this.ST0.TabIndex = 139;
+            this.ST0.Text = "double";
+            this.ST0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // textBox35
+            // TB5
             // 
-            this.textBox35.BackColor = System.Drawing.Color.Silver;
-            this.textBox35.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox35.Location = new System.Drawing.Point(329, 147);
-            this.textBox35.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox35.Multiline = true;
-            this.textBox35.Name = "textBox35";
-            this.textBox35.Size = new System.Drawing.Size(92, 39);
-            this.textBox35.TabIndex = 196;
-            this.textBox35.Text = "double";
-            this.textBox35.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB5.BackColor = System.Drawing.Color.Silver;
+            this.TB5.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB5.Location = new System.Drawing.Point(224, 146);
+            this.TB5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB5.Multiline = true;
+            this.TB5.Name = "TB5";
+            this.TB5.Size = new System.Drawing.Size(92, 39);
+            this.TB5.TabIndex = 196;
+            this.TB5.Text = "double";
+            this.TB5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox36
+            // TB6
             // 
-            this.textBox36.BackColor = System.Drawing.Color.Silver;
-            this.textBox36.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox36.Location = new System.Drawing.Point(329, 198);
-            this.textBox36.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox36.Multiline = true;
-            this.textBox36.Name = "textBox36";
-            this.textBox36.Size = new System.Drawing.Size(92, 39);
-            this.textBox36.TabIndex = 195;
-            this.textBox36.Text = "double";
-            this.textBox36.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB6.BackColor = System.Drawing.Color.Silver;
+            this.TB6.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB6.Location = new System.Drawing.Point(224, 198);
+            this.TB6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB6.Multiline = true;
+            this.TB6.Name = "TB6";
+            this.TB6.Size = new System.Drawing.Size(92, 39);
+            this.TB6.TabIndex = 195;
+            this.TB6.Text = "double";
+            this.TB6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox37
+            // TB7
             // 
-            this.textBox37.BackColor = System.Drawing.Color.Silver;
-            this.textBox37.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox37.Location = new System.Drawing.Point(329, 250);
-            this.textBox37.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox37.Multiline = true;
-            this.textBox37.Name = "textBox37";
-            this.textBox37.Size = new System.Drawing.Size(92, 39);
-            this.textBox37.TabIndex = 194;
-            this.textBox37.Text = "double";
-            this.textBox37.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB7.BackColor = System.Drawing.Color.Silver;
+            this.TB7.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB7.Location = new System.Drawing.Point(224, 250);
+            this.TB7.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB7.Multiline = true;
+            this.TB7.Name = "TB7";
+            this.TB7.Size = new System.Drawing.Size(92, 39);
+            this.TB7.TabIndex = 194;
+            this.TB7.Text = "double";
+            this.TB7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox38
+            // TB10
             // 
-            this.textBox38.BackColor = System.Drawing.Color.Silver;
-            this.textBox38.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox38.Location = new System.Drawing.Point(329, 96);
-            this.textBox38.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox38.Multiline = true;
-            this.textBox38.Name = "textBox38";
-            this.textBox38.Size = new System.Drawing.Size(92, 39);
-            this.textBox38.TabIndex = 193;
-            this.textBox38.Text = "double";
-            this.textBox38.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB10.BackColor = System.Drawing.Color.Silver;
+            this.TB10.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB10.Location = new System.Drawing.Point(328, 198);
+            this.TB10.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB10.Multiline = true;
+            this.TB10.Name = "TB10";
+            this.TB10.Size = new System.Drawing.Size(92, 39);
+            this.TB10.TabIndex = 193;
+            this.TB10.Text = "double";
+            this.TB10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox0
+            // TB1
             // 
-            this.textBox0.BackColor = System.Drawing.Color.Silver;
-            this.textBox0.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox0.Location = new System.Drawing.Point(119, 147);
-            this.textBox0.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox0.Multiline = true;
-            this.textBox0.Name = "textBox0";
-            this.textBox0.Size = new System.Drawing.Size(92, 39);
-            this.textBox0.TabIndex = 200;
-            this.textBox0.Text = "double";
-            this.textBox0.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB1.BackColor = System.Drawing.Color.Silver;
+            this.TB1.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB1.Location = new System.Drawing.Point(119, 147);
+            this.TB1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB1.Multiline = true;
+            this.TB1.Name = "TB1";
+            this.TB1.Size = new System.Drawing.Size(92, 39);
+            this.TB1.TabIndex = 200;
+            this.TB1.Text = "double";
+            this.TB1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox1
+            // TB2
             // 
-            this.textBox1.BackColor = System.Drawing.Color.Silver;
-            this.textBox1.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox1.Location = new System.Drawing.Point(119, 198);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(92, 39);
-            this.textBox1.TabIndex = 199;
-            this.textBox1.Text = "double";
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB2.BackColor = System.Drawing.Color.Silver;
+            this.TB2.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB2.Location = new System.Drawing.Point(119, 198);
+            this.TB2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB2.Multiline = true;
+            this.TB2.Name = "TB2";
+            this.TB2.Size = new System.Drawing.Size(92, 39);
+            this.TB2.TabIndex = 199;
+            this.TB2.Text = "double";
+            this.TB2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox2
+            // TB3
             // 
-            this.textBox2.BackColor = System.Drawing.Color.Silver;
-            this.textBox2.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox2.Location = new System.Drawing.Point(119, 250);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox2.Multiline = true;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(92, 39);
-            this.textBox2.TabIndex = 198;
-            this.textBox2.Text = "double";
-            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB3.BackColor = System.Drawing.Color.Silver;
+            this.TB3.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB3.Location = new System.Drawing.Point(119, 250);
+            this.TB3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB3.Multiline = true;
+            this.TB3.Name = "TB3";
+            this.TB3.Size = new System.Drawing.Size(92, 39);
+            this.TB3.TabIndex = 198;
+            this.TB3.Text = "double";
+            this.TB3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox3
+            // TB0
             // 
-            this.textBox3.BackColor = System.Drawing.Color.Silver;
-            this.textBox3.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox3.Location = new System.Drawing.Point(119, 96);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox3.Multiline = true;
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(92, 39);
-            this.textBox3.TabIndex = 197;
-            this.textBox3.Text = "double";
-            this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB0.BackColor = System.Drawing.Color.Silver;
+            this.TB0.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB0.Location = new System.Drawing.Point(119, 96);
+            this.TB0.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB0.Multiline = true;
+            this.TB0.Name = "TB0";
+            this.TB0.Size = new System.Drawing.Size(92, 39);
+            this.TB0.TabIndex = 197;
+            this.TB0.Text = "double";
+            this.TB0.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox8
+            // TB8
             // 
-            this.textBox8.BackColor = System.Drawing.Color.Silver;
-            this.textBox8.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox8.Location = new System.Drawing.Point(224, 147);
-            this.textBox8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox8.Multiline = true;
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(92, 39);
-            this.textBox8.TabIndex = 204;
-            this.textBox8.Text = "double";
-            this.textBox8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB8.BackColor = System.Drawing.Color.Silver;
+            this.TB8.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB8.Location = new System.Drawing.Point(328, 96);
+            this.TB8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB8.Multiline = true;
+            this.TB8.Name = "TB8";
+            this.TB8.Size = new System.Drawing.Size(92, 39);
+            this.TB8.TabIndex = 204;
+            this.TB8.Text = "double";
+            this.TB8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox9
+            // TB9
             // 
-            this.textBox9.BackColor = System.Drawing.Color.Silver;
-            this.textBox9.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox9.Location = new System.Drawing.Point(224, 198);
-            this.textBox9.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox9.Multiline = true;
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(92, 39);
-            this.textBox9.TabIndex = 203;
-            this.textBox9.Text = "double";
-            this.textBox9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB9.BackColor = System.Drawing.Color.Silver;
+            this.TB9.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB9.Location = new System.Drawing.Point(328, 147);
+            this.TB9.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB9.Multiline = true;
+            this.TB9.Name = "TB9";
+            this.TB9.Size = new System.Drawing.Size(92, 39);
+            this.TB9.TabIndex = 203;
+            this.TB9.Text = "double";
+            this.TB9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox13
+            // TB11
             // 
-            this.textBox13.BackColor = System.Drawing.Color.Silver;
-            this.textBox13.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox13.Location = new System.Drawing.Point(224, 250);
-            this.textBox13.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox13.Multiline = true;
-            this.textBox13.Name = "textBox13";
-            this.textBox13.Size = new System.Drawing.Size(92, 39);
-            this.textBox13.TabIndex = 202;
-            this.textBox13.Text = "double";
-            this.textBox13.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB11.BackColor = System.Drawing.Color.Silver;
+            this.TB11.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB11.Location = new System.Drawing.Point(328, 250);
+            this.TB11.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB11.Multiline = true;
+            this.TB11.Name = "TB11";
+            this.TB11.Size = new System.Drawing.Size(92, 39);
+            this.TB11.TabIndex = 202;
+            this.TB11.Text = "double";
+            this.TB11.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox14
+            // TB4
             // 
-            this.textBox14.BackColor = System.Drawing.Color.Silver;
-            this.textBox14.Font = new System.Drawing.Font("굴림", 12F);
-            this.textBox14.Location = new System.Drawing.Point(224, 96);
-            this.textBox14.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox14.Multiline = true;
-            this.textBox14.Name = "textBox14";
-            this.textBox14.Size = new System.Drawing.Size(92, 39);
-            this.textBox14.TabIndex = 201;
-            this.textBox14.Text = "double";
-            this.textBox14.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TB4.BackColor = System.Drawing.Color.Silver;
+            this.TB4.Font = new System.Drawing.Font("굴림", 12F);
+            this.TB4.Location = new System.Drawing.Point(224, 96);
+            this.TB4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TB4.Multiline = true;
+            this.TB4.Name = "TB4";
+            this.TB4.Size = new System.Drawing.Size(92, 39);
+            this.TB4.TabIndex = 201;
+            this.TB4.Text = "double";
+            this.TB4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label36
             // 
@@ -1023,28 +1023,28 @@ namespace Temp_UI_Example
             this.ClientSize = new System.Drawing.Size(1664, 844);
             this.Controls.Add(this.label37);
             this.Controls.Add(this.label36);
-            this.Controls.Add(this.textBox8);
-            this.Controls.Add(this.textBox9);
-            this.Controls.Add(this.textBox13);
-            this.Controls.Add(this.textBox14);
-            this.Controls.Add(this.textBox0);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox35);
-            this.Controls.Add(this.textBox36);
-            this.Controls.Add(this.textBox37);
-            this.Controls.Add(this.textBox38);
+            this.Controls.Add(this.TB8);
+            this.Controls.Add(this.TB9);
+            this.Controls.Add(this.TB11);
+            this.Controls.Add(this.TB4);
+            this.Controls.Add(this.TB1);
+            this.Controls.Add(this.TB2);
+            this.Controls.Add(this.TB3);
+            this.Controls.Add(this.TB0);
+            this.Controls.Add(this.TB5);
+            this.Controls.Add(this.TB6);
+            this.Controls.Add(this.TB7);
+            this.Controls.Add(this.TB10);
             this.Controls.Add(this.TempTunetbox6);
             this.Controls.Add(this.TempTunetbox5);
             this.Controls.Add(this.TempTunetbox4);
             this.Controls.Add(this.TempTunetbox3);
             this.Controls.Add(this.TempTunetbox2);
             this.Controls.Add(this.TempTunetbox1);
-            this.Controls.Add(this.textBox24);
-            this.Controls.Add(this.textBox29);
-            this.Controls.Add(this.textBox30);
-            this.Controls.Add(this.textBox31);
+            this.Controls.Add(this.TB25);
+            this.Controls.Add(this.TB26);
+            this.Controls.Add(this.TB27);
+            this.Controls.Add(this.TB24);
             this.Controls.Add(this.label49);
             this.Controls.Add(this.label44);
             this.Controls.Add(this.label45);
@@ -1055,29 +1055,29 @@ namespace Temp_UI_Example
             this.Controls.Add(this.label31);
             this.Controls.Add(this.label30);
             this.Controls.Add(this.label29);
-            this.Controls.Add(this.label26);
-            this.Controls.Add(this.label27);
-            this.Controls.Add(this.label28);
-            this.Controls.Add(this.label23);
-            this.Controls.Add(this.label24);
-            this.Controls.Add(this.label25);
-            this.Controls.Add(this.label16);
-            this.Controls.Add(this.label15);
-            this.Controls.Add(this.label14);
+            this.Controls.Add(this.ST7);
+            this.Controls.Add(this.ST8);
+            this.Controls.Add(this.ST6);
+            this.Controls.Add(this.ST4);
+            this.Controls.Add(this.ST5);
+            this.Controls.Add(this.ST3);
+            this.Controls.Add(this.ST1);
+            this.Controls.Add(this.ST2);
+            this.Controls.Add(this.ST0);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label22);
-            this.Controls.Add(this.textBox17);
-            this.Controls.Add(this.textBox25);
-            this.Controls.Add(this.textBox26);
-            this.Controls.Add(this.textBox27);
-            this.Controls.Add(this.textBox10);
-            this.Controls.Add(this.textBox11);
-            this.Controls.Add(this.textBox12);
-            this.Controls.Add(this.textBox16);
-            this.Controls.Add(this.textBox6);
-            this.Controls.Add(this.textBox5);
-            this.Controls.Add(this.textBox7);
+            this.Controls.Add(this.TB21);
+            this.Controls.Add(this.TB22);
+            this.Controls.Add(this.TB23);
+            this.Controls.Add(this.TB20);
+            this.Controls.Add(this.TB17);
+            this.Controls.Add(this.TB18);
+            this.Controls.Add(this.TB19);
+            this.Controls.Add(this.TB16);
+            this.Controls.Add(this.TB13);
+            this.Controls.Add(this.TB14);
+            this.Controls.Add(this.TB15);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label2);
@@ -1095,7 +1095,7 @@ namespace Temp_UI_Example
             this.Controls.Add(this.label19);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.textBox28);
+            this.Controls.Add(this.TB12);
             this.Controls.Add(this.label11);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
@@ -1117,7 +1117,7 @@ namespace Temp_UI_Example
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox28;
+        private System.Windows.Forms.TextBox TB12;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label21;
@@ -1126,28 +1126,28 @@ namespace Temp_UI_Example
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.TextBox textBox10;
-        private System.Windows.Forms.TextBox textBox11;
-        private System.Windows.Forms.TextBox textBox12;
-        private System.Windows.Forms.TextBox textBox16;
-        private System.Windows.Forms.TextBox textBox17;
-        private System.Windows.Forms.TextBox textBox25;
-        private System.Windows.Forms.TextBox textBox26;
-        private System.Windows.Forms.TextBox textBox27;
+        private System.Windows.Forms.TextBox TB15;
+        private System.Windows.Forms.TextBox TB14;
+        private System.Windows.Forms.TextBox TB13;
+        private System.Windows.Forms.TextBox TB17;
+        private System.Windows.Forms.TextBox TB18;
+        private System.Windows.Forms.TextBox TB19;
+        private System.Windows.Forms.TextBox TB16;
+        private System.Windows.Forms.TextBox TB21;
+        private System.Windows.Forms.TextBox TB22;
+        private System.Windows.Forms.TextBox TB23;
+        private System.Windows.Forms.TextBox TB20;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label ST2;
+        private System.Windows.Forms.Label ST1;
+        private System.Windows.Forms.Label ST4;
+        private System.Windows.Forms.Label ST5;
+        private System.Windows.Forms.Label ST3;
+        private System.Windows.Forms.Label ST7;
+        private System.Windows.Forms.Label ST8;
+        private System.Windows.Forms.Label ST6;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label31;
@@ -1158,29 +1158,29 @@ namespace Temp_UI_Example
         private System.Windows.Forms.Label label44;
         private System.Windows.Forms.Label label45;
         private System.Windows.Forms.Label label49;
-        private System.Windows.Forms.TextBox textBox24;
-        private System.Windows.Forms.TextBox textBox29;
-        private System.Windows.Forms.TextBox textBox30;
-        private System.Windows.Forms.TextBox textBox31;
+        private System.Windows.Forms.TextBox TB25;
+        private System.Windows.Forms.TextBox TB26;
+        private System.Windows.Forms.TextBox TB27;
+        private System.Windows.Forms.TextBox TB24;
         private System.Windows.Forms.TextBox TempTunetbox1;
         private System.Windows.Forms.TextBox TempTunetbox2;
         private System.Windows.Forms.TextBox TempTunetbox3;
         private System.Windows.Forms.TextBox TempTunetbox4;
         private System.Windows.Forms.TextBox TempTunetbox5;
         private System.Windows.Forms.TextBox TempTunetbox6;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox textBox35;
-        private System.Windows.Forms.TextBox textBox36;
-        private System.Windows.Forms.TextBox textBox37;
-        private System.Windows.Forms.TextBox textBox38;
-        private System.Windows.Forms.TextBox textBox0;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox8;
-        private System.Windows.Forms.TextBox textBox9;
-        private System.Windows.Forms.TextBox textBox13;
-        private System.Windows.Forms.TextBox textBox14;
+        private System.Windows.Forms.Label ST0;
+        private System.Windows.Forms.TextBox TB5;
+        private System.Windows.Forms.TextBox TB6;
+        private System.Windows.Forms.TextBox TB7;
+        private System.Windows.Forms.TextBox TB10;
+        private System.Windows.Forms.TextBox TB1;
+        private System.Windows.Forms.TextBox TB2;
+        private System.Windows.Forms.TextBox TB3;
+        private System.Windows.Forms.TextBox TB0;
+        private System.Windows.Forms.TextBox TB8;
+        private System.Windows.Forms.TextBox TB9;
+        private System.Windows.Forms.TextBox TB11;
+        private System.Windows.Forms.TextBox TB4;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Label label37;
     }
