@@ -1,0 +1,53 @@
+         UI           -       cascade
+
+(출)Act Temp     -     s_fPV_Value	
+
+(출)Work Set      -    s_fRamp_Out
+
+(출)Act Power     -    s_fMV_Out
+
+(입)Temp Set      -    slave_fTargetTemp
+
+(입)Ramp Set      -    slave_fRamp_Value
+
+(입)Power Limit    -    slave_fPowLimit_
+
+(출)Tune Result    -    s_fPV_Value와 같은 값
+
+
+[ Temp Tune ]
+(입)Tune Set        -    master_tuning_mode
+
+(입)Target Temp   -    m_Target_Temp
+
+(입)Gain              -    master_pi_gain
+
+(입)τi                  -    master_integral_constant
+
+(입)Tune Max        -    master_Zone_Temp_Max_per
+
+(입)Tune Min         -    master_Zone_Temp_Min_per
+
+(입)Tune Time        -    master_tuning_time
+
+
+[ Substrate Temp ] 
+
+Max Temp             -    glass_max
+
+Min Temp             -    glass_min
+
+Avg Temp             -    master_subTC_AVG
+
+Max - Min             -    glass_max - glass_min (UI에서 연산)
+
+
+
+
+
+
+
+
+
+
+

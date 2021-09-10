@@ -6,19 +6,20 @@ VAR_GLOBAL
 	slave_bsimulation		   : BOOL;
 	slave_bRamp_Enable         : BOOL;
 	
+	(*
 	s_ramp_all : LREAL := 10;
 	s_targetTemp_all : LREAL := 30;
 	s_powLimit : LREAL := 90;
+	*)
 	
-	
-	slave_fRamp_Value          : ARRAY[1..4] OF LREAL := [s_ramp_all, s_ramp_all, s_ramp_all, s_ramp_all] ;
-	slave_fTargetTemp          : ARRAY[1..4] OF LREAL  := [s_targetTemp_all, s_targetTemp_all, s_targetTemp_all, s_targetTemp_all ];
-	slave_fPowLimit_           : ARRAY[1..4] OF LREAL := [s_powLimit, s_powLimit, s_powLimit, s_powLimit];
+	slave_fRamp_Value          : ARRAY[1..4] OF LREAL := [10,10,10,10] ;
+	slave_fTargetTemp          : ARRAY[1..4] OF LREAL := [150,150,150,150];
+	slave_fPowLimit_           : ARRAY[1..4] OF LREAL := [90, 90, 90, 90];
 	slave_eCTRL_MODE_          : ARRAY[1..4] OF E_CTRL_MODE ; (*고정값 - UI에서 *)
 	slave_bStart_		       : BOOL;
 	slave_fP_Value_	           : ARRAY[1..4] OF LREAL := [3,3,3,3] ;
-	slave_tI_Value_		       : ARRAY[1..4] OF TIME  := [T#5S, T#5S, T#5S, T#5S] ;
-	slave_tD_Value_		       : ARRAY[1..4] OF TIME  := [T#50S, T#50S, T#50S, T#50S] ;
+	slave_tI_Value_		       : ARRAY[1..4] OF TIME  := [T#500S, T#500S, T#500S, T#500S] ;
+	slave_tD_Value_		       : ARRAY[1..4] OF TIME  := [T#80S, T#80S, T#80S, T#80S] ;
 	slave_fSetManual_		   : ARRAY[1..4] OF LREAL;
 	
 END_VAR]]></Declaration>

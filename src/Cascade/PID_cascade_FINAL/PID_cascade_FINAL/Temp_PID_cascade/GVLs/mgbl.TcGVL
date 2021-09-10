@@ -9,7 +9,7 @@ VAR_GLOBAL
 	master_PowLimit_                     : ARRAY[1..4] OF LREAL;
 	master_integral_constant			 : ARRAY[1..4] OF LREAL;	//PI제어기 적분상수
 	master_pi_gain                       : ARRAY[1..4] OF LREAL;	//PI제어기 이득(gain)
-	master_Sampling_Time				 : LREAL; (*고정값*)
+	master_Sampling_Time				 : LREAL;  //Δt(*고정값*)
 	master_Zone_Temp_Min_per             : LREAL;  //단위 : %
 	master_Zone_Temp_Max_per             : LREAL;  //단위 : %
 	master_fMV_Out						 : ARRAY[1..4] OF LREAL;
