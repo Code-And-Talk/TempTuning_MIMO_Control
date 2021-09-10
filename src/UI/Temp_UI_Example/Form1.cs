@@ -117,7 +117,7 @@ namespace Temp_UI_Example
                 for (int i = 16; i < 25; i++)
                 {
 
-                    pot[i] = ads.ReadSymbolInfo($"master.Substrate_Simulation.fPV_Value_Sub[{cnt++}]");
+                    pot[i] = ads.ReadSymbolInfo($"master.fPV_Value_Sub[{cnt++}]");
                     Act_Temp[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
                     this.Controls["ST" + (i - 16)].Text = Act_Temp[i].ToString();
                     Thread.Sleep(100);
@@ -129,14 +129,14 @@ namespace Temp_UI_Example
                 pot[25] = ads.ReadSymbolInfo($"master.glass_max");
                 pot[26] = ads.ReadSymbolInfo($"master.glass_min");
                 pot[27] = ads.ReadSymbolInfo($"master.master_subTC_AVG");
+                Act_Temp[25] = Convert.ToDouble(ads.ReadSymbol(pot[25]));
                 Act_Temp[26] = Convert.ToDouble(ads.ReadSymbol(pot[26]));
                 Act_Temp[27] = Convert.ToDouble(ads.ReadSymbol(pot[27]));
-                Act_Temp[28] = Convert.ToDouble(ads.ReadSymbol(pot[28]));
-                Act_Temp[29] = Act_Temp[26] - Act_Temp[27];
+                Act_Temp[28] = Act_Temp[25] - Act_Temp[26];
                 this.Controls["ST" + (25 - 16)].Text = Act_Temp[26].ToString();
                 this.Controls["ST" + (26 - 16)].Text = Act_Temp[27].ToString();
                 this.Controls["ST" + (27 - 16)].Text = Act_Temp[28].ToString();
-                this.Controls["ST" + (28 - 16)].Text = Act_Temp[29].ToString();
+                this.Controls["ST" + (28 - 16)].Text = Act_Temp[28].ToString();
                 Thread.Sleep(100);
 
             }
