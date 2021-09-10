@@ -12,3 +12,14 @@ C:\Users\Admin\source\repos\Temp_UI_Example\bin\Debug\TwinCAT.Ads.dll
 C:\Users\Admin\source\repos\Temp_UI_Example\bin\Debug\TwinCAT.Ads.xml
 C:\Users\Admin\source\repos\Temp_UI_Example\obj\Debug\Temp_UI_Example.csproj.CopyComplete
 C:\Users\Admin\source\repos\Temp_UI_Example\obj\Debug\Temp_UI_Example.PID.resources
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\bin\Debug\Temp_UI_Example.exe.config
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\bin\Debug\Temp_UI_Example.exe
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\bin\Debug\Temp_UI_Example.pdb
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\obj\Debug\Temp_UI_Example.csprojAssemblyReference.cache
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\obj\Debug\Temp_UI_Example.Form1.resources
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\obj\Debug\Temp_UI_Example.PID.resources
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\obj\Debug\Temp_UI_Example.Properties.Resources.resources
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\obj\Debug\Temp_UI_Example.csproj.GenerateResource.cache
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\obj\Debug\Temp_UI_Example.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\obj\Debug\Temp_UI_Example.exe
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\obj\Debug\Temp_UI_Example.pdb
