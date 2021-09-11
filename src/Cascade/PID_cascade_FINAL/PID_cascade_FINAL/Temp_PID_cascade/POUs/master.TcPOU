@@ -67,6 +67,13 @@ VAR
 	
 	glass_max 					:			LREAL ;
 	glass_min 					:			LREAL ;
+	glass_dev					:			LREAL ;  (*glss_max - glass_min*)
+	
+(*===================================결과 출력값==========================================================*)
+	result_zone_set_val			:			ARRAY[1..4] OF LREAL ;
+	result_glass_dev			:			LREAL :=0;
+	result_subTC_AVG			:			LREAL :=0;
+	
 	
 (* ------------------------------------------Ramp Parameter Set-------------------------------------- *)
 	m_bRamp_Use				    :			BOOL;	
@@ -116,14 +123,21 @@ IF tWait_Time.Q THEN
 		glass_max := MAX(glass_max, fPV_Value_Sub[i]);
 		glass_min := MIN(glass_min, fPV_Value_Sub[i]);
 	END_FOR
-		
+	glass_dev := glass_max - glass_min;	
 	master_subTC_AVG := master_subTC /9;
+	
+	IF 0 <= glass_dev AND glass_dev <= 10 THEN
+		IF result_glass_dev > glass_dev THEN
+			result_glass_dev := glass_dev;
+		END_IF
+	
+	END_IF
+	
 	
 	IF m_fTargetTemp > 0 THEN
 				
 		FOR i:=1 TO 4 BY 1 DO
 			
-			m_fPowLimit_[i] := mgbl.master_PowLimit_[i];
 			mErr_Value[i] := m_fTargetTemp - Substrate_AvgTemp[i];
 			mErr_integral_Val[i] := mErr_integral_Val[i] + (mErr_Value[i] * m_Sampling_Time);
 			master_Zone_AVG[i] := (m_pi_gain[i] * mErr_Value[i]) + (m_pi_gain[i]/m_integral_constant[i] * mErr_integral_Val[i]) + m_fTargetTemp;
@@ -144,8 +158,6 @@ IF tWait_Time.Q THEN
 			ELSIF master_Zone_AVG[i] > m_Zone_Temp_Max THEN
 				master_Zone_AVG[i] := m_Zone_Temp_Max; 
 				mErr_integral_Val[i] :=  mErr_integral_Val[i] - mErr_Value[i]* m_Sampling_Time;
-			ELSE 
-				 master_Zone_AVG[i] :=  master_Zone_AVG[i];
 			END_IF
 			
 		END_FOR
@@ -225,7 +237,19 @@ Substrate_AvgTemp[4] := (fPV_Value_Sub[5] + fPV_Value_Sub[6] + fPV_Value_Sub[8] 
     </Action>
     <Action Name="Substrate_Simulation" Id="{108ac06f-2968-4bd6-8d2a-f38f7f2d45c0}">
       <Implementation>
-        <ST><![CDATA[fMV_Out_Sub[1] := fMV_Out[1];
+        <ST><![CDATA[fPV_Value_Sub[1] := fMV_Out[1] - 2.5;
+fPV_Value_Sub[2] := (fMV_Out[1] + fMV_Out[2]) / 2 - 3.4;
+fPV_Value_Sub[3] := fMV_Out[2] - 3.1;
+fPV_Value_Sub[4] := (fMV_Out[1] + fMV_Out[3]) / 2 - 3.5;
+fPV_Value_Sub[5] := (fMV_Out[1] + fMV_Out[2]+ fMV_Out[3] + fMV_Out[4]) / 4 - 4;
+fPV_Value_Sub[6] := (fMV_Out[2] + fMV_Out[4]) / 2 - 3.2;
+fPV_Value_Sub[7] := fMV_Out[3] - 2.6;
+fPV_Value_Sub[8] := (fMV_Out[3] + fMV_Out[4]) / 2 - 3.4;
+fPV_Value_Sub[9] := fMV_Out[4] - 2.1;
+
+
+(*
+fMV_Out_Sub[1] := fMV_Out[1];
 
 IF fMV_Out[1] = 0 AND fMV_Out[2] = 0 THEN
 	fMV_Out_Sub[2] := 0;
@@ -284,7 +308,9 @@ FOR i:=1 TO 9 BY 1 DO
 		fPV_Value_Sub[i] := fPV_Value_Local_Sub[i];
 	END_IF 	
 	
-END_FOR]]></ST>
+END_FOR
+*)
+]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="master">
@@ -296,7 +322,15 @@ END_FOR]]></ST>
       <LineId Id="153" Count="0" />
       <LineId Id="261" Count="0" />
       <LineId Id="154" Count="0" />
-      <LineId Id="453" Count="51" />
+      <LineId Id="453" Count="16" />
+      <LineId Id="596" Count="0" />
+      <LineId Id="602" Count="1" />
+      <LineId Id="601" Count="0" />
+      <LineId Id="605" Count="1" />
+      <LineId Id="594" Count="1" />
+      <LineId Id="470" Count="3" />
+      <LineId Id="475" Count="19" />
+      <LineId Id="497" Count="7" />
       <LineId Id="164" Count="0" />
       <LineId Id="67" Count="0" />
       <LineId Id="31" Count="0" />
@@ -315,8 +349,12 @@ END_FOR]]></ST>
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="master.Substrate_Simulation">
-      <LineId Id="3" Count="58" />
+      <LineId Id="322" Count="7" />
+      <LineId Id="318" Count="3" />
+      <LineId Id="257" Count="58" />
       <LineId Id="1" Count="0" />
+      <LineId Id="330" Count="0" />
+      <LineId Id="317" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

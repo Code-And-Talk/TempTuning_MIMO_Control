@@ -36,22 +36,33 @@ tune set :  true -> master, slave호출
 tune set :  false -> slave만 호출
 *)
 
+master();
+
+slave();
+
+(*
+ 아래 코드는 Tune Mode Start 후 바로 False로 변경되어 Master 호출이 안됩니다.
+ 튜닝 완료 후 FALSE로 변경하세요
+*)
+
+(*
 IF mgbl.master_tuning_mode THEN
 	master();
 	slave();
 	
   (* 튜닝 시간 설정 = mgbl.master_tuning_time *)
-    onTimer_tune(IN := OffTimer_tune.Q, PT := mgbl.master_tuning_time*60000);
+    onTimer_tune(IN := OffTimer_tune.Q, PT := LREAL_TO_TIME(mgbl.master_tuning_time)*60000);
     IF onTimer_tune.Q THEN
 	  mgbl.master_tuning_mode := FALSE;
 	  reverseSignal_tune := FALSE;
 	ELSE
 	  reverseSignal_tune := TRUE;
     END_IF
-    OffTimer_tune(IN := reverseSignal_tune, PT := mgbl.master_tuning_time*60000);
+    OffTimer_tune(IN := reverseSignal_tune, PT := LREAL_TO_TIME(mgbl.master_tuning_time)*60000);
 ELSE
 	slave();
 END_IF
+*)
 
 ]]></ST>
     </Implementation>
@@ -68,18 +79,7 @@ END_IF
       <LineId Id="93" Count="0" />
       <LineId Id="128" Count="0" />
       <LineId Id="131" Count="0" />
-      <LineId Id="92" Count="0" />
-      <LineId Id="32" Count="0" />
-      <LineId Id="34" Count="0" />
-      <LineId Id="173" Count="0" />
-      <LineId Id="208" Count="0" />
-      <LineId Id="174" Count="1" />
-      <LineId Id="184" Count="0" />
-      <LineId Id="206" Count="1" />
-      <LineId Id="205" Count="0" />
-      <LineId Id="181" Count="1" />
-      <LineId Id="28" Count="0" />
-      <LineId Id="33" Count="0" />
+      <LineId Id="234" Count="25" />
       <LineId Id="29" Count="0" />
       <LineId Id="132" Count="0" />
       <LineId Id="17" Count="0" />

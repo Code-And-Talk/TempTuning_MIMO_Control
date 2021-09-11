@@ -5,8 +5,8 @@
 VAR_GLOBAL
 	//master_Ramp_Enable                   : BOOL;
 	//master_Ramp_Value                    : ARRAY[1..4] OF LREAL;
+	//master_PowLimit_                     : ARRAY[1..4] OF LREAL;
 	master_TargetTemp                    : LREAL;
-	master_PowLimit_                     : ARRAY[1..4] OF LREAL;
 	master_integral_constant			 : ARRAY[1..4] OF LREAL;	//PI제어기 적분상수
 	master_pi_gain                       : ARRAY[1..4] OF LREAL;	//PI제어기 이득(gain)
 	master_Sampling_Time				 : LREAL;  //Δt(*고정값*)
@@ -15,7 +15,7 @@ VAR_GLOBAL
 	master_fMV_Out						 : ARRAY[1..4] OF LREAL;
 	
 	master_tuning_mode 	     			 : BOOL;
-	master_tuning_time	     			 : TIME;
+	master_tuning_time	     			 : LREAL;
 	master_bWatch						 : BOOL;
 END_VAR]]></Declaration>
   </GVL>

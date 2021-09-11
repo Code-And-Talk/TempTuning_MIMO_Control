@@ -18,8 +18,8 @@ VAR_GLOBAL
 	slave_eCTRL_MODE_          : ARRAY[1..4] OF E_CTRL_MODE ; (*고정값 - UI에서 *)
 	slave_bStart_		       : BOOL;
 	slave_fP_Value_	           : ARRAY[1..4] OF LREAL := [3,3,3,3] ;
-	slave_tI_Value_		       : ARRAY[1..4] OF TIME  := [T#500S, T#500S, T#500S, T#500S] ;
-	slave_tD_Value_		       : ARRAY[1..4] OF TIME  := [T#80S, T#80S, T#80S, T#80S] ;
+	slave_tI_Value_		       : ARRAY[1..4] OF LREAL  := [500,500,500,500] ;
+	slave_tD_Value_		       : ARRAY[1..4] OF LREAL  := [80,80,80,80] ;
 	slave_fSetManual_		   : ARRAY[1..4] OF LREAL;
 	
 END_VAR]]></Declaration>

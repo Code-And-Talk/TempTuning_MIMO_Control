@@ -129,8 +129,8 @@ CASE System_step OF
 	1:
 		FOR i:=1 TO 4 BY 1 DO
 			s_fP_Value[i] :=sgbl.slave_fP_Value_[i];
-			s_tI_Value[i] :=sgbl.slave_tI_Value_[i];
-			s_tD_Value[i] :=sgbl.slave_tD_Value_[i];
+			s_tI_Value[i] :=LREAL_TO_TIME(sgbl.slave_tI_Value_[i]);
+			s_tD_Value[i] :=LREAL_TO_TIME(sgbl.slave_tD_Value_[i]);
 			
 			IF s_fP_Value[i] <= 0 THEN
 				s_fP_Value[i] := 0.1;
