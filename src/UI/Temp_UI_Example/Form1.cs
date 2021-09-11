@@ -20,11 +20,20 @@ namespace Temp_UI_Example
         // ADS 정보를 읽기 위한 인터페이스 정의, 값을 읽어오기 위함
         private ITcAdsSymbol[] pot = new ITcAdsSymbol[100];
         double[] Act_Temp = new double[100];
-        int cnt = 1;
+        private int cnt = 1;
 
-        //쓰레드
+        //쓰레드1 = 데이터출력, 쓰레드2 = 와치독
         Thread thread1;
-        bool bThreadStart = false;
+        Thread thread2;
+        private bool bThreadStart1 = false;
+        private bool bThreadStart2 = false;
+
+        //와치독 변수
+        private bool Watchdog1 = true;
+        private bool Watchdog2 = true;
+        private int Watchdog3 = 0;
+        private int Watchdog4 = 0;
+
 
         // Slave Global Var
         private int Ramp_Set;
@@ -48,15 +57,14 @@ namespace Temp_UI_Example
             Run();
 
             thread1 = new Thread(new ThreadStart(ReadData));
+            thread2 = new Thread(new ThreadStart(WatchDog));
             thread1.IsBackground = true;
+            thread2.IsBackground = true;
 
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // 화면 크기 최대화
-            WindowState = FormWindowState.Maximized;
-
             // Array
             tb = new TextBox[] { TempTunetbox1, TempTunetbox2, TempTunetbox3, TempTunetbox4, TempTunetbox5, TempTunetbox6 };
             Temp_s = new TextBox[] { TB12, TB13, TB14, TB15 };
@@ -65,6 +73,9 @@ namespace Temp_UI_Example
 
             //Tune Set 초기값
             comboBox1.SelectedIndex = 1;
+
+            thread1.Start();
+            thread2.Start();
 
         }
 
@@ -148,16 +159,16 @@ namespace Temp_UI_Example
                 cnt = 1;
 
                 //Substrate Temp (MAX,MIN,AVG,MAX-MIN) 출력
-                pot[25] = ads.ReadSymbolInfo($"master.glass_max");
-                pot[26] = ads.ReadSymbolInfo($"master.glass_min");
-                pot[27] = ads.ReadSymbolInfo($"master.master_subTC_AVG");
+                pot[25] = ads.ReadSymbolInfo("master.glass_max");
+                pot[26] = ads.ReadSymbolInfo("master.glass_min");
+                pot[27] = ads.ReadSymbolInfo("master.master_subTC_AVG");
                 Act_Temp[25] = Convert.ToDouble(ads.ReadSymbol(pot[25]));
                 Act_Temp[26] = Convert.ToDouble(ads.ReadSymbol(pot[26]));
                 Act_Temp[27] = Convert.ToDouble(ads.ReadSymbol(pot[27]));
                 Act_Temp[28] = Act_Temp[25] - Act_Temp[26];
-                this.Controls["ST" + (25 - 16)].Text = Act_Temp[26].ToString();
-                this.Controls["ST" + (26 - 16)].Text = Act_Temp[27].ToString();
-                this.Controls["ST" + (27 - 16)].Text = Act_Temp[28].ToString();
+                this.Controls["ST" + (25 - 16)].Text = Act_Temp[25].ToString();
+                this.Controls["ST" + (26 - 16)].Text = Act_Temp[26].ToString();
+                this.Controls["ST" + (27 - 16)].Text = Act_Temp[27].ToString();
                 this.Controls["ST" + (28 - 16)].Text = Act_Temp[28].ToString();
                 Thread.Sleep(10);
 
@@ -169,7 +180,7 @@ namespace Temp_UI_Example
         {
             if (thread1 != null)
             {
-                if (bThreadStart)
+                if (bThreadStart1)
                 {
                     thread1.Abort();
                 }
@@ -179,6 +190,20 @@ namespace Temp_UI_Example
                 }
                 thread1 = null;
             }
+
+            if (thread2 != null)
+            {
+                if (bThreadStart2)
+                {
+                    thread2.Abort();
+                }
+                else
+                {
+                    thread2.Interrupt();
+                }
+                thread2 = null;
+            }
+
         }
 
         // PID 팝업 창 띄우기
@@ -208,58 +233,60 @@ namespace Temp_UI_Example
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        //와치독 함수
+        private void WatchDog()
         {
-            thread1.Start();
-
-            for (int i = 0; i <= 3; i++)
+            while (true)
             {
-                if (i == 0)
+                pot[28] = ads.ReadSymbolInfo("slave.Watch_Dog_Bool");
+                Watchdog1 = Convert.ToBoolean(ads.ReadSymbol(pot[28]));
+                //this.Controls["ST" + (28 - 16)].Text = Watchdog1.ToString();
+                Thread.Sleep(1000);
+                Watchdog4++;
+                if(Watchdog4 >= 3)
                 {
-                    Temp_Set = ads.CreateVariableHandle("sgbl.slave_fTargetTemp[1]");
-                    Ramp_Set = ads.CreateVariableHandle("sgbl.slave_fRamp_Value[1]");
-                    Power_Set = ads.CreateVariableHandle("sgbl.slave_fPowLimit_[1]");
-
-                    ads.WriteAny(Temp_Set, double.Parse(Temp_s[i].Text));
-                    ads.WriteAny(Ramp_Set, double.Parse(Ramp_s[i].Text));
-                    ads.WriteAny(Power_Set, double.Parse(Power_s[i].Text));
+                    Watchdog4 = 0;
+                    Watchdog3 = 0;
                 }
-                else if (i == 1)
-                {
-                    Temp_Set = ads.CreateVariableHandle("sgbl.slave_fTargetTemp[2]");
-                    Ramp_Set = ads.CreateVariableHandle("sgbl.slave_fRamp_Value[2]");
-                    Power_Set = ads.CreateVariableHandle("sgbl.slave_fPowLimit_[2]");
 
-                    ads.WriteAny(Temp_Set, double.Parse(Temp_s[i].Text));
-                    ads.WriteAny(Ramp_Set, double.Parse(Ramp_s[i].Text));
-                    ads.WriteAny(Power_Set, double.Parse(Power_s[i].Text));
-                }
-                else if (i == 2)
-                {
-                    Temp_Set = ads.CreateVariableHandle("sgbl.slave_fTargetTemp[3]");
-                    Ramp_Set = ads.CreateVariableHandle("sgbl.slave_fRamp_Value[3]");
-                    Power_Set = ads.CreateVariableHandle("sgbl.slave_fPowLimit_[3]");
+                pot[29] = ads.ReadSymbolInfo("slave.Watch_Dog_Bool");
+                Watchdog2 = Convert.ToBoolean(ads.ReadSymbol(pot[28]));
 
-                    ads.WriteAny(Temp_Set, double.Parse(Temp_s[i].Text));
-                    ads.WriteAny(Ramp_Set, double.Parse(Ramp_s[i].Text));
-                    ads.WriteAny(Power_Set, double.Parse(Power_s[i].Text));
-                }
-                else if (i == 3)
+                if (Watchdog1 == Watchdog2)
                 {
-                    Temp_Set = ads.CreateVariableHandle("sgbl.slave_fTargetTemp[4]");
-                    Ramp_Set = ads.CreateVariableHandle("sgbl.slave_fRamp_Value[4]");
-                    Power_Set = ads.CreateVariableHandle("sgbl.slave_fPowLimit_[4]");
-
-                    ads.WriteAny(Temp_Set, double.Parse(Temp_s[i].Text));
-                    ads.WriteAny(Ramp_Set, double.Parse(Ramp_s[i].Text));
-                    ads.WriteAny(Power_Set, double.Parse(Power_s[i].Text));
+                    Watchdog3++;
+                    if (Watchdog3 > 2)
+                    {
+                        MessageBox.Show("PLC가 정지되었습니다.");
+                    }
                 }
             }
-            if (TempTunetbox1.Enabled == true)
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            for (int i = 0; i <= 3; i++) // Slave
             {
+                // Temp_Set
+                Temp_Set = ads.CreateVariableHandle($"sgbl.slave_fTargetTemp[{i + 1}]");
+                ads.WriteAny(Temp_Set, double.Parse(Temp_s[i].Text));
+
+                // Ramp_Set
+                Ramp_Set = ads.CreateVariableHandle($"sgbl.slave_fRamp_Value[{i + 1}]");
+                ads.WriteAny(Ramp_Set, double.Parse(Ramp_s[i].Text));
+
+                // Power_Set
+                Power_Set = ads.CreateVariableHandle($"sgbl.slave_fPowLimit_[{i + 1}]");
+                ads.WriteAny(Power_Set, double.Parse(Power_s[i].Text));
+            }
+            if (TempTunetbox1.Enabled == true) // Master
+            {
+                // Target_Temp
                 Temp_Tune = ads.CreateVariableHandle("mgbl.master_TargetTemp");
                 ads.WriteAny(Temp_Tune, double.Parse(TempTunetbox1.Text));
 
+                // gain(P)
                 Temp_Tune = ads.CreateVariableHandle("mgbl.master_pi_gain[1]");
                 ads.WriteAny(Temp_Tune, double.Parse(TempTunetbox2.Text));
                 Temp_Tune = ads.CreateVariableHandle("mgbl.master_pi_gain[2]");
@@ -269,6 +296,7 @@ namespace Temp_UI_Example
                 Temp_Tune = ads.CreateVariableHandle("mgbl.master_pi_gain[4]");
                 ads.WriteAny(Temp_Tune, double.Parse(TempTunetbox2.Text));
 
+                // i값(적분 상수)
                 Temp_Tune = ads.CreateVariableHandle("mgbl.master_integral_constant[1]");
                 ads.WriteAny(Temp_Tune, double.Parse(TempTunetbox3.Text));
                 Temp_Tune = ads.CreateVariableHandle("mgbl.master_integral_constant[2]");
@@ -278,20 +306,34 @@ namespace Temp_UI_Example
                 Temp_Tune = ads.CreateVariableHandle("mgbl.master_integral_constant[4]");
                 ads.WriteAny(Temp_Tune, double.Parse(TempTunetbox3.Text));
 
+                // Tune_Max
                 Temp_Tune = ads.CreateVariableHandle("mgbl.master_Zone_Temp_Max_per");
                 ads.WriteAny(Temp_Tune, double.Parse(TempTunetbox4.Text));
 
+                // Tune_Min
                 Temp_Tune = ads.CreateVariableHandle("mgbl.master_Zone_Temp_Min_per");
                 ads.WriteAny(Temp_Tune, double.Parse(TempTunetbox5.Text));
 
+                // Tune_Time
                 Temp_Tune = ads.CreateVariableHandle("mgbl.master_tuning_time");
-                TempTunetbox6.Text = (float.Parse(TempTunetbox6.Text) * 0.000000000000000000000000000000000000000000001f).ToString();
-                ads.WriteAny(Temp_Tune, float.Parse(TempTunetbox6.Text));
+                ads.WriteAny(Temp_Tune, double.Parse(TempTunetbox6.Text));
             }
             else
             {
                 MessageBox.Show("Master Value is Null");
             }
+        }
+
+        //Run 모드
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ads.WriteControl(new StateInfo(AdsState.Run, ads.ReadState().DeviceState));
+        }
+
+        //Stop 모드
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ads.WriteControl(new StateInfo(AdsState.Stop, ads.ReadState().DeviceState));
         }
     }
 }

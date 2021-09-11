@@ -105,6 +105,8 @@ namespace Temp_UI_Example
             this.TB4 = new System.Windows.Forms.TextBox();
             this.label36 = new System.Windows.Forms.Label();
             this.label37 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label7
@@ -151,7 +153,6 @@ namespace Temp_UI_Example
             this.TB12.Name = "TB12";
             this.TB12.Size = new System.Drawing.Size(92, 39);
             this.TB12.TabIndex = 75;
-            this.TB12.Text = "입력";
             this.TB12.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label18
@@ -330,7 +331,6 @@ namespace Temp_UI_Example
             this.TB15.Name = "TB15";
             this.TB15.Size = new System.Drawing.Size(92, 39);
             this.TB15.TabIndex = 125;
-            this.TB15.Text = "입력";
             this.TB15.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // TB14
@@ -343,7 +343,6 @@ namespace Temp_UI_Example
             this.TB14.Name = "TB14";
             this.TB14.Size = new System.Drawing.Size(92, 39);
             this.TB14.TabIndex = 126;
-            this.TB14.Text = "입력";
             this.TB14.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // TB13
@@ -356,7 +355,6 @@ namespace Temp_UI_Example
             this.TB13.Name = "TB13";
             this.TB13.Size = new System.Drawing.Size(92, 39);
             this.TB13.TabIndex = 127;
-            this.TB13.Text = "입력";
             this.TB13.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // TB17
@@ -369,7 +367,6 @@ namespace Temp_UI_Example
             this.TB17.Name = "TB17";
             this.TB17.Size = new System.Drawing.Size(92, 39);
             this.TB17.TabIndex = 131;
-            this.TB17.Text = "입력";
             this.TB17.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // TB18
@@ -382,7 +379,6 @@ namespace Temp_UI_Example
             this.TB18.Name = "TB18";
             this.TB18.Size = new System.Drawing.Size(92, 39);
             this.TB18.TabIndex = 130;
-            this.TB18.Text = "입력";
             this.TB18.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // TB19
@@ -395,7 +391,6 @@ namespace Temp_UI_Example
             this.TB19.Name = "TB19";
             this.TB19.Size = new System.Drawing.Size(92, 39);
             this.TB19.TabIndex = 129;
-            this.TB19.Text = "입력";
             this.TB19.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // TB16
@@ -408,7 +403,6 @@ namespace Temp_UI_Example
             this.TB16.Name = "TB16";
             this.TB16.Size = new System.Drawing.Size(92, 39);
             this.TB16.TabIndex = 128;
-            this.TB16.Text = "입력";
             this.TB16.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // TB21
@@ -421,7 +415,6 @@ namespace Temp_UI_Example
             this.TB21.Name = "TB21";
             this.TB21.Size = new System.Drawing.Size(92, 39);
             this.TB21.TabIndex = 135;
-            this.TB21.Text = "입력";
             this.TB21.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // TB22
@@ -434,7 +427,6 @@ namespace Temp_UI_Example
             this.TB22.Name = "TB22";
             this.TB22.Size = new System.Drawing.Size(92, 39);
             this.TB22.TabIndex = 134;
-            this.TB22.Text = "입력";
             this.TB22.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // TB23
@@ -447,7 +439,6 @@ namespace Temp_UI_Example
             this.TB23.Name = "TB23";
             this.TB23.Size = new System.Drawing.Size(92, 39);
             this.TB23.TabIndex = 133;
-            this.TB23.Text = "입력";
             this.TB23.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // TB20
@@ -460,7 +451,6 @@ namespace Temp_UI_Example
             this.TB20.Name = "TB20";
             this.TB20.Size = new System.Drawing.Size(92, 39);
             this.TB20.TabIndex = 132;
-            this.TB20.Text = "입력";
             this.TB20.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label22
@@ -1016,11 +1006,35 @@ namespace Temp_UI_Example
             this.label37.Text = "Tune Result";
             this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(693, 452);
+            this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(147, 45);
+            this.button3.TabIndex = 207;
+            this.button3.Text = "Start";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(693, 501);
+            this.button4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(147, 45);
+            this.button4.TabIndex = 208;
+            this.button4.Text = "Stop";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1664, 844);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.label37);
             this.Controls.Add(this.label36);
             this.Controls.Add(this.TB8);
@@ -1183,6 +1197,8 @@ namespace Temp_UI_Example
         private System.Windows.Forms.TextBox TB4;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
     }
 }
 

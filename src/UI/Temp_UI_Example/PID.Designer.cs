@@ -117,7 +117,6 @@ namespace Temp_UI_Example
             this.tboxZONE4_P.Name = "tboxZONE4_P";
             this.tboxZONE4_P.Size = new System.Drawing.Size(92, 39);
             this.tboxZONE4_P.TabIndex = 77;
-            this.tboxZONE4_P.Text = "입력";
             this.tboxZONE4_P.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE3_P
@@ -129,7 +128,6 @@ namespace Temp_UI_Example
             this.tboxZONE3_P.Name = "tboxZONE3_P";
             this.tboxZONE3_P.Size = new System.Drawing.Size(92, 39);
             this.tboxZONE3_P.TabIndex = 76;
-            this.tboxZONE3_P.Text = "입력";
             this.tboxZONE3_P.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE2_P
@@ -141,7 +139,6 @@ namespace Temp_UI_Example
             this.tboxZONE2_P.Name = "tboxZONE2_P";
             this.tboxZONE2_P.Size = new System.Drawing.Size(92, 39);
             this.tboxZONE2_P.TabIndex = 75;
-            this.tboxZONE2_P.Text = "입력";
             this.tboxZONE2_P.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE1_P
@@ -153,7 +150,6 @@ namespace Temp_UI_Example
             this.tboxZONE1_P.Name = "tboxZONE1_P";
             this.tboxZONE1_P.Size = new System.Drawing.Size(92, 39);
             this.tboxZONE1_P.TabIndex = 74;
-            this.tboxZONE1_P.Text = "입력";
             this.tboxZONE1_P.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label5
@@ -176,7 +172,6 @@ namespace Temp_UI_Example
             this.tboxZONE4_I.Name = "tboxZONE4_I";
             this.tboxZONE4_I.Size = new System.Drawing.Size(92, 39);
             this.tboxZONE4_I.TabIndex = 82;
-            this.tboxZONE4_I.Text = "입력";
             this.tboxZONE4_I.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE3_I
@@ -188,7 +183,6 @@ namespace Temp_UI_Example
             this.tboxZONE3_I.Name = "tboxZONE3_I";
             this.tboxZONE3_I.Size = new System.Drawing.Size(92, 39);
             this.tboxZONE3_I.TabIndex = 81;
-            this.tboxZONE3_I.Text = "입력";
             this.tboxZONE3_I.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE2_I
@@ -200,7 +194,6 @@ namespace Temp_UI_Example
             this.tboxZONE2_I.Name = "tboxZONE2_I";
             this.tboxZONE2_I.Size = new System.Drawing.Size(92, 39);
             this.tboxZONE2_I.TabIndex = 80;
-            this.tboxZONE2_I.Text = "입력";
             this.tboxZONE2_I.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE1_I
@@ -212,7 +205,6 @@ namespace Temp_UI_Example
             this.tboxZONE1_I.Name = "tboxZONE1_I";
             this.tboxZONE1_I.Size = new System.Drawing.Size(92, 39);
             this.tboxZONE1_I.TabIndex = 79;
-            this.tboxZONE1_I.Text = "입력";
             this.tboxZONE1_I.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label6
@@ -235,7 +227,6 @@ namespace Temp_UI_Example
             this.tboxZONE4_D.Name = "tboxZONE4_D";
             this.tboxZONE4_D.Size = new System.Drawing.Size(92, 39);
             this.tboxZONE4_D.TabIndex = 87;
-            this.tboxZONE4_D.Text = "입력";
             this.tboxZONE4_D.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE3_D
@@ -247,7 +238,6 @@ namespace Temp_UI_Example
             this.tboxZONE3_D.Name = "tboxZONE3_D";
             this.tboxZONE3_D.Size = new System.Drawing.Size(92, 39);
             this.tboxZONE3_D.TabIndex = 86;
-            this.tboxZONE3_D.Text = "입력";
             this.tboxZONE3_D.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE2_D
@@ -259,7 +249,6 @@ namespace Temp_UI_Example
             this.tboxZONE2_D.Name = "tboxZONE2_D";
             this.tboxZONE2_D.Size = new System.Drawing.Size(92, 39);
             this.tboxZONE2_D.TabIndex = 85;
-            this.tboxZONE2_D.Text = "입력";
             this.tboxZONE2_D.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE1_D
@@ -271,7 +260,6 @@ namespace Temp_UI_Example
             this.tboxZONE1_D.Name = "tboxZONE1_D";
             this.tboxZONE1_D.Size = new System.Drawing.Size(92, 39);
             this.tboxZONE1_D.TabIndex = 84;
-            this.tboxZONE1_D.Text = "입력";
             this.tboxZONE1_D.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label7
@@ -325,6 +313,7 @@ namespace Temp_UI_Example
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "PID";
             this.Text = "PID";
+            this.Load += new System.EventHandler(this.PID_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

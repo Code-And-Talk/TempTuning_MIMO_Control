@@ -70,6 +70,10 @@ VAR
 	
 	master_Zone_AVG	                 :   ARRAY[1..4] OF LREAL;
 	
+    //와치독
+	Watch_Dog : TON;
+	Watch_Dog_Bool : BOOL := TRUE;
+	
 END_VAR
 
 (* ================ Simulation Constant Parameter =======================*)
@@ -124,6 +128,17 @@ CASE System_step OF
 			END_FOR
 		ELSE
 			System_step := 0;
+		END_IF
+		
+		//와치독
+		Watch_Dog (IN := TRUE, PT := T#1S);
+		IF Watch_Dog.Q THEN
+			Watch_Dog (in := FALSE);
+			IF Watch_Dog_Bool THEN
+				Watch_Dog_Bool := FALSE;
+			ELSE
+				Watch_Dog_Bool := TRUE;
+			END_IF
 		END_IF
 	
 	1:
@@ -356,7 +371,11 @@ END_FOR
       <LineId Id="493" Count="0" />
       <LineId Id="100" Count="8" />
       <LineId Id="401" Count="0" />
-      <LineId Id="109" Count="34" />
+      <LineId Id="109" Count="8" />
+      <LineId Id="682" Count="0" />
+      <LineId Id="684" Count="8" />
+      <LineId Id="683" Count="0" />
+      <LineId Id="118" Count="25" />
       <LineId Id="230" Count="0" />
       <LineId Id="144" Count="6" />
       <LineId Id="152" Count="16" />
