@@ -39,7 +39,7 @@ Min Temp             -    glass_min
 
 Avg Temp             -    master_subTC_AVG
 
-Max - Min             -    glass_max - glass_min (UI에서 연산)
+//편차             -   
 
 
 

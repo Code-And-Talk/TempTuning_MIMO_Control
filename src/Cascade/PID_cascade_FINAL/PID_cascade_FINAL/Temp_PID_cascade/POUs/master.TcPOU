@@ -126,13 +126,17 @@ IF tWait_Time.Q THEN
 	glass_dev := glass_max - glass_min;	
 	master_subTC_AVG := master_subTC /9;
 	
-	IF 0 <= glass_dev AND glass_dev <= 10 THEN
+	IF glass_dev <= 10 THEN
 		IF result_glass_dev > glass_dev THEN
 			result_glass_dev := glass_dev;
 		END_IF
-	
+		
+		IF (m_fTargetTemp * 0.9) <= master_subTC_AVG AND (m_fTargetTemp * 1.1) >= master_subTC_AVG THEN
+			IF ABS(m_fTargetTemp - master_subTC_AVG) < ABS(m_fTargetTemp - result_subTC_AVG) THEN
+				result_subTC_AVG := master_subTC_AVG;
+			END_IF
+		END_IF
 	END_IF
-	
 	
 	IF m_fTargetTemp > 0 THEN
 				
@@ -326,8 +330,11 @@ END_FOR
       <LineId Id="596" Count="0" />
       <LineId Id="602" Count="1" />
       <LineId Id="601" Count="0" />
-      <LineId Id="605" Count="1" />
-      <LineId Id="594" Count="1" />
+      <LineId Id="614" Count="0" />
+      <LineId Id="612" Count="0" />
+      <LineId Id="615" Count="2" />
+      <LineId Id="611" Count="0" />
+      <LineId Id="609" Count="1" />
       <LineId Id="470" Count="3" />
       <LineId Id="475" Count="19" />
       <LineId Id="497" Count="7" />
