@@ -125,7 +125,7 @@ CASE System_step OF
 		ELSE
 			System_step := 0;
 		END_IF
-	
+
 	1:
 		FOR i:=1 TO 4 BY 1 DO
 			s_fP_Value[i] :=sgbl.slave_fP_Value_[i];
