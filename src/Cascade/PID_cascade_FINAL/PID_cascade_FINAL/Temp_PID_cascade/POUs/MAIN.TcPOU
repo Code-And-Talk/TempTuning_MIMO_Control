@@ -35,17 +35,6 @@ mgbl.master_tuning_mode = tune set
 tune set :  true -> master, slave호출
 tune set :  false -> slave만 호출
 *)
-
-master();
-
-slave();
-
-(*
- 아래 코드는 Tune Mode Start 후 바로 False로 변경되어 Master 호출이 안됩니다.
- 튜닝 완료 후 FALSE로 변경하세요
-*)
-
-(*
 IF mgbl.master_tuning_mode THEN
 	master();
 	slave();
@@ -62,7 +51,6 @@ IF mgbl.master_tuning_mode THEN
 ELSE
 	slave();
 END_IF
-*)
 
 ]]></ST>
     </Implementation>
@@ -78,9 +66,7 @@ END_IF
       <LineId Id="165" Count="0" />
       <LineId Id="93" Count="0" />
       <LineId Id="128" Count="0" />
-      <LineId Id="131" Count="0" />
-      <LineId Id="234" Count="25" />
-      <LineId Id="29" Count="0" />
+      <LineId Id="244" Count="15" />
       <LineId Id="132" Count="0" />
       <LineId Id="17" Count="0" />
     </LineIds>
