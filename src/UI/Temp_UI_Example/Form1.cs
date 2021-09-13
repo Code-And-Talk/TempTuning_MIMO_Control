@@ -169,7 +169,7 @@ namespace Temp_UI_Example
                 this.Controls["ST" + (25 - 16)].Text = Act_Temp[25].ToString();
                 this.Controls["ST" + (26 - 16)].Text = Act_Temp[26].ToString();
                 this.Controls["ST" + (27 - 16)].Text = Act_Temp[27].ToString();
-                this.Controls["ST" + (28 - 16)].Text = Act_Temp[28].ToString();
+                //this.Controls["ST" + (28 - 16)].Text = Act_Temp[28].ToString();
                 Thread.Sleep(10);
 
             }
@@ -238,10 +238,10 @@ namespace Temp_UI_Example
         {
             while (true)
             {
-                pot[28] = ads.ReadSymbolInfo("slave.Watch_Dog_Bool");
+                pot[28] = ads.ReadSymbolInfo("MAIN.reverseSignal");
                 Watchdog1 = Convert.ToBoolean(ads.ReadSymbol(pot[28]));
-                //this.Controls["ST" + (28 - 16)].Text = Watchdog1.ToString();
-                Thread.Sleep(1000);
+                this.Controls["ST" + (28 - 16)].Text = Watchdog1.ToString();
+                Thread.Sleep(10000);
                 Watchdog4++;
                 if(Watchdog4 >= 3)
                 {
@@ -249,7 +249,7 @@ namespace Temp_UI_Example
                     Watchdog3 = 0;
                 }
 
-                pot[29] = ads.ReadSymbolInfo("slave.Watch_Dog_Bool");
+                pot[29] = ads.ReadSymbolInfo("MAIN.reverseSignal");
                 Watchdog2 = Convert.ToBoolean(ads.ReadSymbol(pot[28]));
 
                 if (Watchdog1 == Watchdog2)
