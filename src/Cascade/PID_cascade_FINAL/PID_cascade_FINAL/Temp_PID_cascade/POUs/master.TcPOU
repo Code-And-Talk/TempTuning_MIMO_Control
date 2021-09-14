@@ -6,9 +6,6 @@ VAR
 (*-------------------------------------------- master 입력 변수 --------------------------------------------*)	
 	m_bRamp_Enable                   : BOOL;
 	m_fRamp_Value                    : ARRAY[1..4] OF LREAL;
-	m_fMV_Out						 : ARRAY[1..4] OF LREAL;
-	m_fPV_Value						 : ARRAY[1..4] OF LREAL;
-	m_fPV_Value_					 : ARRAY[1..4] OF LREAL;
 	
 	m_fTargetTemp                    : LREAL;
 	m_fPowLimit_                     : ARRAY[1..4] OF LREAL;
@@ -22,7 +19,7 @@ VAR
 		
 	
 	(*slave가 완료되었을 경우 slave에서 받음*)
-	master_subTC_AVG                 : LREAL;                              		// 글래스 온도 평균(9개 평균 = g_bar)
+	master_subTC_AVG                 : LREAL;                   // 글래스 온도 평균(9개 평균 = g_bar)
 	
 	tWait_Time						:	TON;
 (*----------------------------------------Substrate Simulation----------------------------------------------- *)
@@ -32,18 +29,18 @@ VAR
 	fPV_Value_Local_Sub				 : ARRAY[1..9] OF LREAL;
 	fbCTRL_PT2_Sub			         : ARRAY[1..9] OF FB_CTRL_PT2;
 	stPTParams_Sub			         : ARRAY[1..9] OF ST_CTRL_PT2_PARAMS;
-	fKp_Sub						     : ARRAY[1..9] OF REAL := [15.7, 16.1, 15.9, 17.1, 17.0, 18.5, 17.5, 18.5, 19.5];
-	fInit_Temp_Sub				     : ARRAY[1..9] OF REAL := [23.5, 24.5, 23.9, 24.2, 24.1, 23.9, 25.7, 24.9, 26.1];
-	tTimeConstant_Sub			     : ARRAY[1..9] OF TIME := [T#325.7S, T#335.95S, T#328.4S, T#321.9S, T#330.3S, T#3241.2S, T#319.9S, T#329.4S, T#325.1S];
+	fKp_Sub						     : ARRAY[1..9] OF REAL := [15.7, 15.8, 15.3, 15.1, 15.0, 15.5, 15.6, 15.2, 15.4];
+	fInit_Temp_Sub				     : ARRAY[1..9] OF REAL := [23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3];
+	tTimeConstant_Sub			     : ARRAY[1..9] OF TIME := [T#325.7S, T#335.5S, T#328.4S, T#321.9S, T#330.3S, T#324.2S, T#329.9S, T#329.4S, T#325.1S];
 	
 (*-------------------------------------------- master 출력 변수 --------------------------------------------*)
 
 	master_Zone_AVG                :   ARRAY[1..4] OF LREAL;                	// 글래스 온도 평균(4개 더해서 4로 나눔 )
 	master_subTC 				   :   LREAL;
 	
-	Substrate_AvgTemp			   : ARRAY[1..4] OF LREAL;
+	Substrate_AvgTemp			   :   ARRAY[1..4] OF LREAL;
 	
-	mErr_Value                     :   ARRAY[1..4] OF LREAL;                    // 제어오차 (set_temp - msater_subTC_AVG);
+	mErr_Value                     :   ARRAY[1..4] OF LREAL;                    // 제어오차 (set_temp - msater_subTC_AVG)
 	mErr_integral_Val			   :   ARRAY[1..4] OF LREAL := [0 , 0, 0, 0 ];  // 오차의 적분(se , 초기값 = 0)
 	
 	m_min_per					   :	LREAL;
@@ -67,12 +64,12 @@ VAR
 	
 	glass_max 					:			LREAL ;
 	glass_min 					:			LREAL ;
-	glass_dev					:			LREAL ;  (*glss_max - glass_min*)
+	glass_dev					:			LREAL ;  (* glss_max - glass_min *)
 	
 (*===================================결과 출력값==========================================================*)
 	result_zone_set_val			:			ARRAY[1..4] OF LREAL ;
-	result_glass_dev			:			LREAL :=0;
-	result_subTC_AVG			:			LREAL :=0;
+	result_glass_dev			:			LREAL := 10;
+	result_subTC_AVG			:			LREAL := 0;
 	
 	
 (* ------------------------------------------Ramp Parameter Set-------------------------------------- *)
@@ -81,12 +78,6 @@ VAR
 	m_fRamp_Out 			    : 			ARRAY[1..4] OF LREAL;	
 	
 	
-END_VAR
-(* ==================================== Simulation Constant Parameter ===================================*)
-VAR CONSTANT
-	m_fKp							:			ARRAY[1..4] OF REAL := [16.5, 17.5, 18.5, 19.5];
-	m_fInit_Temp					:			ARRAY[1..4] OF REAL := [23.5, 24.5, 23.9, 24.2];
-	m_tTimeConstant					:			ARRAY[1..4] OF TIME := [T#251.4S, T#301.4S, T#275.4S, T#292.4S];
 END_VAR
 
 ]]></Declaration>
@@ -200,35 +191,6 @@ ELSE
 	;
 	END_FOR
 END_IF]]></ST>
-      </Implementation>
-    </Action>
-    <Action Name="SIMULATION" Id="{af2aa546-01ee-4557-85a2-6a7748b696ea}">
-      <Implementation>
-        <ST><![CDATA[
-
-FOR i:=1 TO 4 BY 1 DO
-	stPTParams[i].tTaskCycleTime	:= tTaskCycleTime;
-	stPTParams[i].tCtrlCycleTime	:= tCtrlCycleTime;
-	stPTParams[i].tT1				:= stPTParams[i].tT2 := m_tTimeConstant[i];
-	stPTParams[i].fKp				:= m_fKp[i];
-
-
-	fbCTRL_PT2[i](
-					fIn			:= m_fMV_Out[i] ,
-					eMode		:= eCtrl_MODE_ACTIVE,
-					stParams	:= stPTParams[i],
-					fOut		=> m_fPV_Value_[i]
-					);	
-					
-	IF m_fPV_Value_[i] <= m_fInit_Temp[i] THEN
-		m_fPV_Value[i] := m_fInit_Temp[i];
-	ELSE
-		m_fPV_Value[i] := m_fPV_Value_[i];
-	END_IF 	
-	
-END_FOR
-
-]]></ST>
       </Implementation>
     </Action>
     <Action Name="Substrate_AVG" Id="{ec6bcec0-5768-4543-8f3c-c653a35ce223}">
@@ -345,10 +307,6 @@ END_FOR
     </LineIds>
     <LineIds Name="master.RAMPING">
       <LineId Id="2" Count="21" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
-    <LineIds Name="master.SIMULATION">
-      <LineId Id="2" Count="23" />
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="master.Substrate_AVG">

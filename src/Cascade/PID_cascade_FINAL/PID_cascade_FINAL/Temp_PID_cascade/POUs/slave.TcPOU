@@ -74,9 +74,9 @@ END_VAR
 
 (* ================ Simulation Constant Parameter =======================*)
 VAR CONSTANT
-	fKp							:			ARRAY[1..4] OF REAL := [16.5, 17.5, 18.5, 19.5];
-	fInit_Temp					:			ARRAY[1..4] OF REAL := [23.5, 24.5, 23.9, 24.2];
-	tTimeConstant				:			ARRAY[1..4] OF TIME := [T#251.4S, T#301.4S, T#275.4S, T#292.4S];
+	fKp							:			ARRAY[1..4] OF REAL := [15.5, 15.2, 15.7, 15.8];
+	fInit_Temp					:			ARRAY[1..4] OF REAL := [23.5, 23.8, 23.9, 23.7];
+	tTimeConstant				:			ARRAY[1..4] OF TIME := [T#251.4S, T#252.4S, T#254.4S, T#256.4S];
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -125,7 +125,7 @@ CASE System_step OF
 		ELSE
 			System_step := 0;
 		END_IF
-
+	
 	1:
 		FOR i:=1 TO 4 BY 1 DO
 			s_fP_Value[i] :=sgbl.slave_fP_Value_[i];
