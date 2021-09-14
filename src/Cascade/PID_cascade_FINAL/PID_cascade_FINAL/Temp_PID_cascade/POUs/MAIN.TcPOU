@@ -7,7 +7,6 @@ VAR
 	OffTimer :TOF;
 	timerStart : BOOL;
 	reverseSignal : BOOL;
-	bWatch : BOOL;
 	
 	onTimer_tune  : TON;
 	OffTimer_tune :TOF;
@@ -15,8 +14,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-(* watch dogs : 10s 간격으로 on/ off *)
+      <ST><![CDATA[(* watch dogs : 10s 간격으로 on/ off *)
 
 onTimer(IN := OffTimer.Q, PT := T#10S);
 IF onTimer.Q THEN
@@ -28,8 +26,6 @@ ELSE
 END_IF
 OffTimer(IN := reverseSignal, PT := T#10S);
 
-
-
 (* 
 mgbl.master_tuning_mode = tune set
 tune set :  true -> master, slave호출
@@ -40,26 +36,22 @@ IF mgbl.master_tuning_mode THEN
 	slave();
 	
   (* 튜닝 시간 설정 = mgbl.master_tuning_time *)
-    onTimer_tune(IN := OffTimer_tune.Q, PT := LREAL_TO_TIME(mgbl.master_tuning_time)*60000);
+    onTimer_tune(IN := OffTimer_tune.Q, PT := LREAL_TO_TIME(mgbl.master_tuning_time)*60000); // IN이 FALSE에서 TRUE가 되자마자 시간이 흐름,PT와 같아지면 Q가 TRUE
     IF onTimer_tune.Q THEN
 	  mgbl.master_tuning_mode := FALSE;
 	  reverseSignal_tune := FALSE;
 	ELSE
 	  reverseSignal_tune := TRUE;
     END_IF
-    OffTimer_tune(IN := reverseSignal_tune, PT := LREAL_TO_TIME(mgbl.master_tuning_time)*60000);
+    OffTimer_tune(IN := reverseSignal_tune, PT := T#0S); // IN이 TRUE에서 FALSE가 되자마자 시간이 흐름, PT와 같아지면 Q가 FALSE
 ELSE
 	slave();
-END_IF
-
-]]></ST>
+END_IF]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="167" Count="1" />
+      <LineId Id="168" Count="0" />
       <LineId Id="221" Count="0" />
       <LineId Id="145" Count="8" />
-      <LineId Id="104" Count="0" />
-      <LineId Id="64" Count="0" />
       <LineId Id="35" Count="0" />
       <LineId Id="27" Count="0" />
       <LineId Id="166" Count="0" />
@@ -67,8 +59,6 @@ END_IF
       <LineId Id="93" Count="0" />
       <LineId Id="128" Count="0" />
       <LineId Id="244" Count="15" />
-      <LineId Id="132" Count="0" />
-      <LineId Id="17" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
