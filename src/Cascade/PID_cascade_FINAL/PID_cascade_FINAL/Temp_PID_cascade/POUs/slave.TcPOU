@@ -3,8 +3,6 @@
   <POU Name="slave" Id="{9ab2669f-726a-4789-9ecc-1bd43afc795d}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM slave
 VAR
-	s_fMV_Out					:			ARRAY[1..4] OF LREAL;
-	s_fPV_Value					:			ARRAY[1..4] OF LREAL;
 	fPV_Value_					:			ARRAY[1..4] OF LREAL;
 	
 	tTime						:			TIME;
@@ -33,9 +31,8 @@ VAR
 	s_bFirst					:			BOOL := TRUE;
 	
 	(* Ramp Parameter Set *)
-	s_bRamp_Use				    :			BOOL;	
-	s_fRamp_Rate				:			ARRAY[1..4] OF LREAL := [10 , 10, 10 , 10 ];
-	s_fRamp_Out 			    : 			ARRAY[1..4] OF LREAL;	
+	s_bRamp_Use				    :			ARRAY[1..4] OF BOOL;	
+	s_fRamp_Rate				:			ARRAY[1..4] OF LREAL ;
 	
 	(* =============== Setting Item 입력 =============== *)
 	
@@ -59,7 +56,7 @@ VAR
 	s_bStart						:			BOOL;
 	
 	(*	비상정지	*)
-	bEmergency_Stop					:			ARRAY[1..4] OF BOOL ;
+	//bEmergency_Stop					:			ARRAY[1..4] OF BOOL ;
 	
 	fbCTRL_RAMP_GENERATOR			 :   ARRAY[1..4] OF FB_CTRL_RAMP_GENERATOR;
 	stCTRL_RAMP_GENERATOR_PARAMS     :   ARRAY[1..4] OF ST_CTRL_RAMP_GENERATOR_PARAMS;
@@ -81,28 +78,28 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-IF sgbl.slave_bsimulation THEN
+IF gbl.slave_bsimulation THEN
 	SIMULATION();
 END_IF
 
 FOR i:=1 TO 4 BY 1 DO
-	IF bEmergency_Stop[i] THEN
+	IF gbl.slave_bEmergency_Stop[i] THEN
 		s_fSet_Value[i] := 0;
 		s_fPowLimit[i] := 0;
 		s_eCTRL_MODE[i] := eCTRL_MODE_IDLE;
-		fbCTRL_TempController[i]( eCtrlMode               := s_eCTRL_MODE[i],      
+		fbCTRL_TempController[i]( eCtrlMode := s_eCTRL_MODE[i],      
 				  bSelSetpoint            := FALSE,
 				  fw1                     := s_fSet_Value[i],
 				  fw2                     := ,            
-				  fX                      := s_fPV_Value[i],      
+				  fX                      := gbl.slave_fPV_Value[i],      
 				  fyManual                := s_fSetManual[i],
 				  sParaControllerExternal := stCTRL_ParaController_Ex[i],
 				  sControllerParameter    := stCTRL_TempCtrlParameter[i]
 				  );
 	ELSE
-		s_fSet_Value[i] := sgbl.slave_fTargetTemp[i];
-		s_fPowLimit[i] := sgbl.slave_fPowLimit_[i];
-		s_eCTRL_MODE[i] := sgbl.slave_eCTRL_MODE_[i];
+		s_fSet_Value[i] := gbl.slave_fTargetTemp[i];
+		s_fPowLimit[i] := gbl.slave_fPowLimit[i];
+		s_eCTRL_MODE[i] := gbl.slave_eCTRL_MODE[i];
 	END_IF
 END_FOR
 
@@ -116,10 +113,13 @@ CASE System_step OF
 		
 	0:
 		
-		IF sgbl.slave_bStart_ THEN
+		IF gbl.slave_bStart THEN
+			
+			s_bRamp_Use     :=  gbl.slave_bRamp_Enable;
+			s_fRamp_Rate    :=  gbl.slave_fRamp_Value;
+			
 			FOR i:=1 TO 4 BY 1 DO
 				s_fLast_Set_Value[i] := s_fSet_Value[i];
-				//s_eCTRL_MODE[i] := sgbl.slave_eCTRL_MODE_[i];
 				System_step := 1;
 			END_FOR
 		ELSE
@@ -128,9 +128,9 @@ CASE System_step OF
 	
 	1:
 		FOR i:=1 TO 4 BY 1 DO
-			s_fP_Value[i] :=sgbl.slave_fP_Value_[i];
-			s_tI_Value[i] :=LREAL_TO_TIME(sgbl.slave_tI_Value_[i]);
-			s_tD_Value[i] :=LREAL_TO_TIME(sgbl.slave_tD_Value_[i]);
+			s_fP_Value[i] :=gbl.slave_fP_Value[i];
+			s_tI_Value[i] :=LREAL_TO_TIME(gbl.slave_tI_Value[i]);
+			s_tD_Value[i] :=LREAL_TO_TIME(gbl.slave_tD_Value[i]);
 			
 			IF s_fP_Value[i] <= 0 THEN
 				s_fP_Value[i] := 0.1;
@@ -150,7 +150,6 @@ CASE System_step OF
 		System_step := 2;
 
 	2:
-		//s_fPowLimit:=sgbl.slave_fPowLimit_;
 		
 		FOR i:=1 TO 4 BY 1 DO
 			IF s_fPowLimit[i] > 100 THEN
@@ -160,11 +159,6 @@ CASE System_step OF
 			END_IF
 		
 			stCTRL_TempCtrlParameter[i].fYMax := s_fPowLimit[i];
-		
-  
-			//s_fSet_Value[i] :=  sgbl.slave_fTargetTemp[i];
-			s_bRamp_Use     :=  sgbl.slave_bRamp_Enable;
-			s_fRamp_Rate    :=  sgbl.slave_fRamp_Value;
 			
 			stCTRL_RAMP_GENERATOR_PARAMS[i].fVeloNeg := s_fRamp_Rate[i] / 60.0;
 			stCTRL_RAMP_GENERATOR_PARAMS[i].fVeloPos := s_fRamp_Rate[i] / 60.0;
@@ -176,7 +170,6 @@ CASE System_step OF
 		System_step := 3;
 	
 	3:
-		s_fSetManual   := sgbl.slave_fSetManual_;
 		
 		FOR i:=1 TO 4 BY 1 DO
 		
@@ -194,11 +187,11 @@ CASE System_step OF
   	
 	4:
 		FOR i:=1 TO 4 BY 1 DO
-			fbCTRL_TempController[i]( eCtrlMode               := sgbl.slave_eCTRL_MODE_[i],      
+			fbCTRL_TempController[i]( eCtrlMode               := gbl.slave_eCTRL_MODE[i],      
 									  bSelSetpoint            := FALSE,
 									  fw1                     := s_fSet_Value[i],
 									  fw2                     := ,            
-									  fX                      := s_fPV_Value[i],      
+									  fX                      := gbl.slave_fPV_Value[i],      
 									  fyManual                := s_fSetManual[i],
 									  sParaControllerExternal := stCTRL_ParaController_Ex[i],
 									  sControllerParameter    := stCTRL_TempCtrlParameter[i]
@@ -208,20 +201,27 @@ CASE System_step OF
 		System_step := 10;
 	   
 	10:					  
-		sgbl.slave_bStart_ := FALSE;
+		gbl.slave_bStart := FALSE;
+		System_step := 100;
+		
+	100:
 		System_step := 0;
 		
 END_CASE
 
+
 Ramping();
 
 FOR i:=1 TO 4 BY 1 DO 
+	gbl.slave_nErrorID :=  s_nErrorID ;
+	gbl.slave_bError :=  s_bError ;
+	
 	fbCTRL_TempController[i](
-                 fw1                       := s_fRamp_Out[i],
-                 fX                        := s_fPV_Value[i],    
+                 fw1                       := gbl.slave_fRamp_Out[i],
+                 fX                        := gbl.slave_fPV_Value[i],    
                  sParaControllerExternal   := stCTRL_ParaController_Ex[i],
                  sControllerParameter      := stCTRL_TempCtrlParameter[i],
-                 fYAnalog                   => s_fMV_Out[i],
+                 fYAnalog                   => gbl.slave_fMV_Out[i],
                  bYPWMPos                   => ,
                  bYPWMNeg                   => ,
                  dwAlarm                    => ,
@@ -233,7 +233,7 @@ FOR i:=1 TO 4 BY 1 DO
                  eErrorId                   => s_nErrorID
                 );
 END_FOR
-mgbl.master_fMV_Out:= s_fPV_Value;]]></ST>
+]]></ST>
     </Implementation>
     <Action Name="DEFAULT_PARA_SET" Id="{d227d564-1dc7-4f9c-9a58-3b59ce4af21d}">
       <Implementation>
@@ -285,27 +285,26 @@ END_FOR]]></ST>
       <Implementation>
         <ST><![CDATA[
 ;
-IF s_bRamp_Use THEN
-	FOR i:=1 TO 4 BY 1 DO
-		fbCTRL_RAMP_GENERATOR[i]( bEnable   := s_bRamp_Use,
+FOR i:=1 TO 4 BY 1 DO
+	IF s_bRamp_Use[i] THEN
+
+		fbCTRL_RAMP_GENERATOR[i]( bEnable   := s_bRamp_Use[i],
 								fStart   := s_fLast_Set_Value[i],
 								fTarget  := s_fSet_Value[i],
 								stParams := stCTRL_RAMP_GENERATOR_PARAMS[i],
-								fOut   => s_fRamp_Out[i],
+								fOut   => gbl.slave_fRamp_Out[i],
 								fVeloOut  => ,
 								bValueReached => ,
 								eErrorId => ,
 								bError =>
 								)
-	;
-	END_FOR					
+	;			
 
-ELSE
-	FOR i:=1 TO 4 BY 1 DO
-		s_fRamp_Out[i] := s_fSet_Value[i];
-	;
-	END_FOR
-END_IF]]></ST>
+	ELSE
+			gbl.slave_fRamp_Out[i] := s_fSet_Value[i];
+		;
+	END_IF
+END_FOR	]]></ST>
       </Implementation>
     </Action>
     <Action Name="SIMULATION" Id="{80689f6d-fc40-42f3-b7c8-65ca5280299d}">
@@ -320,16 +319,16 @@ FOR i:=1 TO 4 BY 1 DO
 
 
 	fbCTRL_PT2[i](
-					fIn			:= s_fMV_Out[i] ,
+					fIn			:= gbl.slave_fMV_Out[i] ,
 					eMode		:= eCtrl_MODE_ACTIVE,
 					stParams	:= stPTParams[i],
 					fOut		=> fPV_Value_[i]
 					);	
 					
 	IF fPV_Value_[i] <= fInit_Temp[i] THEN
-		s_fPV_Value[i] := fInit_Temp[i];
+		gbl.slave_fPV_Value[i] := fInit_Temp[i];
 	ELSE
-		s_fPV_Value[i] := fPV_Value_[i];
+		gbl.slave_fPV_Value[i] := fPV_Value_[i];
 	END_IF 	
 	
 END_FOR
@@ -356,16 +355,29 @@ END_FOR
       <LineId Id="493" Count="0" />
       <LineId Id="100" Count="8" />
       <LineId Id="401" Count="0" />
-      <LineId Id="109" Count="34" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="687" Count="1" />
+      <LineId Id="686" Count="0" />
+      <LineId Id="689" Count="0" />
+      <LineId Id="110" Count="1" />
+      <LineId Id="113" Count="29" />
       <LineId Id="230" Count="0" />
       <LineId Id="144" Count="6" />
-      <LineId Id="152" Count="16" />
-      <LineId Id="228" Count="1" />
+      <LineId Id="152" Count="0" />
+      <LineId Id="158" Count="10" />
+      <LineId Id="229" Count="0" />
       <LineId Id="227" Count="0" />
       <LineId Id="169" Count="0" />
       <LineId Id="171" Count="5" />
       <LineId Id="178" Count="20" />
-      <LineId Id="200" Count="25" />
+      <LineId Id="200" Count="1" />
+      <LineId Id="692" Count="0" />
+      <LineId Id="690" Count="1" />
+      <LineId Id="202" Count="2" />
+      <LineId Id="681" Count="0" />
+      <LineId Id="205" Count="3" />
+      <LineId Id="678" Count="2" />
+      <LineId Id="209" Count="16" />
       <LineId Id="480" Count="0" />
     </LineIds>
     <LineIds Name="slave.DEFAULT_PARA_SET">
@@ -373,8 +385,13 @@ END_FOR
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="slave.RAMPING">
-      <LineId Id="2" Count="21" />
+      <LineId Id="2" Count="1" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="4" Count="12" />
+      <LineId Id="18" Count="1" />
+      <LineId Id="21" Count="1" />
       <LineId Id="1" Count="0" />
+      <LineId Id="25" Count="0" />
     </LineIds>
     <LineIds Name="slave.SIMULATION">
       <LineId Id="24" Count="1" />

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <GVL Name="gbl" Id="{1d716d1d-4a41-4782-9f98-0f78397b1655}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	(*===========================================main====================================*)
+	bWatch						 : BOOL;
+	tuning_mode 	     		 : BOOL;
+	tuning_time	     			 : LREAL;
+	
+	(*===========================================master====================================*)
+	(*---------------------input------------------------*)
+	master_TargetTemp                    : LREAL;
+	master_pi_gain                       : ARRAY[1..4] OF LREAL;	//PI제어기 이득(gain) -P
+	master_integral_constant			 : ARRAY[1..4] OF LREAL;	//PI제어기 적분상수 -I
+	master_Zone_Temp_Min            	 : LREAL;  //단위 : %
+	master_Zone_Temp_Max            	 : LREAL;  //단위 : %
+	
+	(*===========================================sub TC===================================*)
+	(*---------------------output------------------------*)
+	fPV_Value_SubTC				: ARRAY[1..9] OF LREAL; (* glass 각각의 온도 *)
+	subTC_max 					: LREAL ;
+	subTC_min 					: LREAL ;
+	subTC_dev					: LREAL ;  (* glss_max - glass_min *)
+	subTC_AVG                   : LREAL ;  (* glass temp AVG *)
+	
+	(*=======================================slave========================================*)	
+	slave_bsimulation		   : BOOL;
+	slave_bRamp_Enable         : ARRAY[1..4] OF BOOL;
+	(*---------------------input------------------------*)
+	slave_fRamp_Value          : ARRAY[1..4] OF LREAL := [10,10,10,10] ;
+	slave_fTargetTemp          : ARRAY[1..4] OF LREAL := [150,150,150,150];
+	slave_fPowLimit            : ARRAY[1..4] OF LREAL := [90, 90, 90, 90];
+	slave_eCTRL_MODE           : ARRAY[1..4] OF E_CTRL_MODE ;
+	slave_bStart		       : BOOL;
+	slave_fP_Value	           : ARRAY[1..4] OF LREAL := [3,3,3,3] ;
+	slave_tI_Value		       : ARRAY[1..4] OF LREAL  := [500,500,500,500] ;
+	slave_tD_Value		       : ARRAY[1..4] OF LREAL  := [80,80,80,80] ;
+	slave_bEmergency_Stop	   : ARRAY[1..4] OF BOOL ;
+	(*---------------------output------------------------*)
+	slave_fPV_Value				: ARRAY[1..4] OF LREAL;
+	slave_fMV_Out				: ARRAY[1..4] OF LREAL;
+	slave_fRamp_Out 		    : ARRAY[1..4] OF LREAL;
+	slave_nErrorID			    : E_CTRL_ERRORCODES;	
+	slave_bError				: BOOL;
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>

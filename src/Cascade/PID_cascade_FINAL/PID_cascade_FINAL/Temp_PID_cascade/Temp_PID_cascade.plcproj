@@ -17,11 +17,7 @@
     <LibraryReferences>{7b74f9de-4486-4c67-a519-99f23500f431}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GVLs\mgbl.TcGVL">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
-    <Compile Include="GVLs\sgbl.TcGVL">
+    <Compile Include="GVLs\gbl.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>

@@ -8,20 +8,15 @@ VAR
 	m_fRamp_Value                    : ARRAY[1..4] OF LREAL;
 	
 	m_fTargetTemp                    : LREAL;
-	m_fPowLimit_                     : ARRAY[1..4] OF LREAL;
 	m_btuning_mode 	     			 : BOOL;
-	m_Sampling_Time					 : LREAL;                   // Sampling time (적용시간 간격)
+	m_Sampling_Time					 : LREAL:=5;                 // Sampling time (적용시간 간격  Δt(*고정값*))
 	m_integral_constant			 	 : ARRAY[1..4] OF LREAL;	//PI제어기 적분상수
 	m_pi_gain                        : ARRAY[1..4] OF LREAL;	//PI제어기 이득(gain)
 	
 	m_Set_Value						 : ARRAY[1..4] OF LREAL;
 	m_fLast_Set_Value            	 : ARRAY[1..4] OF LREAL;
-		
 	
-	(*slave가 완료되었을 경우 slave에서 받음*)
-	master_subTC_AVG                 : LREAL;                   // 글래스 온도 평균(9개 평균 = g_bar)
-	
-	tWait_Time						:	TON;
+	tWait_Time						 :	TON;
 (*----------------------------------------Substrate Simulation----------------------------------------------- *)
 	fMV_Out						     : ARRAY[1..4] OF LREAL;
 	fMV_Out_Sub					     : ARRAY[1..9] OF LREAL;
@@ -64,7 +59,8 @@ VAR
 	
 	glass_max 					:			LREAL ;
 	glass_min 					:			LREAL ;
-	glass_dev					:			LREAL ;  (* glss_max - glass_min *)
+	glass_dev					:			LREAL ;       (* glss_max - glass_min *)
+	glass_AVG                   : 			LREAL;        (* 글래스 온도 평균(9개 평균 = g_bar)*)
 	
 (*===================================결과 출력값==========================================================*)
 	result_zone_set_val			:			ARRAY[1..4] OF LREAL ;
@@ -76,29 +72,28 @@ VAR
 	m_bRamp_Use				    :			BOOL;	
 	m_fRamp_Rate				:			ARRAY[1..4] OF LREAL := [10 , 10, 10 , 10 ];
 	m_fRamp_Out 			    : 			ARRAY[1..4] OF LREAL;	
-	
-	
-END_VAR
-
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF NOT mgbl.master_tuning_mode THEN
+      <ST><![CDATA[IF NOT gbl.tuning_mode THEN
 	RETURN;
 END_IF
 
-IF sgbl.slave_bsimulation THEN
+IF gbl.slave_bsimulation THEN
 	Substrate_Simulation();
 END_IF
 
 Substrate_AVG();
 
-m_Sampling_Time 	 := mgbl.master_Sampling_Time;
-m_integral_constant  := mgbl.master_integral_constant;
-m_pi_gain    		 := mgbl.master_pi_gain;
-m_fTargetTemp		 := mgbl.master_TargetTemp;
-m_min_per		     := mgbl.master_Zone_Temp_Min_per;
-m_max_per	         := mgbl.master_Zone_Temp_Max_per;
-fMV_Out				 := mgbl.master_fMV_Out;
+m_integral_constant  := gbl.master_integral_constant;
+m_pi_gain    		 := gbl.master_pi_gain;
+m_fTargetTemp		 := gbl.master_TargetTemp;
+m_min_per		     := gbl.master_Zone_Temp_Min;
+m_max_per	         := gbl.master_Zone_Temp_Max;
+gbl.subTC_max := glass_max ;
+gbl.subTC_min := glass_min ;
+gbl.subTC_dev := glass_dev ;
+gbl.subTC_AVG := glass_AVG ;
+gbl.fPV_Value_SubTC := fPV_Value_Sub ;
 master_subTC 		 := 0 ;
 tWait_Time(IN := TRUE, PT := LREAL_TO_TIME(m_Sampling_Time) * 1000);
 
@@ -115,16 +110,16 @@ IF tWait_Time.Q THEN
 		glass_min := MIN(glass_min, fPV_Value_Sub[i]);
 	END_FOR
 	glass_dev := glass_max - glass_min;	
-	master_subTC_AVG := master_subTC /9;
+	glass_AVG := master_subTC /9;
 	
 	IF glass_dev <= 10 THEN
 		IF result_glass_dev > glass_dev THEN
 			result_glass_dev := glass_dev;
 		END_IF
 		
-		IF (m_fTargetTemp * 0.9) <= master_subTC_AVG AND (m_fTargetTemp * 1.1) >= master_subTC_AVG THEN
-			IF ABS(m_fTargetTemp - master_subTC_AVG) < ABS(m_fTargetTemp - result_subTC_AVG) THEN
-				result_subTC_AVG := master_subTC_AVG;
+		IF (m_fTargetTemp * 0.9) <= glass_AVG AND (m_fTargetTemp * 1.1) >= glass_AVG THEN
+			IF ABS(m_fTargetTemp - glass_AVG) < ABS(m_fTargetTemp - result_subTC_AVG) THEN
+				result_subTC_AVG := glass_AVG;
 			END_IF
 		END_IF
 	END_IF
@@ -157,7 +152,7 @@ IF tWait_Time.Q THEN
 			
 		END_FOR
 		
-		sgbl.slave_fTargetTemp := master_Zone_AVG;
+		gbl.slave_fTargetTemp := master_Zone_AVG;
 	
 	END_IF
 	
@@ -203,7 +198,9 @@ Substrate_AvgTemp[4] := (fPV_Value_Sub[5] + fPV_Value_Sub[6] + fPV_Value_Sub[8] 
     </Action>
     <Action Name="Substrate_Simulation" Id="{108ac06f-2968-4bd6-8d2a-f38f7f2d45c0}">
       <Implementation>
-        <ST><![CDATA[fPV_Value_Sub[1] := fMV_Out[1] - 2.5;
+        <ST><![CDATA[fMV_Out:= gbl.slave_fPV_Value;
+
+fPV_Value_Sub[1] := fMV_Out[1] - 2.5;
 fPV_Value_Sub[2] := (fMV_Out[1] + fMV_Out[2]) / 2 - 3.4;
 fPV_Value_Sub[3] := fMV_Out[2] - 3.1;
 fPV_Value_Sub[4] := (fMV_Out[1] + fMV_Out[3]) / 2 - 3.5;
@@ -283,10 +280,10 @@ END_FOR
       <LineId Id="445" Count="5" />
       <LineId Id="155" Count="0" />
       <LineId Id="451" Count="1" />
-      <LineId Id="156" Count="0" />
       <LineId Id="142" Count="4" />
       <LineId Id="153" Count="0" />
-      <LineId Id="261" Count="0" />
+      <LineId Id="697" Count="3" />
+      <LineId Id="704" Count="0" />
       <LineId Id="154" Count="0" />
       <LineId Id="453" Count="16" />
       <LineId Id="596" Count="0" />
@@ -314,6 +311,7 @@ END_FOR
       <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="master.Substrate_Simulation">
+      <LineId Id="331" Count="1" />
       <LineId Id="322" Count="7" />
       <LineId Id="318" Count="3" />
       <LineId Id="257" Count="58" />
