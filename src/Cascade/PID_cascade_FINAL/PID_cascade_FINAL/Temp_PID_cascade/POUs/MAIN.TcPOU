@@ -11,6 +11,10 @@ VAR
 	onTimer_tune  : TON;
 	OffTimer_tune :TOF;
 	reverseSignal_tune : BOOL;
+	(*
+	arrSize :  ARRAY[1..4] OF LREAL ; (* 배열 size*) 
+	i : INT  ;   
+	*)
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -32,6 +36,13 @@ tune set :  true -> master, slave호출
 tune set :  false -> slave만 호출
 *)
 IF gbl.tuning_mode THEN
+	
+	(*
+	FOR i:=1 TO 4 BY 1 DO
+		arrSize[i] := (master.m_fTargetTemp - master.m_Last_Zone_Temp_AVG[i]) / gbl.slave_fRamp_Value[i] * 60 / master.m_Sampling_Time ;
+	END_FOR
+	*)
+	
 	master();
 	slave();
 	
@@ -58,7 +69,14 @@ END_IF]]></ST>
       <LineId Id="165" Count="0" />
       <LineId Id="93" Count="0" />
       <LineId Id="128" Count="0" />
-      <LineId Id="244" Count="15" />
+      <LineId Id="244" Count="0" />
+      <LineId Id="288" Count="0" />
+      <LineId Id="284" Count="0" />
+      <LineId Id="274" Count="0" />
+      <LineId Id="271" Count="0" />
+      <LineId Id="276" Count="1" />
+      <LineId Id="287" Count="0" />
+      <LineId Id="245" Count="14" />
     </LineIds>
   </POU>
 </TcPlcObject>

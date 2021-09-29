@@ -2,6 +2,9 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
   <POU Name="master" Id="{a879b6bf-7db0-4565-8869-c4d1ff680093}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM master
+VAR CONSTANT
+	arrSize 						 : INT := 300;  (* heat up data 배열 size *)
+END_VAR
 VAR
 (*-------------------------------------------- master 입력 변수 --------------------------------------------*)	
 	m_bRamp_Enable                   : BOOL;
@@ -9,7 +12,7 @@ VAR
 	
 	m_fTargetTemp                    : LREAL;
 	m_btuning_mode 	     			 : BOOL;
-	m_Sampling_Time					 : LREAL:=5;                 // Sampling time (적용시간 간격  Δt(*고정값*))
+	m_Sampling_Time					 : LREAL := 10;             // Sampling time (적용시간 간격  Δt(*고정값*))
 	m_integral_constant			 	 : ARRAY[1..4] OF LREAL;	//PI제어기 적분상수
 	m_pi_gain                        : ARRAY[1..4] OF LREAL;	//PI제어기 이득(gain)
 	
@@ -17,7 +20,7 @@ VAR
 	m_fLast_Set_Value            	 : ARRAY[1..4] OF LREAL;
 	
 	tWait_Time						 :	TON;
-(*----------------------------------------Substrate Simulation----------------------------------------------- *)
+(*---------------------------------------- Substrate Simulation ----------------------------------------------- *)
 	fMV_Out						     : ARRAY[1..4] OF LREAL;
 	fMV_Out_Sub					     : ARRAY[1..9] OF LREAL;
 	fPV_Value_Sub					 : ARRAY[1..9] OF LREAL;
@@ -30,7 +33,7 @@ VAR
 	
 (*-------------------------------------------- master 출력 변수 --------------------------------------------*)
 
-	master_Zone_AVG                :   ARRAY[1..4] OF LREAL;                	// 글래스 온도 평균(4개 더해서 4로 나눔 )
+	master_Zone_AVG                :   ARRAY[1..4] OF LREAL;                	// 글래스 온도 평균(4개 더해서 4로 나눔)
 	master_subTC 				   :   LREAL;
 	
 	Substrate_AvgTemp			   :   ARRAY[1..4] OF LREAL;
@@ -63,11 +66,14 @@ VAR
 	glass_AVG                   : 			LREAL;        (* 글래스 온도 평균(9개 평균 = g_bar)*)
 	
 (*===================================결과 출력값==========================================================*)
-	result_zone_set_val			:			ARRAY[1..4] OF LREAL ;
+	result_zone_set_val			:			ARRAY [1..4] OF LREAL ;
 	result_glass_dev			:			LREAL := 10;
 	result_subTC_AVG			:			LREAL := 0;
 	
 	
+	heatupData				    :			ARRAY [1..4, 1..arrSize] OF LREAL ;   (* tuning data 저장 *)
+	index						:			INT  := 0;
+	rampBool 					:			BOOL ;
 (* ------------------------------------------Ramp Parameter Set-------------------------------------- *)
 	m_bRamp_Use				    :			BOOL;	
 	m_fRamp_Rate				:			ARRAY[1..4] OF LREAL := [10 , 10, 10 , 10 ];
@@ -89,16 +95,18 @@ m_pi_gain    		 := gbl.master_pi_gain;
 m_fTargetTemp		 := gbl.master_TargetTemp;
 m_min_per		     := gbl.master_Zone_Temp_Min;
 m_max_per	         := gbl.master_Zone_Temp_Max;
-gbl.subTC_max := glass_max ;
-gbl.subTC_min := glass_min ;
-gbl.subTC_dev := glass_dev ;
-gbl.subTC_AVG := glass_AVG ;
-gbl.fPV_Value_SubTC := fPV_Value_Sub ;
+gbl.subTC_max		 := glass_max ;
+gbl.subTC_min		 := glass_min ;
+gbl.subTC_dev		 := glass_dev ;
+gbl.subTC_AVG		 := glass_AVG ;
+gbl.fPV_Value_SubTC  := fPV_Value_Sub ;
 master_subTC 		 := 0 ;
 tWait_Time(IN := TRUE, PT := LREAL_TO_TIME(m_Sampling_Time) * 1000);
 
 IF tWait_Time.Q THEN
 	tWait_Time(IN := FALSE);
+	index := index + 1 ;
+	rampBool := TRUE;
 	
 	glass_max := 0;
 	glass_min := 1000;
@@ -130,15 +138,10 @@ IF tWait_Time.Q THEN
 			
 			mErr_Value[i] := m_fTargetTemp - Substrate_AvgTemp[i];
 			mErr_integral_Val[i] := mErr_integral_Val[i] + (mErr_Value[i] * m_Sampling_Time);
-			master_Zone_AVG[i] := (m_pi_gain[i] * mErr_Value[i]) + (m_pi_gain[i]/m_integral_constant[i] * mErr_integral_Val[i]) + m_fTargetTemp;
+			master_Zone_AVG[i] := (m_pi_gain[i] * mErr_Value[i]) + (m_pi_gain[i] / m_integral_constant[i] * mErr_integral_Val[i]) + m_fTargetTemp;
 			 
-			m_Zone_Temp_Min := slave.s_fLast_Set_Value[i]- (slave.s_fLast_Set_Value[i] * m_min_per / 100);
-			m_Zone_Temp_Max := slave.s_fLast_Set_Value[i]+ (slave.s_fLast_Set_Value[i] * m_max_per / 100);
-			
-			(*
-			m_Zone_Temp_Min := 140;
-			m_Zone_Temp_Max := 160;
-			*)
+			m_Zone_Temp_Min := slave.s_fLast_Set_Value[i] - (slave.s_fLast_Set_Value[i] * m_min_per / 100);
+			m_Zone_Temp_Max := slave.s_fLast_Set_Value[i] + (slave.s_fLast_Set_Value[i] * m_max_per / 100);
 			
 			m_Last_Zone_Temp_AVG[i] := master_Zone_AVG[i];
 			
@@ -150,12 +153,26 @@ IF tWait_Time.Q THEN
 				mErr_integral_Val[i] :=  mErr_integral_Val[i] - mErr_Value[i]* m_Sampling_Time;
 			END_IF
 			
+			m_bRamp_Use     :=  gbl.master_bRamp_Enable;
+			m_fRamp_Rate    :=  gbl.master_fRamp_Value;
+			stCTRL_RAMP_GENERATOR_PARAMS[i].fVeloNeg := m_fRamp_Rate[i] / 60.0;
+			stCTRL_RAMP_GENERATOR_PARAMS[i].fVeloPos := m_fRamp_Rate[i] / 60.0;
 		END_FOR
 		
 		gbl.slave_fTargetTemp := master_Zone_AVG;
 	
 	END_IF
 	
+END_IF
+
+RAMPING();
+
+(* tuning data 저장 *)
+IF rampBool THEN
+	FOR i:=1 TO 4 BY 1 DO
+		heatupData[i, index] := m_Last_Zone_Temp_AVG[i];
+	END_FOR
+	rampBool := FALSE;
 END_IF
 
 
@@ -168,11 +185,11 @@ END_IF
 IF m_bRamp_Use THEN
 	FOR i:=1 TO 4 BY 1 DO
 		fbCTRL_RAMP_GENERATOR[i]( bEnable   := m_bRamp_Use,
-								fStart   := m_fLast_Set_Value[i],
-								fTarget  := m_Set_Value[i],
-								stParams := stCTRL_RAMP_GENERATOR_PARAMS[i],
-								fOut    => m_fRamp_Out[i],
-								fVeloOut  => ,
+								fStart  	:= m_Last_Zone_Temp_AVG[i],
+								fTarget 	:= m_fTargetTemp,
+								stParams    := stCTRL_RAMP_GENERATOR_PARAMS[i],
+								fOut    	 => m_fRamp_Out[i],
+								fVeloOut  	 => ,
 								bValueReached => ,
 								eErrorId => ,
 								bError =>
@@ -182,7 +199,7 @@ IF m_bRamp_Use THEN
 
 ELSE
 	FOR i:=1 TO 4 BY 1 DO
-		m_fRamp_Out[i] := m_Set_Value[i];
+		m_fRamp_Out[i] := m_fTargetTemp;
 	;
 	END_FOR
 END_IF]]></ST>
@@ -285,7 +302,10 @@ END_FOR
       <LineId Id="697" Count="3" />
       <LineId Id="704" Count="0" />
       <LineId Id="154" Count="0" />
-      <LineId Id="453" Count="16" />
+      <LineId Id="453" Count="3" />
+      <LineId Id="891" Count="0" />
+      <LineId Id="893" Count="0" />
+      <LineId Id="457" Count="12" />
       <LineId Id="596" Count="0" />
       <LineId Id="602" Count="1" />
       <LineId Id="601" Count="0" />
@@ -295,12 +315,25 @@ END_FOR
       <LineId Id="611" Count="0" />
       <LineId Id="609" Count="1" />
       <LineId Id="470" Count="3" />
-      <LineId Id="475" Count="19" />
-      <LineId Id="497" Count="7" />
+      <LineId Id="475" Count="6" />
+      <LineId Id="487" Count="7" />
+      <LineId Id="497" Count="1" />
+      <LineId Id="802" Count="2" />
+      <LineId Id="801" Count="0" />
+      <LineId Id="499" Count="5" />
       <LineId Id="164" Count="0" />
-      <LineId Id="67" Count="0" />
+      <LineId Id="805" Count="0" />
       <LineId Id="31" Count="0" />
+      <LineId Id="897" Count="0" />
+      <LineId Id="896" Count="0" />
+      <LineId Id="798" Count="0" />
+      <LineId Id="785" Count="0" />
       <LineId Id="33" Count="0" />
+      <LineId Id="786" Count="0" />
+      <LineId Id="895" Count="0" />
+      <LineId Id="894" Count="0" />
+      <LineId Id="899" Count="1" />
+      <LineId Id="898" Count="0" />
     </LineIds>
     <LineIds Name="master.RAMPING">
       <LineId Id="2" Count="21" />
