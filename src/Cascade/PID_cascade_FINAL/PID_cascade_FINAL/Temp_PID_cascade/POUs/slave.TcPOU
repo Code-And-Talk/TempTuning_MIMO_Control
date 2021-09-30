@@ -121,10 +121,9 @@ CASE System_step OF
 		
 		FOR i:=1 TO 4 BY 1 DO
 			s_fLast_Set_Value[i] := s_fSet_Value[i];
-			System_step := 1;
 		END_FOR
 		
-		System_step := 0;
+		System_step := 1;
 
 	1:
 		FOR i:=1 TO 4 BY 1 DO
@@ -226,8 +225,7 @@ FOR i:=1 TO 4 BY 1 DO
                  bError                     => gbl.slave_bError,
                  eErrorId                   => gbl.slave_nErrorID
                 );
-END_FOR
-]]></ST>
+END_FOR]]></ST>
     </Implementation>
     <Action Name="DEFAULT_PARA_SET" Id="{d227d564-1dc7-4f9c-9a58-3b59ce4af21d}">
       <Implementation>
@@ -354,7 +352,7 @@ END_FOR
       <LineId Id="841" Count="0" />
       <LineId Id="689" Count="0" />
       <LineId Id="110" Count="1" />
-      <LineId Id="113" Count="1" />
+      <LineId Id="114" Count="0" />
       <LineId Id="915" Count="1" />
       <LineId Id="117" Count="0" />
       <LineId Id="119" Count="23" />
@@ -373,7 +371,6 @@ END_FOR
       <LineId Id="205" Count="3" />
       <LineId Id="680" Count="0" />
       <LineId Id="209" Count="16" />
-      <LineId Id="480" Count="0" />
     </LineIds>
     <LineIds Name="slave.DEFAULT_PARA_SET">
       <LineId Id="2" Count="40" />

@@ -11,7 +11,7 @@ VAR_GLOBAL
 	(*===========================================master====================================*)
 	master_bRamp_Enable          : BOOL;
 	(*---------------------input------------------------*)
-	master_fRamp_Value           : ARRAY[1..4] OF LREAL := [10,10,10,10] ;
+	master_fRamp_Value           : ARRAY[1..4] OF LREAL  ;
 	master_TargetTemp            : LREAL;
 	master_pi_gain               : ARRAY[1..4] OF LREAL;	//PI제어기 이득(gain) -P
 	master_integral_constant	 : ARRAY[1..4] OF LREAL;	//PI제어기 적분상수 -I
@@ -30,14 +30,14 @@ VAR_GLOBAL
 	slave_bsimulation		   : BOOL;
 	slave_bRamp_Enable         : ARRAY[1..4] OF BOOL;
 	(*---------------------input------------------------*)
-	slave_fRamp_Value          : ARRAY[1..4] OF LREAL := [10,10,10,10] ;
-	slave_fTargetTemp          : ARRAY[1..4] OF LREAL := [150,150,150,150];
-	slave_fPowLimit            : ARRAY[1..4] OF LREAL := [90, 90, 90, 90];
+	slave_fRamp_Value          : ARRAY[1..4] OF LREAL ;
+	slave_fTargetTemp          : ARRAY[1..4] OF LREAL ;
+	slave_fPowLimit            : ARRAY[1..4] OF LREAL ;
 	slave_eCTRL_MODE           : ARRAY[1..4] OF E_CTRL_MODE ;
 
-	slave_fP_Value	           : ARRAY[1..4] OF LREAL := [3,3,3,3] ;
-	slave_tI_Value		       : ARRAY[1..4] OF LREAL  := [500,500,500,500] ;
-	slave_tD_Value		       : ARRAY[1..4] OF LREAL  := [80,80,80,80] ;
+	slave_fP_Value	           : ARRAY[1..4] OF LREAL  ;
+	slave_tI_Value		       : ARRAY[1..4] OF LREAL  ;
+	slave_tD_Value		       : ARRAY[1..4] OF LREAL  ;
 	slave_bEmergency_Stop	   : BOOL ;
 	(*---------------------output------------------------*)
 	slave_fPV_Value				: ARRAY[1..4] OF LREAL;
