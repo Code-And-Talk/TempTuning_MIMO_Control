@@ -11,6 +11,7 @@ VAR
 	onTimer_tune  : TON;
 	OffTimer_tune :TOF;
 	reverseSignal_tune : BOOL;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -32,6 +33,7 @@ tune set :  true -> master, slave호출
 tune set :  false -> slave만 호출
 *)
 IF gbl.tuning_mode THEN
+
 	master();
 	slave();
 	
@@ -58,7 +60,9 @@ END_IF]]></ST>
       <LineId Id="165" Count="0" />
       <LineId Id="93" Count="0" />
       <LineId Id="128" Count="0" />
-      <LineId Id="244" Count="15" />
+      <LineId Id="244" Count="0" />
+      <LineId Id="287" Count="0" />
+      <LineId Id="245" Count="14" />
     </LineIds>
   </POU>
 </TcPlcObject>

@@ -3,77 +3,76 @@
   <POU Name="slave" Id="{9ab2669f-726a-4789-9ecc-1bd43afc795d}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM slave
 VAR
-	fPV_Value_					:			ARRAY[1..4] OF LREAL;
+	fPV_Value_					:			ARRAY[1..4] OF LREAL ;
 	
-	tTime						:			TIME;
-	tTaskCycleTime				:			TIME := T#1MS;
-	tCtrlCycleTime				:			TIME := T#200MS;
+	tTime						:			TIME ;
+	tTaskCycleTime				:			TIME := T#1MS ;
+	tCtrlCycleTime				:			TIME := T#200MS ;
 	
-	fbCTRL_PT2				    : 			ARRAY[1..4] OF FB_CTRL_PT2;
-	stPTParams				    : 			ARRAY[1..4] OF ST_CTRL_PT2_PARAMS;
+	fbCTRL_PT2				    : 			ARRAY[1..4] OF FB_CTRL_PT2 ;
+	stPTParams				    : 			ARRAY[1..4] OF ST_CTRL_PT2_PARAMS ;
 
+	stCTRL_ParaController_Ex	:			ARRAY[1..4] OF ST_CTRL_ParaController ;
+	stCTRL_ParaController_In	:			ARRAY[1..4] OF ST_CTRL_ParaController ;
+	stCTRL_TempCtrlParameter	:			ARRAY[1..4] OF ST_CTRL_TempCtrlParameter ;
 	
-	stCTRL_ParaController_Ex	:			ARRAY[1..4] OF ST_CTRL_ParaController;
-	stCTRL_ParaController_In	:			ARRAY[1..4] OF ST_CTRL_ParaController;
-	stCTRL_TempCtrlParameter	:			ARRAY[1..4] OF ST_CTRL_TempCtrlParameter;
-	
-	fbCTRL_TempController		:			ARRAY[1..4] OF FB_CTRL_TempController;
+	fbCTRL_TempController		:			ARRAY[1..4] OF FB_CTRL_TempController ;
 		
-	eCTRL_STATE					:			ARRAY[1..4] OF E_CTRL_STATE;
+	eCTRL_STATE					:			ARRAY[1..4] OF E_CTRL_STATE ;
 	
-	e_Heat_Mode					:			E_CTRL_ControlMode 			:= eCTRL_ControlMode_HEATING;
-	e_Fail_Action				:			E_CTRL_ReactionOnFailure 	:= eCTRL_ReactionOnFailure_NoFailure;
+	e_Heat_Mode					:			E_CTRL_ControlMode 			:= eCTRL_ControlMode_HEATING ;
+	e_Fail_Action				:			E_CTRL_ReactionOnFailure 	:= eCTRL_ReactionOnFailure_NoFailure ;
 		
-	s_bError					:			BOOL;
-	s_nErrorID					:			E_CTRL_ERRORCODES;
-	s_fMaxOvershoot				:			LREAL;
+	s_bError					:			BOOL ;
+	s_nErrorID					:			E_CTRL_ERRORCODES ;
+	s_fMaxOvershoot				:			LREAL ;
 	
-	s_bFirst					:			BOOL := TRUE;
+	s_bFirst					:			BOOL := TRUE ;
 	
 	(* Ramp Parameter Set *)
-	s_bRamp_Use				    :			ARRAY[1..4] OF BOOL;	
+	s_bRamp_Use				    :			ARRAY[1..4] OF BOOL ;	
 	s_fRamp_Rate				:			ARRAY[1..4] OF LREAL ;
 	
 	(* =============== Setting Item 입력 =============== *)
 	
 	(* PID Set Parameter *)
-	s_fP_Value						:			ARRAY[1..4] OF LREAL					;
-	s_tI_Value						:			ARRAY[1..4] OF TIME						;
-	s_tD_Value						:			ARRAY[1..4] OF TIME						;
+	s_fP_Value						:			ARRAY[1..4] OF LREAL ;
+	s_tI_Value						:			ARRAY[1..4] OF TIME	;
+	s_tD_Value						:			ARRAY[1..4] OF TIME	;
 	
 	(* Power Limit Set *)
-	s_fPowLimit					:			ARRAY[1..4] OF LREAL;
+	s_fPowLimit					:			ARRAY[1..4] OF LREAL ;
 	
 	(* Manual Control 시 Power 출력값 *)
-	s_fSetManual					:			ARRAY[1..4] OF LREAL;
+	s_fSetManual					:			ARRAY[1..4] OF LREAL ;
 	
 	(*	Heater Mode	*)
-	s_eCTRL_MODE					:			ARRAY[1..4] OF E_CTRL_MODE;			(* Auto Mode 동작은 2 : eCTRL_MODE_ACTIVE 설정 *)
+	s_eCTRL_MODE					:			ARRAY[1..4] OF E_CTRL_MODE ;			(* Auto Mode 동작은 2 : eCTRL_MODE_ACTIVE 설정 *)
 	
 	(*	온도 설정 입력	*)
-	s_fSet_Value					:			ARRAY[1..4] OF LREAL;
-	s_fLast_Set_Value            	:           ARRAY[1..4] OF LREAL;
-	s_bStart						:			BOOL;
+	s_fSet_Value					:			ARRAY[1..4] OF LREAL ;
+	s_fLast_Set_Value            	:           ARRAY[1..4] OF LREAL ;
+
 	
 	(*	비상정지	*)
 	//bEmergency_Stop					:			ARRAY[1..4] OF BOOL ;
 	
-	fbCTRL_RAMP_GENERATOR			 :   ARRAY[1..4] OF FB_CTRL_RAMP_GENERATOR;
-	stCTRL_RAMP_GENERATOR_PARAMS     :   ARRAY[1..4] OF ST_CTRL_RAMP_GENERATOR_PARAMS;
+	fbCTRL_RAMP_GENERATOR			 :   ARRAY[1..4] OF FB_CTRL_RAMP_GENERATOR ;
+	stCTRL_RAMP_GENERATOR_PARAMS     :   ARRAY[1..4] OF ST_CTRL_RAMP_GENERATOR_PARAMS ;
 	
-	System_step	: INT;
+	System_step	: INT ;
 	
 	i    :   INT ;
 	
-	master_Zone_AVG	                 :   ARRAY[1..4] OF LREAL;
+	master_Zone_AVG	                 :   ARRAY[1..4] OF LREAL ;
 	
 END_VAR
 
 (* ================ Simulation Constant Parameter =======================*)
 VAR CONSTANT
-	fKp							:			ARRAY[1..4] OF REAL := [15.5, 15.2, 15.7, 15.8];
-	fInit_Temp					:			ARRAY[1..4] OF REAL := [23.5, 23.8, 23.9, 23.7];
-	tTimeConstant				:			ARRAY[1..4] OF TIME := [T#251.4S, T#252.4S, T#254.4S, T#256.4S];
+	fKp							:			ARRAY[1..4] OF REAL := [15.5, 15.2, 15.7, 15.8] ;
+	fInit_Temp					:			ARRAY[1..4] OF REAL := [23.5, 23.8, 23.9, 23.7] ;
+	tTimeConstant				:			ARRAY[1..4] OF TIME := [T#251.4S, T#252.4S, T#254.4S, T#256.4S] ;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -82,8 +81,12 @@ IF gbl.slave_bsimulation THEN
 	SIMULATION();
 END_IF
 
+IF gbl.slave_bError THEN
+	gbl.slave_bEmergency_Stop := TRUE ;
+END_IF
+
 FOR i:=1 TO 4 BY 1 DO
-	IF gbl.slave_bEmergency_Stop[i] THEN
+	IF gbl.slave_bEmergency_Stop THEN
 		s_fSet_Value[i] := 0;
 		s_fPowLimit[i] := 0;
 		s_eCTRL_MODE[i] := eCTRL_MODE_IDLE;
@@ -112,25 +115,22 @@ END_IF
 CASE System_step OF
 		
 	0:
+
+		s_bRamp_Use     :=  gbl.slave_bRamp_Enable;
+		s_fRamp_Rate    :=  gbl.slave_fRamp_Value;
 		
-		IF gbl.slave_bStart THEN
-			
-			s_bRamp_Use     :=  gbl.slave_bRamp_Enable;
-			s_fRamp_Rate    :=  gbl.slave_fRamp_Value;
-			
-			FOR i:=1 TO 4 BY 1 DO
-				s_fLast_Set_Value[i] := s_fSet_Value[i];
-				System_step := 1;
-			END_FOR
-		ELSE
-			System_step := 0;
-		END_IF
-	
+		FOR i:=1 TO 4 BY 1 DO
+			s_fLast_Set_Value[i] := s_fSet_Value[i];
+			System_step := 1;
+		END_FOR
+		
+		System_step := 0;
+
 	1:
 		FOR i:=1 TO 4 BY 1 DO
-			s_fP_Value[i] :=gbl.slave_fP_Value[i];
-			s_tI_Value[i] :=LREAL_TO_TIME(gbl.slave_tI_Value[i]);
-			s_tD_Value[i] :=LREAL_TO_TIME(gbl.slave_tD_Value[i]);
+			s_fP_Value[i] := gbl.slave_fP_Value[i];
+			s_tI_Value[i] := LREAL_TO_TIME(gbl.slave_tI_Value[i]);
+			s_tD_Value[i] := LREAL_TO_TIME(gbl.slave_tD_Value[i]);
 			
 			IF s_fP_Value[i] <= 0 THEN
 				s_fP_Value[i] := 0.1;
@@ -198,10 +198,6 @@ CASE System_step OF
 									  );
 	  	END_FOR
 		
-		System_step := 10;
-	   
-	10:					  
-		gbl.slave_bStart := FALSE;
 		System_step := 100;
 		
 	100:
@@ -213,8 +209,6 @@ END_CASE
 Ramping();
 
 FOR i:=1 TO 4 BY 1 DO 
-	gbl.slave_nErrorID :=  s_nErrorID ;
-	gbl.slave_bError :=  s_bError ;
 	
 	fbCTRL_TempController[i](
                  fw1                       := gbl.slave_fRamp_Out[i],
@@ -229,8 +223,8 @@ FOR i:=1 TO 4 BY 1 DO
                  tStartUpTime               => ,
                  eCtrlState                 => eCTRL_STATE[i],
                  sParaControllerInternal    => stCTRL_ParaController_In[i],
-                 bError                     => s_bError,
-                 eErrorId                   => s_nErrorID
+                 bError                     => gbl.slave_bError,
+                 eErrorId                   => gbl.slave_nErrorID
                 );
 END_FOR
 ]]></ST>
@@ -341,7 +335,9 @@ END_FOR
       <LineId Id="318" Count="0" />
       <LineId Id="89" Count="0" />
       <LineId Id="321" Count="0" />
+      <LineId Id="917" Count="0" />
       <LineId Id="492" Count="0" />
+      <LineId Id="918" Count="2" />
       <LineId Id="90" Count="1" />
       <LineId Id="93" Count="0" />
       <LineId Id="95" Count="0" />
@@ -354,13 +350,14 @@ END_FOR
       <LineId Id="98" Count="1" />
       <LineId Id="493" Count="0" />
       <LineId Id="100" Count="8" />
-      <LineId Id="401" Count="0" />
-      <LineId Id="109" Count="0" />
       <LineId Id="687" Count="1" />
-      <LineId Id="686" Count="0" />
+      <LineId Id="841" Count="0" />
       <LineId Id="689" Count="0" />
       <LineId Id="110" Count="1" />
-      <LineId Id="113" Count="29" />
+      <LineId Id="113" Count="1" />
+      <LineId Id="915" Count="1" />
+      <LineId Id="117" Count="0" />
+      <LineId Id="119" Count="23" />
       <LineId Id="230" Count="0" />
       <LineId Id="144" Count="6" />
       <LineId Id="152" Count="0" />
@@ -369,14 +366,12 @@ END_FOR
       <LineId Id="227" Count="0" />
       <LineId Id="169" Count="0" />
       <LineId Id="171" Count="5" />
-      <LineId Id="178" Count="20" />
-      <LineId Id="200" Count="1" />
-      <LineId Id="692" Count="0" />
+      <LineId Id="178" Count="19" />
       <LineId Id="690" Count="1" />
       <LineId Id="202" Count="2" />
       <LineId Id="681" Count="0" />
       <LineId Id="205" Count="3" />
-      <LineId Id="678" Count="2" />
+      <LineId Id="680" Count="0" />
       <LineId Id="209" Count="16" />
       <LineId Id="480" Count="0" />
     </LineIds>
