@@ -11,7 +11,7 @@ VAR_GLOBAL
 	(*===========================================master====================================*)
 	master_bRamp_Enable          : BOOL;
 	(*---------------------input------------------------*)
-	master_fRamp_Value           : ARRAY[1..4] OF LREAL  ;
+	master_fRamp_Value           : ARRAY[1..4] OF LREAL := [10, 10, 10, 10] ;
 	master_TargetTemp            : LREAL;
 	master_pi_gain               : ARRAY[1..4] OF LREAL;	//PI제어기 이득(gain) -P
 	master_integral_constant	 : ARRAY[1..4] OF LREAL;	//PI제어기 적분상수 -I
