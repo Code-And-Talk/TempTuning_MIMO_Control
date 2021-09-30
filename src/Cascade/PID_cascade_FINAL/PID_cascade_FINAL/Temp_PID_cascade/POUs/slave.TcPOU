@@ -81,7 +81,7 @@ IF gbl.slave_bsimulation THEN
 	SIMULATION();
 END_IF
 
-IF s_bError THEN
+IF gbl.slave_bError THEN
 	gbl.slave_bEmergency_Stop := TRUE ;
 END_IF
 
@@ -209,8 +209,6 @@ END_CASE
 Ramping();
 
 FOR i:=1 TO 4 BY 1 DO 
-	gbl.slave_nErrorID :=  s_nErrorID ;
-	gbl.slave_bError   :=  s_bError ;
 	
 	fbCTRL_TempController[i](
                  fw1                       := gbl.slave_fRamp_Out[i],
@@ -225,8 +223,8 @@ FOR i:=1 TO 4 BY 1 DO
                  tStartUpTime               => ,
                  eCtrlState                 => eCTRL_STATE[i],
                  sParaControllerInternal    => stCTRL_ParaController_In[i],
-                 bError                     => s_bError,
-                 eErrorId                   => s_nErrorID
+                 bError                     => gbl.slave_bError,
+                 eErrorId                   => gbl.slave_nErrorID
                 );
 END_FOR
 ]]></ST>
@@ -373,7 +371,7 @@ END_FOR
       <LineId Id="202" Count="2" />
       <LineId Id="681" Count="0" />
       <LineId Id="205" Count="3" />
-      <LineId Id="678" Count="2" />
+      <LineId Id="680" Count="0" />
       <LineId Id="209" Count="16" />
       <LineId Id="480" Count="0" />
     </LineIds>
