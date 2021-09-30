@@ -45,15 +45,15 @@ namespace Temp_UI_Example
             for (int i = 0; i <= 3; i++)
             {
                 // 각 ZONE 별로 P 값 입력
-                ZONE_P = ads.CreateVariableHandle($"sgbl.slave_fP_Value_[{i + 1}]");
+                ZONE_P = ads.CreateVariableHandle($"gbl.slave_fP_Value[{i + 1}]");
                 ads.WriteAny(ZONE_P, double.Parse(PID_p[i].Text));
 
                 // 각 ZONE 별로 I 값 입력
-                ZONE_I = ads.CreateVariableHandle($"sgbl.slave_tI_Value_[{i + 1}]");
+                ZONE_I = ads.CreateVariableHandle($"gbl.slave_tI_Value[{i + 1}]");
                 ads.WriteAny(ZONE_I, double.Parse(PID_i[i].Text));
 
                 // 각 ZONE 별로 D 값 입력
-                ZONE_D = ads.CreateVariableHandle($"sgbl.slave_tD_Value_[{i + 1}]");
+                ZONE_D = ads.CreateVariableHandle($"gbl.slave_tD_Value[{i + 1}]");
                 ads.WriteAny(ZONE_D, double.Parse(PID_d[i].Text));
             }
         }
@@ -68,21 +68,21 @@ namespace Temp_UI_Example
             // PLC에 있는 값 읽어오기
             for (int i = 0; i <= 3; i++)
             {
-                pot2[i] = ads.ReadSymbolInfo($"sgbl.slave_fP_Value_[{i + 1}]");
+                pot2[i] = ads.ReadSymbolInfo($"gbl.slave_fP_Value[{i + 1}]");
                 PT101[i] = Convert.ToDouble(ads.ReadSymbol(pot2[i]));
                 PID_p[i].Text = PT101[i].ToString();
             }
 
             for (int i = 0; i <= 3; i++)
             {
-                pot2[i] = ads.ReadSymbolInfo($"sgbl.slave_tI_Value_[{i + 1}]");
+                pot2[i] = ads.ReadSymbolInfo($"gbl.slave_tI_Value[{i + 1}]");
                 PT101[i] = Convert.ToDouble(ads.ReadSymbol(pot2[i]));
                 PID_i[i].Text = PT101[i].ToString();
             }
 
             for (int i = 0; i <= 3; i++)
             {
-                pot2[i] = ads.ReadSymbolInfo($"sgbl.slave_tD_Value_[{i + 1}]");
+                pot2[i] = ads.ReadSymbolInfo($"gbl.slave_tD_Value[{i + 1}]");
                 PT101[i] = Convert.ToDouble(ads.ReadSymbol(pot2[i]));
                 PID_d[i].Text = PT101[i].ToString();
             }
