@@ -19,8 +19,8 @@ namespace Temp_UI_Example
 
         // ADS 정보를 읽기 위한 인터페이스 정의
         private ITcAdsSymbol[] pot3 = new ITcAdsSymbol[100];
-        private ITcAdsSymbol[] pot4 = new ITcAdsSymbol[100];
-        bool[] bError = new bool[100];
+        private ITcAdsSymbol pot4; // 에러 읽기
+        bool bError;
         string[] Error_MSG = new string[100];
 
         // ADS 정보를 읽기 위한 인터페이스 정의, 값을 읽어오기 위함
@@ -36,14 +36,20 @@ namespace Temp_UI_Example
         //쓰레드1 = 데이터출력, 쓰레드2 = 와치독
         Thread thread1;
         Thread thread2;
+        // Thread thread4;
         private bool bThreadStart1 = false;
         private bool bThreadStart2 = false;
+        // private bool bThreadStart3 = false;
 
         //와치독 변수
         private bool Watchdog1 = true;
         private bool Watchdog2 = true;
         private int Watchdog3 = 0;
         private int Watchdog4 = 0;
+
+        // 
+        // private int WatchError3 = 0;
+        // private int WatchError4 = 0;
 
 
         // Slave Global Var
@@ -66,6 +72,9 @@ namespace Temp_UI_Example
         TextBox[] Ramp_s;
         TextBox[] Power_s;
 
+        // 에러 체크
+        // private bool WatchError1;
+
         public Form1()
         {
 
@@ -75,8 +84,10 @@ namespace Temp_UI_Example
 
             thread1 = new Thread(new ThreadStart(ReadData));
             thread2 = new Thread(new ThreadStart(WatchDog));
+            // thread4 = new Thread(new ThreadStart(WatchError));
             thread1.IsBackground = true;
             thread2.IsBackground = true;
+            // thread4.IsBackground = true;
 
         }
 
@@ -153,7 +164,162 @@ namespace Temp_UI_Example
 
             thread1.Start();
             thread2.Start();
+            // thread4.Start();
+        }
 
+        // ErrorMessage Enum
+        enum eCTRL_ERROR_Message
+        {
+            eCTRL_ERROR_NOERROR = 0, /* no error */
+            eCTRL_ERROR_INVALIDTASKCYCLETIME = 1, /* invalid task cycle time */
+            eCTRL_ERROR_INVALIDCTRLCYCLETIME = 2, /* invalid ctrl cycle time */
+            eCTRL_ERROR_INVALIDPARAM = 3, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_Tv = 4, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_Td = 5, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_Tn = 6, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_Ti = 7, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fHystereisisRange = 8, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fPosOutOn_Off = 9, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fNegOutOn_Off = 10, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_TableDescription = 11, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_TableData = 12, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_DataTableADR = 13, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_T0 = 14, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_T1 = 15, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_T2 = 16, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_T3 = 17, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_Theta = 18, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nOrder = 19, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_Tt = 20, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_Tu = 21, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_Tg = 22, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_infinite_slope = 23, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fMaxIsLessThanfMin = 24, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fOutMaxLimitIsLessThanfOutMinLimit = 25, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fOuterWindow = 26, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fInnerWindow = 27, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fOuterWindowIsLessThanfInnerWindow = 28, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fDeadBandInput = 29, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fDeadBandOutput = 30, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_PWM_Cycletime = 31, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_no_Parameterset = 32, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fOutOn = 33, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fOutOff = 34, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fGain = 35, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fOffset = 36, /* invalid parameter */
+            eCTRL_ERROR_MODE_NOT_SUPPORTED = 37, /* invalid mode: mode not supported*/
+            eCTRL_ERROR_INVALIDPARAM_Tv_heating = 38, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_Td_heating = 39, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_Tn_heating = 40, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_Tv_cooling = 41, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_Td_cooling = 42, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_Tn_cooling = 43, /* invalid parameter */
+            eCTRL_ERROR_RANGE_NOT_SUPPORTED = 44, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nParameterChangeCycleTicks = 45, /* invalid parameter */
+            eCTRL_ERROR_ParameterEstimationFailed = 46, /* invalid parameter */
+            eCTRL_ERROR_NoiseLevelToHigh = 47, /* invalid parameter */
+            eCTRL_ERROR_INTERNAL_ERROR_0 = 48, /* internal error*/
+            eCTRL_ERROR_INTERNAL_ERROR_1 = 49, /* internal error*/
+            eCTRL_ERROR_INTERNAL_ERROR_2 = 50, /* internal error*/
+            eCTRL_ERROR_INTERNAL_ERROR_3 = 51, /* internal error*/
+            eCTRL_ERROR_INTERNAL_ERROR_4 = 52, /* internal error*/
+            eCTRL_ERROR_INTERNAL_ERROR_5 = 53, /* internal error*/
+            eCTRL_ERROR_INTERNAL_ERROR_6 = 54, /* internal error*/
+            eCTRL_ERROR_INTERNAL_ERROR_7 = 55, /* internal error*/
+            eCTRL_ERROR_INTERNAL_ERROR_8 = 56, /* internal error*/
+            eCTRL_ERROR_INTERNAL_ERROR_9 = 57, /* internal error*/
+            eCTRL_ERROR_INVALIDPARAM_WorkArrayADR = 58, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_tOnTiime = 59, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_tOffTiime = 60, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nMaxMovingPulses = 61, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nAdditionalPulsesAtLimits = 62, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fCtrlOutMax_Min = 63, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fDeltaMax = 64, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_tMovingTime = 65, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_tDeadTime = 66, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_tAdditionalMoveTimeAtLimits = 67, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fThreshold = 68, /* invalid parameter */
+            eCTRL_ERROR_MEMCPY = 69, /* MEMCPY failed */
+            eCTRL_ERROR_MEMSET = 70, /* MEMSET failed */
+            eCTRL_ERROR_INVALIDPARAM_nNumberOfColumns = 71, /* invalid parameter */
+            eCTRL_ERROR_FileClose = 72, /* File Close failed*/
+            eCTRL_ERROR_FileOpen = 73, /* File Open failed*/
+            eCTRL_ERROR_FileWrite = 74, /* File Write failed*/
+            eCTRL_ERROR_INVALIDPARAM_fVeloNeg = 75, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fVeloPos = 76, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_DeadBandInput = 77, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_DeadBandOutput = 78, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_CycleDuration = 79, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_tStart = 80, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_StepHeigthTuningToLow = 81, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fMinLimitIsLessThanZero = 82, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fMaxLimitIsGreaterThan100 = 83, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fStepSize = 84, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fOkRangeIsLessOrEqualZero = 85, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fForceRangeIsLessOrEqualfOkRange = 86, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPWMPeriod = 87, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_tMinimumPulseTime = 88, /* invalid parameter */
+            eCTRL_ERROR_FileDelete = 89, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nNumberOfPwmOutputs = 90, /* File Delete failed*/
+            eCTRL_ERROR_INVALIDPARAM_nPwmInputArray_SIZEOF = 91, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nPwmOutputArray_SIZEOF = 92, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nPwmWaitTimesConfig_SIZEOF = 93, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nPwmInternalData_SIZEOF = 94, /* invalid parameter */
+            eCTRL_ERROR_SIZEOF = 95, /* SIZEOF failed */
+            eCTRL_ERROR_INVALIDPARAM_nOrderOfTheTransferfunction = 96, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nNumeratorArray_SIZEOF = 97, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nDenominatorArray_SIZEOF = 98, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_a_n_IsZero = 99, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_WorkArraySIZEOF = 100, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_MOVINGRANGE_MIN_MAX = 101, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_MOVINGTIME = 102, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_DEADTIME = 103, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fMinLimitIsGreaterThanfMaxLimit = 104, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_DataTableSIZEOF = 105, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_OutputVectorDescription = 106, /* invalid parameter */
+            eCTRL_ERROR_TaskCycleTimeChanged = 107, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nMinMovingPulses = 108, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fAcceleration = 109, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fDeceleration = 110, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_StartAndTargetPos = 111, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fVelocity = 112, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fTargetPos = 113, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fStartPos = 114, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fMovingLength = 115, /* invalid parameter */
+            eCTRL_ERROR_NT_GetTime = 116, /* internal error NT_GetTime */
+            eCTRL_ERROR_INVALIDPARAM_No3PhaseSolutionPossible = 117, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fStartVelo = 118, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fTargetVelo = 119, /* invalid parameter */
+            eCTRL_ERROR_INVALID_NEW_PARAMETER_TYPE = 120,  /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fBaseTime = 121, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nOrderOfTheTransferfunction_SIZEOF = 122, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nFilterOrder = 124, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nCoefficientsArray_a_SIZEOF = 125, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nCoefficientsArray_b_SIZEOF = 126, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nDigitalFiterData_SIZEOF = 127, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nLogBuffer_SIZEOF = 128, /* invalid parameter */
+            eCTRL_ERROR_LogBufferOverflow = 129, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nLogBuffer_ADR = 130, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nCoefficientsArray_a_ADR = 131, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nCoefficientsArray_b_ADR = 132, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nPwmInputArray_ADR = 133, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nPwmOutputArray_ADR = 134, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nPwmWaitTimesConfig_ADR = 135, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nPwmInternalData_ADR = 136, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nDigitalFiterData_ADR = 137, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nNumeratorArray_ADR = 138, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nDenominatorArray_ADR = 139, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nTransferfunction1Data_ADR = 140, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_nTransferfunction2Data_ADR = 141, /* invalid parameter */
+            eCTRL_ERROR_FileSeek = 142, /* internal error FB_FileSeek */
+            eCTRL_ERROR_INVALIDPARAM_AmbientTempMaxIsLessThanAmbientTempMin = 143, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_ForerunTempMaxIsLessThanForerunTempMin = 144, /* invalid parameter */
+            eCTRL_ERROR_INVALIDLOGCYCLETIME = 145, /* invalid parameter */
+            eCTRL_ERROR_INVALIDVERSION_TcControllerToolbox = 146,
+            eCTRL_ERROR_INVALIDPARAM_Bandwidth = 147, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_NotchFrequency = 148, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_DampingCoefficient = 149, /* invalid parameter */
+            eCTRL_ERROR_INVALIDPARAM_fKpIsLessThanZero = 150  /* invalid parameter */
         }
 
         //TwinCat3 연동
@@ -253,13 +419,16 @@ namespace Temp_UI_Example
                 pot[25] = ads.ReadSymbolInfo("gbl.subTC_max");
                 pot[26] = ads.ReadSymbolInfo("gbl.subTC_min");
                 pot[27] = ads.ReadSymbolInfo("gbl.subTC_AVG");
+                pot[28] = ads.ReadSymbolInfo("gbl.subTC_dev");
                 Substrate_Temp2[0] = Convert.ToDouble(ads.ReadSymbol(pot[25]));
                 Substrate_Temp2[1] = Convert.ToDouble(ads.ReadSymbol(pot[26]));
                 Substrate_Temp2[2] = Convert.ToDouble(ads.ReadSymbol(pot[27]));
-                Substrate_Temp2[3] = Substrate_Temp2[0] - Substrate_Temp2[1];
+                // Substrate_Temp2[3] = Substrate_Temp2[0] - Substrate_Temp2[1];
+                Substrate_Temp2[3] = Convert.ToDouble(ads.ReadSymbol(pot[28]));
                 this.Controls["ST" + 0].Text = Substrate_Temp2[0].ToString();
                 this.Controls["ST" + 1].Text = Substrate_Temp2[1].ToString();
                 this.Controls["ST" + 2].Text = Substrate_Temp2[2].ToString();
+                this.Controls["ST" + 3].Text = Substrate_Temp2[3].ToString();
                 //밑에 와치독 테스트중
                 //this.Controls["ST" + 3].Text = Substrate_Temp2[3].ToString();
                 Thread.Sleep(10);
@@ -295,6 +464,19 @@ namespace Temp_UI_Example
                 }
                 thread2 = null;
             }
+
+            //if (thread4 != null)
+            //{
+            //    if (bThreadStart3)
+            //    {
+            //        thread4.Abort();
+            //    }
+            //    else
+            //    {
+            //        thread4.Interrupt();
+            //    }
+            //    thread4 = null;
+            //}
         }
 
         // PID 팝업 창 띄우기
@@ -360,7 +542,7 @@ namespace Temp_UI_Example
             {
                 pot[28] = ads.ReadSymbolInfo("gbl.bWatch");
                 Watchdog1 = Convert.ToBoolean(ads.ReadSymbol(pot[28]));
-                this.Controls["ST" + 3].Text = Watchdog1.ToString();
+                this.Controls["label" + 36].Text = Watchdog1.ToString();
                 Thread.Sleep(10000);
                 Watchdog4++;
                 if (Watchdog4 >= 3)
@@ -382,6 +564,33 @@ namespace Temp_UI_Example
                 }
             }
         }
+
+        // 에러 검출 금요일에 종원이한테 물어보기
+        //private void WatchError()
+        //{
+        //    while (true)
+        //    {
+        //        pot4 = ads.ReadSymbolInfo($"gbl.slave_bError");
+        //        bError[0] = Convert.ToBoolean(ads.ReadSymbol(pot4));
+
+        //        Thread.Sleep(1000);
+
+        //        WatchError4++;
+        //        if (WatchError4 >= 3)
+        //        {
+        //            WatchError4 = 0;
+        //            WatchError3 = 0;
+        //        }
+
+        //        pot4 = ads.ReadSymbolInfo($"gbl.slave_bError");
+        //        bError[0] = Convert.ToBoolean(ads.ReadSymbol(pot4));
+
+        //        if (bError[0] == true)
+        //        {
+        //            Error_True();
+        //        }
+        //    }
+        //}
 
         // Data Write
         private void button2_Click(object sender, EventArgs e)
@@ -475,18 +684,18 @@ namespace Temp_UI_Example
             }
 
             // Error 
-            pot4[0] = ads.ReadSymbolInfo($"gbl.slave_bError");
-            bError[0] = Convert.ToBoolean(ads.ReadSymbol(pot4[0]));
-            if (bError[0] == true)
+            pot4 = ads.ReadSymbolInfo($"gbl.slave_bError");
+            bError = Convert.ToBoolean(ads.ReadSymbol(pot4));
+            if (bError == true)
             {
                 Error_True();
 
-                pot4[0] = ads.ReadSymbolInfo($"gbl.slave_nErrorID");
-                Error_MSG[0] = Convert.ToString(ads.ReadSymbol(pot4[0]));
+                pot4 = ads.ReadSymbolInfo($"gbl.slave_nErrorID");
+                Error_MSG[0] = Convert.ToString(ads.ReadSymbol(pot4));
 
-                txtError.Text = string.Format("Error = " + Error_MSG[0].ToString() + "\r\n");
+                txtError.Text = string.Format("Error = " + ((eCTRL_ERROR_Message)Enum.ToObject(typeof(eCTRL_ERROR_Message), Convert.ToInt32(Error_MSG[0]))).ToString().Substring(12) + "\r\n");
             }
-            else if (bError[0] == false)
+            else if (bError == false)
             {
                 pictureBox1.Load(@"C:\SmartFactory\Last_Project\Temp_UI_Example\Resources\꺼진등.png");
             }
@@ -544,6 +753,10 @@ namespace Temp_UI_Example
         {
             Emergency = ads.CreateVariableHandle($"gbl.slave_bError");
             ads.WriteAny(Emergency, true);
+
+            Error_True();
+
+            txtError.Text = string.Format("Error = EmergencyStop\r\n");
         }
     }
 }
