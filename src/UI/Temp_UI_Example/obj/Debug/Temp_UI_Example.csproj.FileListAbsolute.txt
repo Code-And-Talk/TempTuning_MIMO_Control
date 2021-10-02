@@ -48,3 +48,7 @@ C:\SmartFactory\Last_Project\Temp_UI_Example\obj\Debug\Temp_UI_Example.csproj.Co
 C:\SmartFactory\Last_Project\Temp_UI_Example\obj\Debug\Temp_UI_Example.csproj.CopyComplete
 C:\SmartFactory\Last_Project\Temp_UI_Example\obj\Debug\Temp_UI_Example.exe
 C:\SmartFactory\Last_Project\Temp_UI_Example\obj\Debug\Temp_UI_Example.pdb
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\bin\Debug\MetroFramework.Design.dll
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\bin\Debug\MetroFramework.dll
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\bin\Debug\MetroFramework.Fonts.dll
+C:\Users\Admin\Documents\GitHub\TempTuning_MIMO_Control\src\UI\Temp_UI_Example\obj\Debug\Temp_UI_Example.csproj.CopyComplete

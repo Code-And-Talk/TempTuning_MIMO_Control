@@ -12,7 +12,7 @@ using TwinCAT.Ads;
 
 namespace Temp_UI_Example
 {
-    public partial class Form1 : Form
+    public partial class Form1 : MetroFramework.Forms.MetroForm
     {
         // 통신 객체 정의
         private TcAdsClient ads = new TcAdsClient();
