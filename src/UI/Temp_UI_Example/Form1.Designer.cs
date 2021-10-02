@@ -1022,9 +1022,9 @@ namespace Temp_UI_Example
             // pictureBox1
             // 
             this.pictureBox1.Image = global::Temp_UI_Example.Properties.Resources.꺼진등;
-            this.pictureBox1.Location = new System.Drawing.Point(1552, 16);
+            this.pictureBox1.Location = new System.Drawing.Point(1344, 376);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(144, 128);
+            this.pictureBox1.Size = new System.Drawing.Size(152, 136);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 208;
             this.pictureBox1.TabStop = false;
@@ -1032,11 +1032,11 @@ namespace Temp_UI_Example
             // txtError
             // 
             this.txtError.Enabled = false;
-            this.txtError.Location = new System.Drawing.Point(1344, 16);
+            this.txtError.Location = new System.Drawing.Point(1344, 520);
             this.txtError.Multiline = true;
             this.txtError.Name = "txtError";
             this.txtError.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtError.Size = new System.Drawing.Size(200, 544);
+            this.txtError.Size = new System.Drawing.Size(152, 40);
             this.txtError.TabIndex = 209;
             // 
             // Form1

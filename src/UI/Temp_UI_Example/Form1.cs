@@ -74,7 +74,6 @@ namespace Temp_UI_Example
 
         // 에러 체크
         // private bool WatchError1;
-
         public Form1()
         {
 
@@ -93,7 +92,9 @@ namespace Temp_UI_Example
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // 폼 크기 최대화
             WindowState = FormWindowState.Maximized;
+
             // Array
             tb = new TextBox[] { TempTunetbox1, TempTunetbox2, TempTunetbox3, TempTunetbox4, TempTunetbox5, TempTunetbox6 };
             double[] PT102 = new double[100];
@@ -322,7 +323,7 @@ namespace Temp_UI_Example
             eCTRL_ERROR_INVALIDPARAM_fKpIsLessThanZero = 150  /* invalid parameter */
         }
 
-        //TwinCat3 연동
+            //TwinCat3 연동
         private void Run()
         {
             ads.Connect(851); //연결 포트
@@ -692,8 +693,7 @@ namespace Temp_UI_Example
 
                 pot4 = ads.ReadSymbolInfo($"gbl.slave_nErrorID");
                 Error_MSG[0] = Convert.ToString(ads.ReadSymbol(pot4));
-
-                txtError.Text = string.Format("Error = " + ((eCTRL_ERROR_Message)Enum.ToObject(typeof(eCTRL_ERROR_Message), Convert.ToInt32(Error_MSG[0]))).ToString().Substring(12) + "\r\n");
+                txtError.Text = string.Format("Error = " + ((eCTRL_ERROR_Message)Enum.ToObject(typeof(eCTRL_ERROR_Message), Convert.ToInt32(Error_MSG[0]))).ToString().Substring(12) + "\r\n");              
             }
             else if (bError == false)
             {
