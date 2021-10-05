@@ -76,140 +76,148 @@ VAR CONSTANT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[(*
 IF gbl.slave_bsimulation THEN
-	SIMULATION();
+   SIMULATION();
 END_IF
+*)
 
 IF gbl.slave_bError THEN
-	gbl.slave_bEmergency_Stop := TRUE ;
+   gbl.slave_bEmergency_Stop := TRUE ;
 END_IF
 
 FOR i:=1 TO 4 BY 1 DO
-	IF gbl.slave_bEmergency_Stop THEN
-		s_fSet_Value[i] := 0;
-		s_fPowLimit[i] := 0;
-		s_eCTRL_MODE[i] := eCTRL_MODE_IDLE;
-		fbCTRL_TempController[i]( eCtrlMode := s_eCTRL_MODE[i],      
-				  bSelSetpoint            := FALSE,
-				  fw1                     := s_fSet_Value[i],
-				  fw2                     := ,            
-				  fX                      := gbl.slave_fPV_Value[i],      
-				  fyManual                := s_fSetManual[i],
-				  sParaControllerExternal := stCTRL_ParaController_Ex[i],
-				  sControllerParameter    := stCTRL_TempCtrlParameter[i]
-				  );
-	ELSE
-		s_fSet_Value[i] := gbl.slave_fTargetTemp[i];
-		s_fPowLimit[i] := gbl.slave_fPowLimit[i];
-		s_eCTRL_MODE[i] := gbl.slave_eCTRL_MODE[i];
-	END_IF
+   IF gbl.slave_bEmergency_Stop THEN
+      s_fSet_Value[i] := 0;
+      s_fPowLimit[i] := 0;
+      s_eCTRL_MODE[i] := eCTRL_MODE_IDLE;
+      fbCTRL_TempController[i]( eCtrlMode := s_eCTRL_MODE[i],      
+              bSelSetpoint            := FALSE,
+              fw1                     := s_fSet_Value[i],
+              fw2                     := ,            
+              fX                      := gbl.slave_fPV_Value[i],      
+              fyManual                := s_fSetManual[i],
+              sParaControllerExternal := stCTRL_ParaController_Ex[i],
+              sControllerParameter    := stCTRL_TempCtrlParameter[i]
+              );
+   ELSE
+      s_fPowLimit[i] := gbl.slave_fPowLimit[i];
+      s_eCTRL_MODE[i] := gbl.slave_eCTRL_MODE[i];
+   END_IF
 END_FOR
 
 IF s_bFirst THEN
-	DEFAULT_PARA_SET();
-	s_bFirst := FALSE ;
-	System_step :=0;
+   DEFAULT_PARA_SET();
+   s_bFirst := FALSE ;
+   System_step :=0;
 END_IF
 
 CASE System_step OF
-		
-	0:
+      
+   0:
 
-		s_bRamp_Use     :=  gbl.slave_bRamp_Enable;
-		s_fRamp_Rate    :=  gbl.slave_fRamp_Value;
-		
-		FOR i:=1 TO 4 BY 1 DO
-			s_fLast_Set_Value[i] := s_fSet_Value[i];
-		END_FOR
-		
-		System_step := 1;
+      s_bRamp_Use     :=  gbl.slave_bRamp_Enable;
+      s_fRamp_Rate    :=  gbl.slave_fRamp_Value;
+	  
+      IF gbl.slave_bStart THEN
+         FOR i:=1 TO 4 BY 1 DO
+            s_fLast_Set_Value[i] := s_fSet_Value[i];
+         END_FOR
+         FOR i:=1 TO 4 BY 1 DO
+            s_fSet_Value[i] := gbl.slave_fTargetTemp[i];
+         END_FOR
+         System_step := 1;
+         gbl.slave_bStart := FALSE;
+         ELSE
+            System_step := 0;
+      END_IF
+      
 
-	1:
-		FOR i:=1 TO 4 BY 1 DO
-			s_fP_Value[i] := gbl.slave_fP_Value[i];
-			s_tI_Value[i] := LREAL_TO_TIME(gbl.slave_tI_Value[i]);
-			s_tD_Value[i] := LREAL_TO_TIME(gbl.slave_tD_Value[i]);
-			
-			IF s_fP_Value[i] <= 0 THEN
-				s_fP_Value[i] := 0.1;
-			ELSE
-				s_fP_Value[i] := s_fP_Value[i];
-			END_IF
+   1:
+      FOR i:=1 TO 4 BY 1 DO
+         s_fP_Value[i] := gbl.slave_fP_Value[i];
+         s_tI_Value[i] := LREAL_TO_TIME(gbl.slave_tI_Value[i]);
+         s_tD_Value[i] := LREAL_TO_TIME(gbl.slave_tD_Value[i]);
+         
+         IF s_fP_Value[i] <= 0 THEN
+            s_fP_Value[i] := 0.1;
+         ELSE
+            s_fP_Value[i] := s_fP_Value[i];
+         END_IF
 
-			stCTRL_ParaController_Ex[i].KpHeat := s_fP_Value[i];	
-			stCTRL_ParaController_Ex[i].TnHeat := s_tI_Value[i];
-			stCTRL_ParaController_Ex[i].TvHeat := s_tD_Value[i];
-			stCTRL_ParaController_Ex[i].TdHeat := T#1S;
-			
-			System_step := 2;
-			
-		END_FOR
-		
-		System_step := 2;
+         stCTRL_ParaController_Ex[i].KpHeat := s_fP_Value[i];   
+         stCTRL_ParaController_Ex[i].TnHeat := s_tI_Value[i];
+         stCTRL_ParaController_Ex[i].TvHeat := s_tD_Value[i];
+         stCTRL_ParaController_Ex[i].TdHeat := T#1S;
+         
+         System_step := 2;
+         
+      END_FOR
+      
+      System_step := 2;
 
-	2:
-		
-		FOR i:=1 TO 4 BY 1 DO
-			IF s_fPowLimit[i] > 100 THEN
-				s_fPowLimit[i] := 100;
-			ELSE 
-				s_fPowLimit[i] := s_fPowLimit[i];
-			END_IF
-		
-			stCTRL_TempCtrlParameter[i].fYMax := s_fPowLimit[i];
-			
-			stCTRL_RAMP_GENERATOR_PARAMS[i].fVeloNeg := s_fRamp_Rate[i] / 60.0;
-			stCTRL_RAMP_GENERATOR_PARAMS[i].fVeloPos := s_fRamp_Rate[i] / 60.0;
-			
-			System_step := 3;
-		
-		END_FOR
- 		
-		System_step := 3;
-	
-	3:
-		
-		FOR i:=1 TO 4 BY 1 DO
-		
-			IF s_fSetManual[i] > 100 THEN
-				s_fSetManual[i] := 100;
-			ELSE
-				s_fSetManual := s_fSetManual;
-			END_IF
+   2:
+      
+      FOR i:=1 TO 4 BY 1 DO
+         IF s_fPowLimit[i] > 100 THEN
+            s_fPowLimit[i] := 100;
+         ELSE 
+            s_fPowLimit[i] := s_fPowLimit[i];
+         END_IF
+      
+         stCTRL_TempCtrlParameter[i].fYMax := s_fPowLimit[i];
+         
+         stCTRL_RAMP_GENERATOR_PARAMS[i].fVeloNeg := s_fRamp_Rate[i] / 60.0;
+         stCTRL_RAMP_GENERATOR_PARAMS[i].fVeloPos := s_fRamp_Rate[i] / 60.0;
+         
+         System_step := 3;
+      
+      END_FOR
+       
+      System_step := 3;
+   
+   3:
+      
+      FOR i:=1 TO 4 BY 1 DO
+      
+         IF s_fSetManual[i] > 100 THEN
+            s_fSetManual[i] := 100;
+         ELSE
+            s_fSetManual := s_fSetManual;
+         END_IF
 
-			stCTRL_TempCtrlParameter[i].fYManual         :=   s_fSetManual[i];          
-			stCTRL_TempCtrlParameter[i].fYOnFailure      :=   s_fSet_Value[i];
-		END_FOR
-		
-		System_step := 4;
-  	
-	4:
-		FOR i:=1 TO 4 BY 1 DO
-			fbCTRL_TempController[i]( eCtrlMode               := gbl.slave_eCTRL_MODE[i],      
-									  bSelSetpoint            := FALSE,
-									  fw1                     := s_fSet_Value[i],
-									  fw2                     := ,            
-									  fX                      := gbl.slave_fPV_Value[i],      
-									  fyManual                := s_fSetManual[i],
-									  sParaControllerExternal := stCTRL_ParaController_Ex[i],
-									  sControllerParameter    := stCTRL_TempCtrlParameter[i]
-									  );
-	  	END_FOR
-		
-		System_step := 100;
-		
-	100:
-		System_step := 0;
-		
+         stCTRL_TempCtrlParameter[i].fYManual         :=   s_fSetManual[i];          
+         stCTRL_TempCtrlParameter[i].fYOnFailure      :=   s_fSet_Value[i];
+      END_FOR
+      
+      System_step := 4;
+     
+   4:
+      FOR i:=1 TO 4 BY 1 DO
+         fbCTRL_TempController[i]( eCtrlMode               := gbl.slave_eCTRL_MODE[i],      
+                             bSelSetpoint            := FALSE,
+                             fw1                     := s_fSet_Value[i],
+                             fw2                     := ,            
+                             fX                      := gbl.slave_fPV_Value[i],      
+                             fyManual                := s_fSetManual[i],
+                             sParaControllerExternal := stCTRL_ParaController_Ex[i],
+                             sControllerParameter    := stCTRL_TempCtrlParameter[i]
+                             );
+        END_FOR
+      
+      System_step := 100;
+      
+   100:
+      System_step := 0;
+      
 END_CASE
 
 
 Ramping();
 
 FOR i:=1 TO 4 BY 1 DO 
-	
-	fbCTRL_TempController[i](
+   
+   fbCTRL_TempController[i](
                  fw1                       := gbl.slave_fRamp_Out[i],
                  fX                        := gbl.slave_fPV_Value[i],    
                  sParaControllerExternal   := stCTRL_ParaController_Ex[i],
@@ -329,48 +337,10 @@ END_FOR
       </Implementation>
     </Action>
     <LineIds Name="slave">
-      <LineId Id="600" Count="0" />
-      <LineId Id="318" Count="0" />
-      <LineId Id="89" Count="0" />
-      <LineId Id="321" Count="0" />
-      <LineId Id="917" Count="0" />
-      <LineId Id="492" Count="0" />
-      <LineId Id="918" Count="2" />
-      <LineId Id="90" Count="1" />
-      <LineId Id="93" Count="0" />
-      <LineId Id="95" Count="0" />
-      <LineId Id="239" Count="0" />
-      <LineId Id="513" Count="7" />
-      <LineId Id="512" Count="0" />
-      <LineId Id="494" Count="0" />
-      <LineId Id="500" Count="1" />
-      <LineId Id="498" Count="0" />
-      <LineId Id="98" Count="1" />
-      <LineId Id="493" Count="0" />
-      <LineId Id="100" Count="8" />
-      <LineId Id="687" Count="1" />
-      <LineId Id="841" Count="0" />
-      <LineId Id="689" Count="0" />
-      <LineId Id="110" Count="1" />
-      <LineId Id="114" Count="0" />
-      <LineId Id="915" Count="1" />
-      <LineId Id="117" Count="0" />
-      <LineId Id="119" Count="23" />
-      <LineId Id="230" Count="0" />
-      <LineId Id="144" Count="6" />
-      <LineId Id="152" Count="0" />
-      <LineId Id="158" Count="10" />
-      <LineId Id="229" Count="0" />
-      <LineId Id="227" Count="0" />
-      <LineId Id="169" Count="0" />
-      <LineId Id="171" Count="5" />
-      <LineId Id="178" Count="19" />
-      <LineId Id="690" Count="1" />
-      <LineId Id="202" Count="2" />
-      <LineId Id="681" Count="0" />
-      <LineId Id="205" Count="3" />
-      <LineId Id="680" Count="0" />
-      <LineId Id="209" Count="16" />
+      <LineId Id="1153" Count="41" />
+      <LineId Id="1309" Count="0" />
+      <LineId Id="1195" Count="113" />
+      <LineId Id="225" Count="0" />
     </LineIds>
     <LineIds Name="slave.DEFAULT_PARA_SET">
       <LineId Id="2" Count="40" />

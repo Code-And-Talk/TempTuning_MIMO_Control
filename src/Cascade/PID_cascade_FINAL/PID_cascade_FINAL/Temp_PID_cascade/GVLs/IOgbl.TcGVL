@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <GVL Name="IOgbl" Id="{78ca9920-bd5d-46f1-b2da-a4323cc174cb}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	AI_IO_slave_pv  AT%IB1001   :   ARRAY [1..4] OF UINT;
+	AI_IO_ST_temp   AT%IB1021   :   ARRAY [1..9] OF UINT;
+	
+	
+	AO_IO_SCR_set 	AT%QB1051 	:   ARRAY [1..4] OF UINT;  
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>
