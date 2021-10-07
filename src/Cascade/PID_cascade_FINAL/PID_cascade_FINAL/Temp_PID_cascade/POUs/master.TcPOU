@@ -71,8 +71,14 @@ VAR
 	result_subTC_AVG			:			LREAL := 0;
 	
 	
-	heatupData				    :			ARRAY [1..4, 1..arrSize] OF LREAL ;   (* tuning data 저장 *)
-	index						:			INT  := 0;
+	heatupData				    :			ARRAY [1..4, 1..4, 1..arrSize] OF LREAL ;   (* tuning data 저장 *)
+	tuning_index				: 			INT  := 0;  (*tuning_count*)
+	index						:			INT  := 0;	(*heat up data 배열 size*)
+	zone_index					:			INT  := 0;	(*Zone*)
+	
+	newData						: 			ARRAY [1..4, 1..arrsize] OF LREAL;
+	oldData						: 			ARRAY [1..4, 1..arrsize] OF LREAL;
+	
 	rampBool 					:			BOOL ;
 (* ------------------------------------------Ramp Parameter Set-------------------------------------- *)
 	m_bRamp_Use				    :			BOOL;	
@@ -168,9 +174,11 @@ END_IF
 RAMPING();
 
 (* tuning data 저장 *)
+
 IF rampBool THEN
-	FOR i:=1 TO 4 BY 1 DO
-		heatupData[i, index] := m_Last_Zone_Temp_AVG[i];
+	FOR zone_index :=1 TO 4 BY 1 DO
+		newData[zone_index, index] := m_Last_Zone_Temp_AVG[i];
+		// heatupData[tuning_index, zone_index, index] := m_Last_Zone_Temp_AVG[i]; 
 	END_FOR
 	rampBool := FALSE;
 END_IF
@@ -326,8 +334,10 @@ END_FOR
       <LineId Id="31" Count="0" />
       <LineId Id="897" Count="0" />
       <LineId Id="896" Count="0" />
+      <LineId Id="978" Count="0" />
       <LineId Id="798" Count="0" />
       <LineId Id="785" Count="0" />
+      <LineId Id="987" Count="0" />
       <LineId Id="33" Count="0" />
       <LineId Id="786" Count="0" />
       <LineId Id="895" Count="0" />
