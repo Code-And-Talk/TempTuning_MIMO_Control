@@ -9,6 +9,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TwinCAT.Ads;
+using System.Windows.Forms.DataVisualization.Charting;
+using Oracle.ManagedDataAccess.Client;
 
 namespace Temp_UI_Example
 {
@@ -36,10 +38,12 @@ namespace Temp_UI_Example
         //쓰레드1 = 데이터출력, 쓰레드2 = 와치독
         Thread thread1;
         Thread thread2;
-        // Thread thread4;
+
         private bool bThreadStart1 = false;
         private bool bThreadStart2 = false;
-        // private bool bThreadStart3 = false;
+
+        //차트
+        double k = 0;
 
         //와치독 변수
         private bool Watchdog1 = true;
@@ -47,17 +51,13 @@ namespace Temp_UI_Example
         private int Watchdog3 = 0;
         private int Watchdog4 = 0;
 
-        // 
-        // private int WatchError3 = 0;
-        // private int WatchError4 = 0;
-
-
         // Slave Global Var
         private int Temp_Set;
         private int Ramp_Set;
         private int Power_Set;
         private int Ramp_En;
         private int e_Ctrl_Mode;
+        private int bStart;
 
         // Master Global Var
         private int Temp_Tune;
@@ -72,8 +72,13 @@ namespace Temp_UI_Example
         TextBox[] Ramp_s;
         TextBox[] Power_s;
 
+        //소수점 버림
+        String str,str2,str3,str4;
+
         // 에러 체크
         // private bool WatchError1;
+
+        int count = 0;
         public Form1()
         {
 
@@ -83,10 +88,9 @@ namespace Temp_UI_Example
 
             thread1 = new Thread(new ThreadStart(ReadData));
             thread2 = new Thread(new ThreadStart(WatchDog));
-            // thread4 = new Thread(new ThreadStart(WatchError));
+
             thread1.IsBackground = true;
             thread2.IsBackground = true;
-            // thread4.IsBackground = true;
 
         }
 
@@ -163,9 +167,33 @@ namespace Temp_UI_Example
             //Tune Set 초기값
             comboBox1.SelectedIndex = 1;
 
+            //차트 설정
+            chart1.Series.Clear();
+            for (int i = 1; i < 10; i++)
+            {
+                Series STChart1 = chart1.Series.Add($"SubStrate{i}");
+                STChart1.ChartType = SeriesChartType.Line;
+            }
+
             thread1.Start();
             thread2.Start();
-            // thread4.Start();
+
+            //DB 마지막 에러 조회
+            using (OracleConnection conn = new OracleConnection("Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)" +
+             "(HOST=localhost)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)" +
+             "(SERVICE_NAME=xe)));User Id=hr;Password=hr;"))
+            using (OracleCommand cmd = new OracleCommand("select error_id from(select * from log order by error_date desc, num desc) where rownum = 1", conn))
+            {
+                conn.Open();
+                using (OracleDataReader reader = cmd.ExecuteReader())
+                {
+                    reader.Read();
+                    string str = reader["error_id"] as string;
+                    txtError.Text = "Last_Error = " + str.ToString();
+                    reader.Close();
+                    conn.Close();
+                }
+            }
         }
 
         // ErrorMessage Enum
@@ -323,7 +351,7 @@ namespace Temp_UI_Example
             eCTRL_ERROR_INVALIDPARAM_fKpIsLessThanZero = 150  /* invalid parameter */
         }
 
-            //TwinCat3 연동
+        //TwinCat3 연동
         private void Run()
         {
             ads.Connect(851); //연결 포트
@@ -349,8 +377,8 @@ namespace Temp_UI_Example
 
                     pot[i] = ads.ReadSymbolInfo($"gbl.slave_fPV_Value[{cnt++}]");
                     Act_Temp[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
-                    this.Controls["ActTempTB" + i].Text = Act_Temp[i].ToString();
-                    Thread.Sleep(10);
+                    str = String.Format("{0:0.00}", Act_Temp[i]);
+                    this.Controls["ActTempTB" + i].Text = str;
 
                 }
                 cnt = 1;
@@ -361,8 +389,8 @@ namespace Temp_UI_Example
 
                     pot[i] = ads.ReadSymbolInfo($"gbl.slave_fRamp_Out[{cnt++}]");
                     Work_Set[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
-                    this.Controls["WorkSetTB" + i].Text = Work_Set[i].ToString();
-                    Thread.Sleep(10);
+                    str = String.Format("{0:0.00}", Work_Set[i]);
+                    this.Controls["WorkSetTB" + i].Text = str;
 
                 }
                 cnt = 1;
@@ -373,9 +401,9 @@ namespace Temp_UI_Example
 
                     pot[i] = ads.ReadSymbolInfo($"gbl.slave_fMV_Out[{cnt++}]");
                     Act_Power[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
-                    this.Controls["ActPowerTB" + i].Text = Act_Power[i].ToString();
-                    Thread.Sleep(10);
-                    
+                    str = String.Format("{0:0.00}", Act_Power[i]);
+                    this.Controls["ActPowerTB" + i].Text = str;
+
                 }
                 cnt = 1;
 
@@ -383,10 +411,10 @@ namespace Temp_UI_Example
                 for (int i = 0; i < 4; i++)
                 {
 
-                    pot[i] = ads.ReadSymbolInfo($"gbl.slave_fPV_Value[{cnt++}]");
+                    pot[i] = ads.ReadSymbolInfo($"gbl.tune_result[{cnt++}]");
                     Tune_Result[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
-                    this.Controls["TuneResultTB" + i].Text = Tune_Result[i].ToString();
-                    Thread.Sleep(10);
+                    str = String.Format("{0:0.00}", Tune_Result[i]);
+                    this.Controls["TuneResultTB" + i].Text = str;
 
                 }
                 cnt = 1;
@@ -397,25 +425,12 @@ namespace Temp_UI_Example
 
                     pot[i] = ads.ReadSymbolInfo($"gbl.fPV_Value_SubTC[{cnt++}]");
                     Substrate_Temp[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
-                    this.Controls["SubstrateTemp" + i].Text = Substrate_Temp[i].ToString();
-                    Thread.Sleep(10);
+                    str = String.Format("{0:0.00}", Substrate_Temp[i]);
+                    this.Controls["SubstrateTemp" + i].Text = str;
 
                 }
                 cnt = 1;
 
-                //Substrate Temp (MAX,MIN,AVG,MAX-MIN) 출력
-                //pot[25] = ads.ReadSymbolInfo("gbl.subTC_max");
-                //pot[26] = ads.ReadSymbolInfo("gbl.subTC_min");
-                //pot[27] = ads.ReadSymbolInfo("gbl.subTC_AVG");
-                //Act_Temp[25] = Convert.ToDouble(ads.ReadSymbol(pot[25]));
-                //Act_Temp[26] = Convert.ToDouble(ads.ReadSymbol(pot[26]));
-                //Act_Temp[27] = Convert.ToDouble(ads.ReadSymbol(pot[27]));
-                //Act_Temp[28] = Act_Temp[25] - Act_Temp[26];
-                //this.Controls["ST" + (25 - 16)].Text = Act_Temp[25].ToString();
-                //this.Controls["ST" + (26 - 16)].Text = Act_Temp[26].ToString();
-                //this.Controls["ST" + (27 - 16)].Text = Act_Temp[27].ToString();
-                ////this.Controls["ST" + (28 - 16)].Text = Act_Temp[28].ToString();
-                //Thread.Sleep(10);
 
                 pot[25] = ads.ReadSymbolInfo("gbl.subTC_max");
                 pot[26] = ads.ReadSymbolInfo("gbl.subTC_min");
@@ -424,15 +439,28 @@ namespace Temp_UI_Example
                 Substrate_Temp2[0] = Convert.ToDouble(ads.ReadSymbol(pot[25]));
                 Substrate_Temp2[1] = Convert.ToDouble(ads.ReadSymbol(pot[26]));
                 Substrate_Temp2[2] = Convert.ToDouble(ads.ReadSymbol(pot[27]));
-                // Substrate_Temp2[3] = Substrate_Temp2[0] - Substrate_Temp2[1];
                 Substrate_Temp2[3] = Convert.ToDouble(ads.ReadSymbol(pot[28]));
-                this.Controls["ST" + 0].Text = Substrate_Temp2[0].ToString();
-                this.Controls["ST" + 1].Text = Substrate_Temp2[1].ToString();
-                this.Controls["ST" + 2].Text = Substrate_Temp2[2].ToString();
-                this.Controls["ST" + 3].Text = Substrate_Temp2[3].ToString();
-                //밑에 와치독 테스트중
-                //this.Controls["ST" + 3].Text = Substrate_Temp2[3].ToString();
-                Thread.Sleep(10);
+                str = String.Format("{0:0.00}", Substrate_Temp2[0]);
+                str2 = String.Format("{0:0.00}", Substrate_Temp2[1]);
+                str3 = String.Format("{0:0.00}", Substrate_Temp2[2]);
+                str4 = String.Format("{0:0.00}", Substrate_Temp2[3]);
+                this.Controls["ST" + 0].Text = str;
+                this.Controls["ST" + 1].Text = str2;
+                this.Controls["ST" + 2].Text = str3;
+                this.Controls["ST" + 3].Text = str4;
+
+                chart1.Series[0].Points.AddXY(k, Convert.ToDouble(SubstrateTemp0.Text));
+                chart1.Series[1].Points.AddXY(k, Convert.ToDouble(SubstrateTemp1.Text));
+                chart1.Series[2].Points.AddXY(k, Convert.ToDouble(SubstrateTemp2.Text));
+                chart1.Series[3].Points.AddXY(k, Convert.ToDouble(SubstrateTemp3.Text));
+                chart1.Series[4].Points.AddXY(k, Convert.ToDouble(SubstrateTemp4.Text));
+                chart1.Series[5].Points.AddXY(k, Convert.ToDouble(SubstrateTemp5.Text));
+                chart1.Series[6].Points.AddXY(k, Convert.ToDouble(SubstrateTemp6.Text));
+                chart1.Series[7].Points.AddXY(k, Convert.ToDouble(SubstrateTemp7.Text));
+                chart1.Series[8].Points.AddXY(k, Convert.ToDouble(SubstrateTemp8.Text));
+
+                k++;
+                Thread.Sleep(10000);
 
             }
         }
@@ -465,24 +493,11 @@ namespace Temp_UI_Example
                 }
                 thread2 = null;
             }
-
-            //if (thread4 != null)
-            //{
-            //    if (bThreadStart3)
-            //    {
-            //        thread4.Abort();
-            //    }
-            //    else
-            //    {
-            //        thread4.Interrupt();
-            //    }
-            //    thread4 = null;
-            //}
         }
 
         // PID 팝업 창 띄우기
         private void button1_Click_1(object sender, EventArgs e)
-        {     
+        {
             PID pid = new PID();
             pid.Show();
         }
@@ -505,36 +520,6 @@ namespace Temp_UI_Example
                 }
             }
         }
-
-        //와치독 함수
-        //private void WatchDog()
-        //{
-        //    while (true)
-        //    {
-        //        pot[28] = ads.ReadSymbolInfo("gbl.bWatch");
-        //        Watchdog1 = Convert.ToBoolean(ads.ReadSymbol(pot[28]));
-        //        this.Controls["ST" + (28 - 16)].Text = Watchdog1.ToString();
-        //        Thread.Sleep(10000);
-        //        Watchdog4++;
-        //        if(Watchdog4 >= 3)
-        //        {
-        //            Watchdog4 = 0;
-        //            Watchdog3 = 0;
-        //        }
-
-        //        pot[29] = ads.ReadSymbolInfo("gbl.bWatch");
-        //        Watchdog2 = Convert.ToBoolean(ads.ReadSymbol(pot[28]));
-
-        //        if (Watchdog1 == Watchdog2)
-        //        {
-        //            Watchdog3++;
-        //            if (Watchdog3 > 2)
-        //            {
-        //                MessageBox.Show("PLC가 정지되었습니다.");
-        //            }
-        //        }
-        //    }
-        //}
 
         //와치독 함수
         private void WatchDog()
@@ -565,33 +550,6 @@ namespace Temp_UI_Example
                 }
             }
         }
-
-        // 에러 검출 금요일에 종원이한테 물어보기
-        //private void WatchError()
-        //{
-        //    while (true)
-        //    {
-        //        pot4 = ads.ReadSymbolInfo($"gbl.slave_bError");
-        //        bError[0] = Convert.ToBoolean(ads.ReadSymbol(pot4));
-
-        //        Thread.Sleep(1000);
-
-        //        WatchError4++;
-        //        if (WatchError4 >= 3)
-        //        {
-        //            WatchError4 = 0;
-        //            WatchError3 = 0;
-        //        }
-
-        //        pot4 = ads.ReadSymbolInfo($"gbl.slave_bError");
-        //        bError[0] = Convert.ToBoolean(ads.ReadSymbol(pot4));
-
-        //        if (bError[0] == true)
-        //        {
-        //            Error_True();
-        //        }
-        //    }
-        //}
 
         // Data Write
         private void button2_Click(object sender, EventArgs e)
@@ -687,24 +645,46 @@ namespace Temp_UI_Example
             // Error 
             pot4 = ads.ReadSymbolInfo($"gbl.slave_bError");
             bError = Convert.ToBoolean(ads.ReadSymbol(pot4));
+
+            //DB
+            string strConn = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=xe)));User Id=hr;Password=hr";
+            // 1. 연결 객체 만들기 - Client
+            OracleConnection conn = new OracleConnection(strConn);
+            // 2. 데이터베이스 접속을 위한 연결
+            conn.Open();
+            // 3. 서버와 함께 신나게 놀기 
+            // ~~~~~~~~~~~
+            // 3.1 Query 명령객체 만들기
+            OracleCommand cmd = new OracleCommand();
+            cmd.Connection = conn;
             if (bError == true)
             {
                 Error_True();
 
                 pot4 = ads.ReadSymbolInfo($"gbl.slave_nErrorID");
                 Error_MSG[0] = Convert.ToString(ads.ReadSymbol(pot4));
-                txtError.Text = string.Format("Error = " + ((eCTRL_ERROR_Message)Enum.ToObject(typeof(eCTRL_ERROR_Message), Convert.ToInt32(Error_MSG[0]))).ToString().Substring(12) + "\r\n");              
+                txtError.Text = string.Format("Error = " + ((eCTRL_ERROR_Message)Enum.ToObject(typeof(eCTRL_ERROR_Message), Convert.ToInt32(Error_MSG[0]))).ToString().Substring(12) + "\r\n");
+
+                // 에러가 발생하면 DB에 에러내용 입력
+                cmd.CommandText = $"INSERT INTO LOG VALUES ({count},{Error_MSG[0]},to_char(sysdate, 'yyyy-mm-dd hh24:mi:ss'),'{((eCTRL_ERROR_Message)Enum.ToObject(typeof(eCTRL_ERROR_Message), Convert.ToInt32(Error_MSG[0]))).ToString().Substring(12)}')";
+                cmd.ExecuteNonQuery();
+
+                count++;
+
+                conn.Close();
             }
             else if (bError == false)
             {
                 pictureBox1.Load(@"C:\SmartFactory\Last_Project\Temp_UI_Example\Resources\꺼진등.png");
             }
+
+            bStart = ads.CreateVariableHandle($"gbl.slave_bstart");
+            ads.WriteAny(bStart, true);
         }
 
         // 깜빡깜빡
         //딜레이 메소드
         private static DateTime Delay(int MS)
-
         {
 
             DateTime ThisMoment = DateTime.Now;
@@ -754,9 +734,36 @@ namespace Temp_UI_Example
             Emergency = ads.CreateVariableHandle($"gbl.slave_bError");
             ads.WriteAny(Emergency, true);
 
+            pot4 = ads.ReadSymbolInfo($"gbl.slave_nErrorID");
+            Error_MSG[0] = Convert.ToString(ads.ReadSymbol(pot4));
+
             Error_True();
 
             txtError.Text = string.Format("Error = EmergencyStop\r\n");
+
+            //DB
+            string strConn = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=xe)));User Id=hr;Password=hr";
+            // 1. 연결 객체 만들기 - Client
+            OracleConnection conn = new OracleConnection(strConn);
+            // 2. 데이터베이스 접속을 위한 연결
+            conn.Open();
+            // 3. 서버와 함께 신나게 놀기 
+            // ~~~~~~~~~~~
+            // 3.1 Query 명령객체 만들기
+            OracleCommand cmd = new OracleCommand();
+            cmd.Connection = conn;
+            // 에러가 발생하면 DB에 에러내용 입력
+            cmd.CommandText = $"INSERT INTO LOG VALUES ({count},{Error_MSG[0]},to_char(sysdate, 'yyyy-mm-dd hh24:mi:ss'),'EmergencyStop')";
+            cmd.ExecuteNonQuery();
+
+            count++;
+            conn.Close();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Error_Log log = new Error_Log();
+            log.Show();
         }
     }
 }
