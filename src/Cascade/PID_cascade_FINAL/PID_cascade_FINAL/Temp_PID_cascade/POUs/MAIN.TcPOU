@@ -13,7 +13,7 @@ VAR
 	reverseSignal_tune  : BOOL;
 	
 	i    				: INT;
-
+	zoneIndex			: INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -57,10 +57,24 @@ IF gbl.tuning_mode THEN
   (* 튜닝 시간 설정 = mgbl.master_tuning_time *)
     onTimer_tune(IN := OffTimer_tune.Q, PT := LREAL_TO_TIME(gbl.tuning_time)*60000); // IN이 FALSE에서 TRUE가 되자마자 시간이 흐름,PT와 같아지면 Q가 TRUE
     IF onTimer_tune.Q THEN
-	  gbl.tuning_mode := FALSE ;
-	  reverseSignal_tune := FALSE ;
-	  gbl.tune_result := gbl.slave_fPV_Value ;
-	  master.oldData := master.newData ;
+	  reverseSignal_tune := FALSE;
+	  gbl.tune_result := gbl.slave_fPV_Value;
+	  IF gbl.tuningIndex <> 0 THEN
+		  gbl.heatupData[gbl.tuningCount + 1 - gbl.tuningIndex] := gbl.oldData;
+		  gbl.heatupData[gbl.tuningCount - gbl.tuningIndex] := gbl.newData;
+	  END_IF
+	  gbl.oldData := gbl.newData;
+	  gbl.tuningIndex := gbl.tuningIndex + 1;
+	  FOR zoneIndex:=1 TO 4 BY 1 DO
+		  FOR i:=1 TO gbl.index BY 1 DO
+			  gbl.newData[zoneIndex, i] := 0;
+		  END_FOR
+	  END_FOR
+	  gbl.index := 1;
+	  IF gbl.tuningIndex = 4 THEN
+		  gbl.tuningIndex := 0;
+		  gbl.tuning_mode := FALSE;
+	  END_IF
 	ELSE
 	  reverseSignal_tune := TRUE;
     END_IF
@@ -95,9 +109,22 @@ END_IF]]></ST>
       <LineId Id="128" Count="0" />
       <LineId Id="244" Count="0" />
       <LineId Id="287" Count="0" />
-      <LineId Id="245" Count="7" />
+      <LineId Id="245" Count="5" />
+      <LineId Id="252" Count="0" />
       <LineId Id="387" Count="0" />
-      <LineId Id="405" Count="0" />
+      <LineId Id="424" Count="0" />
+      <LineId Id="421" Count="0" />
+      <LineId Id="426" Count="0" />
+      <LineId Id="418" Count="0" />
+      <LineId Id="415" Count="0" />
+      <LineId Id="410" Count="0" />
+      <LineId Id="431" Count="0" />
+      <LineId Id="428" Count="2" />
+      <LineId Id="437" Count="0" />
+      <LineId Id="427" Count="0" />
+      <LineId Id="411" Count="0" />
+      <LineId Id="438" Count="0" />
+      <LineId Id="413" Count="1" />
       <LineId Id="253" Count="3" />
       <LineId Id="389" Count="0" />
       <LineId Id="388" Count="0" />
