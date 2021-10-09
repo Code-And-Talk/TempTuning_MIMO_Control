@@ -15,6 +15,7 @@ VAR
 	i    				: INT;
 	zoneIndex			: INT;
 	
+	(* 행렬 *)
 	A                   : ARRAY[1..3] OF ARRAY [1..3] OF LREAL; // 3X3
     B                   : ARRAY[1..3] OF ARRAY [1..2] OF LREAL; // 3X2
    
@@ -25,28 +26,7 @@ VAR
     k                   : INT;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF start THEN
-   start := FALSE;
-   FOR i:=1 TO 3 BY 1 DO
-      FOR j:=1 TO 3 BY 1 DO
-         A[i][j] := cnt := cnt+1;
-      END_FOR
-      FOR j:=1 TO 2 BY 1 DO
-         B[i][j] := i;
-      END_FOR
-   END_FOR
-   FOR i:=1 TO 3 BY 1 DO
-      FOR j:=1 TO 2 BY 1 DO
-         FOR k:=1 TO 3 BY 1 DO
-            result[i][j] := result[i][j] + A[i][k] * B[k][j];
-         END_FOR
-      END_FOR
-   END_FOR
-END_IF
-
-
-
-(*
+      <ST><![CDATA[
 IF gbl.slave_bsimulation = FALSE THEN
 
 	FOR i:=1 TO 4 BY 1 DO
@@ -85,10 +65,11 @@ IF gbl.tuning_mode THEN
 	
   (* 튜닝 시간 설정 = mgbl.master_tuning_time *)
     onTimer_tune(IN := OffTimer_tune.Q, PT := LREAL_TO_TIME(gbl.tuning_time)*60000);  // IN이 FALSE에서 TRUE가 되자마자 시간이 흐름,PT와 같아지면 Q가 TRUE
+	gbl.tune_Remaining_time := TIME_TO_LREAL(onTimer_tune.PT - onTimer_tune.ET);
 	
     IF onTimer_tune.Q THEN
-	  reverseSignal_tune := FALSE;
-	  gbl.tune_result 	 := gbl.slave_fPV_Value;
+	  reverseSignal_tune  := FALSE;
+	  gbl.tune_result 	  := gbl.slave_fPV_Value;
 	  
 	  IF gbl.tuningIndex <> 0 THEN
 		  gbl.heatupData[gbl.tuningCount + 1 - gbl.tuningIndex] := gbl.oldData;
@@ -118,11 +99,33 @@ IF gbl.tuning_mode THEN
 ELSE
 	slave();
 END_IF
-*)]]></ST>
+
+
+(*
+3*2행렬
+
+IF start THEN
+   start := FALSE;
+   FOR i:=1 TO 3 BY 1 DO
+      FOR j:=1 TO 3 BY 1 DO
+         A[i][j] := cnt := cnt+1;
+      END_FOR
+      FOR j:=1 TO 2 BY 1 DO
+         B[i][j] := i;
+      END_FOR
+   END_FOR
+   FOR i:=1 TO 3 BY 1 DO
+      FOR j:=1 TO 2 BY 1 DO
+         FOR k:=1 TO 3 BY 1 DO
+            result[i][j] := result[i][j] + A[i][k] * B[k][j];
+         END_FOR
+      END_FOR
+   END_FOR
+END_IF
+*)
+]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="497" Count="16" />
-      <LineId Id="483" Count="3" />
       <LineId Id="338" Count="0" />
       <LineId Id="323" Count="0" />
       <LineId Id="358" Count="0" />
@@ -147,10 +150,11 @@ END_IF
       <LineId Id="287" Count="0" />
       <LineId Id="245" Count="4" />
       <LineId Id="463" Count="0" />
+      <LineId Id="609" Count="0" />
       <LineId Id="250" Count="0" />
       <LineId Id="252" Count="0" />
       <LineId Id="387" Count="0" />
-      <LineId Id="462" Count="0" />
+      <LineId Id="584" Count="0" />
       <LineId Id="424" Count="0" />
       <LineId Id="421" Count="0" />
       <LineId Id="426" Count="0" />
@@ -171,6 +175,9 @@ END_IF
       <LineId Id="253" Count="2" />
       <LineId Id="468" Count="0" />
       <LineId Id="256" Count="3" />
+      <LineId Id="633" Count="0" />
+      <LineId Id="632" Count="0" />
+      <LineId Id="610" Count="21" />
       <LineId Id="482" Count="0" />
     </LineIds>
   </POU>

@@ -12,6 +12,7 @@ VAR_GLOBAL
 	tuning_mode 	     		 : BOOL;
 	tuning_time	     			 : LREAL;
 	tune_result					 : ARRAY[1..4] OF LREAL;
+	tune_Remaining_time			 : LREAL;
 	
 	(*===========================================master====================================*)
 	master_bRamp_Enable          : BOOL;
