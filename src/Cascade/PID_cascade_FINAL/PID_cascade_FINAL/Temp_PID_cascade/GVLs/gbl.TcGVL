@@ -4,14 +4,14 @@
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
 	arrSize 						 : INT := 300;  (* heat up data 배열 size *)
-	tuningCount			: INT := 4;
+	tuningCount			             : INT := 4;
 END_VAR
 VAR_GLOBAL
 	(*===========================================main=====================================*)
 	bWatch						 : BOOL;
 	tuning_mode 	     		 : BOOL;
 	tuning_time	     			 : LREAL;
-	tune_result					 :  ARRAY[1..4] OF LREAL;
+	tune_result					 : ARRAY[1..4] OF LREAL;
 	
 	(*===========================================master====================================*)
 	master_bRamp_Enable          : BOOL;
@@ -53,11 +53,11 @@ VAR_GLOBAL
 	slave_bError				: BOOL;
 	
 	(*=======================================ArrayData========================================*)
-	heatupData					: 			ARRAY [1..tuningCount] OF ARRAY [1..4, 1..arrSize] OF LREAL;   (* tuning data 저장 *)
-	newData						:			ARRAY[1..4, 1..arrSize] OF LREAL;
-	oldData						:			ARRAY[1..4, 1..arrSize] OF LREAL;
-	tuningIndex					:			INT := 0;
-	index						:			INT  := 1;
+	heatupData					: ARRAY [1..tuningCount] OF ARRAY [1..4, 1..arrSize] OF LREAL;   (* tuning data 저장 *)
+	newData						: ARRAY [1..4, 1..arrSize] OF LREAL;
+	oldData						: ARRAY [1..4, 1..arrSize] OF LREAL;
+	tuningIndex					: INT  := 0;
+	index						: INT  := 1;
 END_VAR
 ]]></Declaration>
   </GVL>
