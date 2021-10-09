@@ -87,5 +87,11 @@ namespace Temp_UI_Example
                 PID_d[i].Text = PT101[i].ToString();
             }
         }
+        // PID 값 한번에 입력
+        private void label13_Click(object sender, EventArgs e)
+        {
+            PID_Pop pid_pop = new PID_Pop();
+            pid_pop.Show();
+        }
     }
 }

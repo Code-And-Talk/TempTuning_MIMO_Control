@@ -119,8 +119,13 @@ namespace Temp_UI_Example
             this.label36 = new System.Windows.Forms.Label();
             this.label37 = new System.Windows.Forms.Label();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button4 = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.e_Ctrl_modeTB1 = new System.Windows.Forms.TextBox();
+            this.e_Ctrl_modeTB2 = new System.Windows.Forms.TextBox();
+            this.e_Ctrl_modeTB3 = new System.Windows.Forms.TextBox();
+            this.e_Ctrl_modeTB0 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -130,7 +135,7 @@ namespace Temp_UI_Example
             this.label13.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.label13.Font = new System.Drawing.Font("굴림", 12F);
             this.label13.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label13.Location = new System.Drawing.Point(1064, 16);
+            this.label13.Location = new System.Drawing.Point(1224, 16);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(425, 62);
             this.label13.TabIndex = 138;
@@ -141,7 +146,7 @@ namespace Temp_UI_Example
             // 
             this.SubstrateTemp2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.SubstrateTemp2.Font = new System.Drawing.Font("굴림", 15F);
-            this.SubstrateTemp2.Location = new System.Drawing.Point(1352, 92);
+            this.SubstrateTemp2.Location = new System.Drawing.Point(1512, 96);
             this.SubstrateTemp2.Name = "SubstrateTemp2";
             this.SubstrateTemp2.Size = new System.Drawing.Size(137, 120);
             this.SubstrateTemp2.TabIndex = 140;
@@ -152,7 +157,7 @@ namespace Temp_UI_Example
             // 
             this.SubstrateTemp1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.SubstrateTemp1.Font = new System.Drawing.Font("굴림", 15F);
-            this.SubstrateTemp1.Location = new System.Drawing.Point(1208, 92);
+            this.SubstrateTemp1.Location = new System.Drawing.Point(1368, 96);
             this.SubstrateTemp1.Name = "SubstrateTemp1";
             this.SubstrateTemp1.Size = new System.Drawing.Size(137, 120);
             this.SubstrateTemp1.TabIndex = 141;
@@ -163,7 +168,7 @@ namespace Temp_UI_Example
             // 
             this.SubstrateTemp4.BackColor = System.Drawing.SystemColors.ControlLight;
             this.SubstrateTemp4.Font = new System.Drawing.Font("굴림", 15F);
-            this.SubstrateTemp4.Location = new System.Drawing.Point(1208, 220);
+            this.SubstrateTemp4.Location = new System.Drawing.Point(1368, 224);
             this.SubstrateTemp4.Name = "SubstrateTemp4";
             this.SubstrateTemp4.Size = new System.Drawing.Size(137, 120);
             this.SubstrateTemp4.TabIndex = 144;
@@ -174,7 +179,7 @@ namespace Temp_UI_Example
             // 
             this.SubstrateTemp5.BackColor = System.Drawing.SystemColors.ControlLight;
             this.SubstrateTemp5.Font = new System.Drawing.Font("굴림", 15F);
-            this.SubstrateTemp5.Location = new System.Drawing.Point(1352, 220);
+            this.SubstrateTemp5.Location = new System.Drawing.Point(1512, 224);
             this.SubstrateTemp5.Name = "SubstrateTemp5";
             this.SubstrateTemp5.Size = new System.Drawing.Size(137, 120);
             this.SubstrateTemp5.TabIndex = 143;
@@ -185,7 +190,7 @@ namespace Temp_UI_Example
             // 
             this.SubstrateTemp3.BackColor = System.Drawing.SystemColors.ControlLight;
             this.SubstrateTemp3.Font = new System.Drawing.Font("굴림", 15F);
-            this.SubstrateTemp3.Location = new System.Drawing.Point(1064, 220);
+            this.SubstrateTemp3.Location = new System.Drawing.Point(1224, 224);
             this.SubstrateTemp3.Name = "SubstrateTemp3";
             this.SubstrateTemp3.Size = new System.Drawing.Size(137, 120);
             this.SubstrateTemp3.TabIndex = 142;
@@ -196,7 +201,7 @@ namespace Temp_UI_Example
             // 
             this.SubstrateTemp7.BackColor = System.Drawing.SystemColors.ControlLight;
             this.SubstrateTemp7.Font = new System.Drawing.Font("굴림", 15F);
-            this.SubstrateTemp7.Location = new System.Drawing.Point(1208, 346);
+            this.SubstrateTemp7.Location = new System.Drawing.Point(1368, 350);
             this.SubstrateTemp7.Name = "SubstrateTemp7";
             this.SubstrateTemp7.Size = new System.Drawing.Size(137, 120);
             this.SubstrateTemp7.TabIndex = 147;
@@ -207,7 +212,7 @@ namespace Temp_UI_Example
             // 
             this.SubstrateTemp8.BackColor = System.Drawing.SystemColors.ControlLight;
             this.SubstrateTemp8.Font = new System.Drawing.Font("굴림", 15F);
-            this.SubstrateTemp8.Location = new System.Drawing.Point(1352, 346);
+            this.SubstrateTemp8.Location = new System.Drawing.Point(1512, 350);
             this.SubstrateTemp8.Name = "SubstrateTemp8";
             this.SubstrateTemp8.Size = new System.Drawing.Size(137, 120);
             this.SubstrateTemp8.TabIndex = 146;
@@ -218,7 +223,7 @@ namespace Temp_UI_Example
             // 
             this.SubstrateTemp6.BackColor = System.Drawing.SystemColors.ControlLight;
             this.SubstrateTemp6.Font = new System.Drawing.Font("굴림", 15F);
-            this.SubstrateTemp6.Location = new System.Drawing.Point(1064, 348);
+            this.SubstrateTemp6.Location = new System.Drawing.Point(1224, 352);
             this.SubstrateTemp6.Name = "SubstrateTemp6";
             this.SubstrateTemp6.Size = new System.Drawing.Size(137, 120);
             this.SubstrateTemp6.TabIndex = 145;
@@ -229,7 +234,7 @@ namespace Temp_UI_Example
             // 
             this.ST0.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ST0.Font = new System.Drawing.Font("굴림", 15F);
-            this.ST0.Location = new System.Drawing.Point(1352, 501);
+            this.ST0.Location = new System.Drawing.Point(1512, 504);
             this.ST0.Name = "ST0";
             this.ST0.Size = new System.Drawing.Size(137, 50);
             this.ST0.TabIndex = 148;
@@ -240,7 +245,7 @@ namespace Temp_UI_Example
             // 
             this.ST2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ST2.Font = new System.Drawing.Font("굴림", 15F);
-            this.ST2.Location = new System.Drawing.Point(1352, 626);
+            this.ST2.Location = new System.Drawing.Point(1512, 629);
             this.ST2.Name = "ST2";
             this.ST2.Size = new System.Drawing.Size(137, 50);
             this.ST2.TabIndex = 149;
@@ -251,7 +256,7 @@ namespace Temp_UI_Example
             // 
             this.ST1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ST1.Font = new System.Drawing.Font("굴림", 15F);
-            this.ST1.Location = new System.Drawing.Point(1352, 564);
+            this.ST1.Location = new System.Drawing.Point(1512, 567);
             this.ST1.Name = "ST1";
             this.ST1.Size = new System.Drawing.Size(137, 50);
             this.ST1.TabIndex = 150;
@@ -262,7 +267,7 @@ namespace Temp_UI_Example
             // 
             this.label32.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.label32.Font = new System.Drawing.Font("굴림", 15F);
-            this.label32.Location = new System.Drawing.Point(1064, 501);
+            this.label32.Location = new System.Drawing.Point(1224, 504);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(281, 50);
             this.label32.TabIndex = 151;
@@ -273,7 +278,7 @@ namespace Temp_UI_Example
             // 
             this.label34.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.label34.Font = new System.Drawing.Font("굴림", 15F);
-            this.label34.Location = new System.Drawing.Point(1064, 564);
+            this.label34.Location = new System.Drawing.Point(1224, 567);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(281, 50);
             this.label34.TabIndex = 153;
@@ -284,7 +289,7 @@ namespace Temp_UI_Example
             // 
             this.label33.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.label33.Font = new System.Drawing.Font("굴림", 15F);
-            this.label33.Location = new System.Drawing.Point(1064, 626);
+            this.label33.Location = new System.Drawing.Point(1224, 629);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(281, 50);
             this.label33.TabIndex = 154;
@@ -295,7 +300,7 @@ namespace Temp_UI_Example
             // 
             this.label44.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.label44.Font = new System.Drawing.Font("굴림", 15F);
-            this.label44.Location = new System.Drawing.Point(1063, 689);
+            this.label44.Location = new System.Drawing.Point(1223, 692);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(281, 50);
             this.label44.TabIndex = 166;
@@ -306,7 +311,7 @@ namespace Temp_UI_Example
             // 
             this.ST3.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ST3.Font = new System.Drawing.Font("굴림", 15F);
-            this.ST3.Location = new System.Drawing.Point(1352, 689);
+            this.ST3.Location = new System.Drawing.Point(1512, 692);
             this.ST3.Name = "ST3";
             this.ST3.Size = new System.Drawing.Size(137, 50);
             this.ST3.TabIndex = 165;
@@ -317,7 +322,7 @@ namespace Temp_UI_Example
             // 
             this.SubstrateTemp0.BackColor = System.Drawing.SystemColors.ControlLight;
             this.SubstrateTemp0.Font = new System.Drawing.Font("굴림", 15F);
-            this.SubstrateTemp0.Location = new System.Drawing.Point(1064, 92);
+            this.SubstrateTemp0.Location = new System.Drawing.Point(1224, 96);
             this.SubstrateTemp0.Name = "SubstrateTemp0";
             this.SubstrateTemp0.Size = new System.Drawing.Size(137, 120);
             this.SubstrateTemp0.TabIndex = 139;
@@ -326,7 +331,8 @@ namespace Temp_UI_Example
             // 
             // button3
             // 
-            this.button3.BackColor = System.Drawing.Color.Red;
+            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button3.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.button3.Location = new System.Drawing.Point(520, 672);
             this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button3.Name = "button3";
@@ -469,6 +475,7 @@ namespace Temp_UI_Example
             this.label6.TabIndex = 84;
             this.label6.Text = "Ramp Set";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // label5
             // 
@@ -480,6 +487,7 @@ namespace Temp_UI_Example
             this.label5.TabIndex = 79;
             this.label5.Text = "Power Set";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // label18
             // 
@@ -491,6 +499,7 @@ namespace Temp_UI_Example
             this.label18.TabIndex = 74;
             this.label18.Text = "Temp Set";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label18.Click += new System.EventHandler(this.label18_Click);
             // 
             // label4
             // 
@@ -543,7 +552,7 @@ namespace Temp_UI_Example
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label1.Location = new System.Drawing.Point(13, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(1008, 62);
+            this.label1.Size = new System.Drawing.Size(1139, 62);
             this.label1.TabIndex = 3;
             this.label1.Text = "TempControl";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -737,7 +746,7 @@ namespace Temp_UI_Example
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(120, 69);
             this.label49.TabIndex = 170;
-            this.label49.Text = "Tune Time";
+            this.label49.Text = "Tune Time / Remain Time ";
             this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // TuneResultTB0
@@ -1105,17 +1114,6 @@ namespace Temp_UI_Example
             this.chart1.TabIndex = 210;
             this.chart1.Text = "chart1";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::Temp_UI_Example.Properties.Resources.녹색등;
-            this.pictureBox1.Location = new System.Drawing.Point(14, 670);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(63, 69);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 208;
-            this.pictureBox1.TabStop = false;
-            // 
             // button4
             // 
             this.button4.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -1128,11 +1126,90 @@ namespace Temp_UI_Example
             this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::Temp_UI_Example.Properties.Resources.꺼진등;
+            this.pictureBox1.Location = new System.Drawing.Point(14, 670);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(63, 69);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 208;
+            this.pictureBox1.TabStop = false;
+            // 
+            // label14
+            // 
+            this.label14.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.label14.Font = new System.Drawing.Font("굴림", 12F);
+            this.label14.Location = new System.Drawing.Point(1032, 92);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(120, 69);
+            this.label14.TabIndex = 212;
+            this.label14.Text = "e_Ctrl_Mode";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // e_Ctrl_modeTB1
+            // 
+            this.e_Ctrl_modeTB1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.e_Ctrl_modeTB1.Font = new System.Drawing.Font("굴림", 12F);
+            this.e_Ctrl_modeTB1.Location = new System.Drawing.Point(1032, 244);
+            this.e_Ctrl_modeTB1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.e_Ctrl_modeTB1.Multiline = true;
+            this.e_Ctrl_modeTB1.Name = "e_Ctrl_modeTB1";
+            this.e_Ctrl_modeTB1.Size = new System.Drawing.Size(119, 68);
+            this.e_Ctrl_modeTB1.TabIndex = 216;
+            this.e_Ctrl_modeTB1.Text = "double";
+            this.e_Ctrl_modeTB1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // e_Ctrl_modeTB2
+            // 
+            this.e_Ctrl_modeTB2.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.e_Ctrl_modeTB2.Font = new System.Drawing.Font("굴림", 12F);
+            this.e_Ctrl_modeTB2.Location = new System.Drawing.Point(1032, 320);
+            this.e_Ctrl_modeTB2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.e_Ctrl_modeTB2.Multiline = true;
+            this.e_Ctrl_modeTB2.Name = "e_Ctrl_modeTB2";
+            this.e_Ctrl_modeTB2.Size = new System.Drawing.Size(119, 68);
+            this.e_Ctrl_modeTB2.TabIndex = 215;
+            this.e_Ctrl_modeTB2.Text = "double";
+            this.e_Ctrl_modeTB2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // e_Ctrl_modeTB3
+            // 
+            this.e_Ctrl_modeTB3.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.e_Ctrl_modeTB3.Font = new System.Drawing.Font("굴림", 12F);
+            this.e_Ctrl_modeTB3.Location = new System.Drawing.Point(1032, 397);
+            this.e_Ctrl_modeTB3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.e_Ctrl_modeTB3.Multiline = true;
+            this.e_Ctrl_modeTB3.Name = "e_Ctrl_modeTB3";
+            this.e_Ctrl_modeTB3.Size = new System.Drawing.Size(119, 68);
+            this.e_Ctrl_modeTB3.TabIndex = 214;
+            this.e_Ctrl_modeTB3.Text = "double";
+            this.e_Ctrl_modeTB3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // e_Ctrl_modeTB0
+            // 
+            this.e_Ctrl_modeTB0.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.e_Ctrl_modeTB0.Font = new System.Drawing.Font("굴림", 12F);
+            this.e_Ctrl_modeTB0.Location = new System.Drawing.Point(1032, 168);
+            this.e_Ctrl_modeTB0.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.e_Ctrl_modeTB0.Multiline = true;
+            this.e_Ctrl_modeTB0.Name = "e_Ctrl_modeTB0";
+            this.e_Ctrl_modeTB0.Size = new System.Drawing.Size(119, 68);
+            this.e_Ctrl_modeTB0.TabIndex = 213;
+            this.e_Ctrl_modeTB0.Text = "double";
+            this.e_Ctrl_modeTB0.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1902, 1055);
+            this.Controls.Add(this.e_Ctrl_modeTB1);
+            this.Controls.Add(this.e_Ctrl_modeTB2);
+            this.Controls.Add(this.e_Ctrl_modeTB3);
+            this.Controls.Add(this.e_Ctrl_modeTB0);
+            this.Controls.Add(this.label14);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.txtError);
@@ -1308,6 +1385,11 @@ namespace Temp_UI_Example
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox e_Ctrl_modeTB1;
+        private System.Windows.Forms.TextBox e_Ctrl_modeTB2;
+        private System.Windows.Forms.TextBox e_Ctrl_modeTB3;
+        private System.Windows.Forms.TextBox e_Ctrl_modeTB0;
     }
 }
 

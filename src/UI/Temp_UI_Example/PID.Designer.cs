@@ -56,9 +56,9 @@ namespace Temp_UI_Example
             // 
             this.label17.BackColor = System.Drawing.SystemColors.ControlDark;
             this.label17.Font = new System.Drawing.Font("굴림", 12F);
-            this.label17.Location = new System.Drawing.Point(14, 218);
+            this.label17.Location = new System.Drawing.Point(16, 272);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(91, 38);
+            this.label17.Size = new System.Drawing.Size(104, 48);
             this.label17.TabIndex = 72;
             this.label17.Text = "ZONE4";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -67,9 +67,9 @@ namespace Temp_UI_Example
             // 
             this.label16.BackColor = System.Drawing.SystemColors.ControlDark;
             this.label16.Font = new System.Drawing.Font("굴림", 12F);
-            this.label16.Location = new System.Drawing.Point(14, 166);
+            this.label16.Location = new System.Drawing.Point(16, 208);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(91, 38);
+            this.label16.Size = new System.Drawing.Size(104, 48);
             this.label16.TabIndex = 71;
             this.label16.Text = "ZONE3";
             this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -78,9 +78,9 @@ namespace Temp_UI_Example
             // 
             this.label15.BackColor = System.Drawing.SystemColors.ControlDark;
             this.label15.Font = new System.Drawing.Font("굴림", 12F);
-            this.label15.Location = new System.Drawing.Point(14, 115);
+            this.label15.Location = new System.Drawing.Point(16, 144);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(91, 38);
+            this.label15.Size = new System.Drawing.Size(104, 48);
             this.label15.TabIndex = 70;
             this.label15.Text = "ZONE2";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -89,9 +89,9 @@ namespace Temp_UI_Example
             // 
             this.label14.BackColor = System.Drawing.SystemColors.ControlDark;
             this.label14.Font = new System.Drawing.Font("굴림", 12F);
-            this.label14.Location = new System.Drawing.Point(14, 64);
+            this.label14.Location = new System.Drawing.Point(16, 80);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(91, 38);
+            this.label14.Size = new System.Drawing.Size(104, 48);
             this.label14.TabIndex = 69;
             this.label14.Text = "ZONE1";
             this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -101,54 +101,55 @@ namespace Temp_UI_Example
             this.label13.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.label13.Font = new System.Drawing.Font("굴림", 12F);
             this.label13.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label13.Location = new System.Drawing.Point(14, 13);
+            this.label13.Location = new System.Drawing.Point(16, 16);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(91, 38);
+            this.label13.Size = new System.Drawing.Size(104, 48);
             this.label13.TabIndex = 68;
             this.label13.Text = "PID";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label13.Click += new System.EventHandler(this.label13_Click);
             // 
             // tboxZONE4_P
             // 
             this.tboxZONE4_P.Font = new System.Drawing.Font("굴림", 12F);
-            this.tboxZONE4_P.Location = new System.Drawing.Point(119, 218);
+            this.tboxZONE4_P.Location = new System.Drawing.Point(136, 272);
             this.tboxZONE4_P.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tboxZONE4_P.Multiline = true;
             this.tboxZONE4_P.Name = "tboxZONE4_P";
-            this.tboxZONE4_P.Size = new System.Drawing.Size(92, 39);
+            this.tboxZONE4_P.Size = new System.Drawing.Size(105, 48);
             this.tboxZONE4_P.TabIndex = 77;
             this.tboxZONE4_P.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE3_P
             // 
             this.tboxZONE3_P.Font = new System.Drawing.Font("굴림", 12F);
-            this.tboxZONE3_P.Location = new System.Drawing.Point(119, 166);
+            this.tboxZONE3_P.Location = new System.Drawing.Point(136, 208);
             this.tboxZONE3_P.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tboxZONE3_P.Multiline = true;
             this.tboxZONE3_P.Name = "tboxZONE3_P";
-            this.tboxZONE3_P.Size = new System.Drawing.Size(92, 39);
+            this.tboxZONE3_P.Size = new System.Drawing.Size(105, 48);
             this.tboxZONE3_P.TabIndex = 76;
             this.tboxZONE3_P.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE2_P
             // 
             this.tboxZONE2_P.Font = new System.Drawing.Font("굴림", 12F);
-            this.tboxZONE2_P.Location = new System.Drawing.Point(119, 115);
+            this.tboxZONE2_P.Location = new System.Drawing.Point(136, 144);
             this.tboxZONE2_P.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tboxZONE2_P.Multiline = true;
             this.tboxZONE2_P.Name = "tboxZONE2_P";
-            this.tboxZONE2_P.Size = new System.Drawing.Size(92, 39);
+            this.tboxZONE2_P.Size = new System.Drawing.Size(105, 48);
             this.tboxZONE2_P.TabIndex = 75;
             this.tboxZONE2_P.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE1_P
             // 
             this.tboxZONE1_P.Font = new System.Drawing.Font("굴림", 12F);
-            this.tboxZONE1_P.Location = new System.Drawing.Point(119, 64);
+            this.tboxZONE1_P.Location = new System.Drawing.Point(136, 80);
             this.tboxZONE1_P.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tboxZONE1_P.Multiline = true;
             this.tboxZONE1_P.Name = "tboxZONE1_P";
-            this.tboxZONE1_P.Size = new System.Drawing.Size(92, 39);
+            this.tboxZONE1_P.Size = new System.Drawing.Size(105, 48);
             this.tboxZONE1_P.TabIndex = 74;
             this.tboxZONE1_P.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -156,9 +157,9 @@ namespace Temp_UI_Example
             // 
             this.label5.BackColor = System.Drawing.SystemColors.ControlDark;
             this.label5.Font = new System.Drawing.Font("굴림", 12F);
-            this.label5.Location = new System.Drawing.Point(119, 13);
+            this.label5.Location = new System.Drawing.Point(136, 16);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(91, 38);
+            this.label5.Size = new System.Drawing.Size(104, 48);
             this.label5.TabIndex = 73;
             this.label5.Text = "P";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -166,44 +167,44 @@ namespace Temp_UI_Example
             // tboxZONE4_I
             // 
             this.tboxZONE4_I.Font = new System.Drawing.Font("굴림", 12F);
-            this.tboxZONE4_I.Location = new System.Drawing.Point(224, 218);
+            this.tboxZONE4_I.Location = new System.Drawing.Point(256, 272);
             this.tboxZONE4_I.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tboxZONE4_I.Multiline = true;
             this.tboxZONE4_I.Name = "tboxZONE4_I";
-            this.tboxZONE4_I.Size = new System.Drawing.Size(92, 39);
+            this.tboxZONE4_I.Size = new System.Drawing.Size(105, 48);
             this.tboxZONE4_I.TabIndex = 82;
             this.tboxZONE4_I.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE3_I
             // 
             this.tboxZONE3_I.Font = new System.Drawing.Font("굴림", 12F);
-            this.tboxZONE3_I.Location = new System.Drawing.Point(224, 166);
+            this.tboxZONE3_I.Location = new System.Drawing.Point(256, 208);
             this.tboxZONE3_I.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tboxZONE3_I.Multiline = true;
             this.tboxZONE3_I.Name = "tboxZONE3_I";
-            this.tboxZONE3_I.Size = new System.Drawing.Size(92, 39);
+            this.tboxZONE3_I.Size = new System.Drawing.Size(105, 48);
             this.tboxZONE3_I.TabIndex = 81;
             this.tboxZONE3_I.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE2_I
             // 
             this.tboxZONE2_I.Font = new System.Drawing.Font("굴림", 12F);
-            this.tboxZONE2_I.Location = new System.Drawing.Point(224, 115);
+            this.tboxZONE2_I.Location = new System.Drawing.Point(256, 144);
             this.tboxZONE2_I.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tboxZONE2_I.Multiline = true;
             this.tboxZONE2_I.Name = "tboxZONE2_I";
-            this.tboxZONE2_I.Size = new System.Drawing.Size(92, 39);
+            this.tboxZONE2_I.Size = new System.Drawing.Size(105, 48);
             this.tboxZONE2_I.TabIndex = 80;
             this.tboxZONE2_I.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE1_I
             // 
             this.tboxZONE1_I.Font = new System.Drawing.Font("굴림", 12F);
-            this.tboxZONE1_I.Location = new System.Drawing.Point(224, 64);
+            this.tboxZONE1_I.Location = new System.Drawing.Point(256, 80);
             this.tboxZONE1_I.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tboxZONE1_I.Multiline = true;
             this.tboxZONE1_I.Name = "tboxZONE1_I";
-            this.tboxZONE1_I.Size = new System.Drawing.Size(92, 39);
+            this.tboxZONE1_I.Size = new System.Drawing.Size(105, 48);
             this.tboxZONE1_I.TabIndex = 79;
             this.tboxZONE1_I.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -211,9 +212,9 @@ namespace Temp_UI_Example
             // 
             this.label6.BackColor = System.Drawing.SystemColors.ControlDark;
             this.label6.Font = new System.Drawing.Font("굴림", 12F);
-            this.label6.Location = new System.Drawing.Point(224, 13);
+            this.label6.Location = new System.Drawing.Point(256, 16);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(91, 38);
+            this.label6.Size = new System.Drawing.Size(104, 48);
             this.label6.TabIndex = 78;
             this.label6.Text = "I";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -221,44 +222,44 @@ namespace Temp_UI_Example
             // tboxZONE4_D
             // 
             this.tboxZONE4_D.Font = new System.Drawing.Font("굴림", 12F);
-            this.tboxZONE4_D.Location = new System.Drawing.Point(329, 218);
+            this.tboxZONE4_D.Location = new System.Drawing.Point(376, 272);
             this.tboxZONE4_D.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tboxZONE4_D.Multiline = true;
             this.tboxZONE4_D.Name = "tboxZONE4_D";
-            this.tboxZONE4_D.Size = new System.Drawing.Size(92, 39);
+            this.tboxZONE4_D.Size = new System.Drawing.Size(105, 48);
             this.tboxZONE4_D.TabIndex = 87;
             this.tboxZONE4_D.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE3_D
             // 
             this.tboxZONE3_D.Font = new System.Drawing.Font("굴림", 12F);
-            this.tboxZONE3_D.Location = new System.Drawing.Point(329, 166);
+            this.tboxZONE3_D.Location = new System.Drawing.Point(376, 208);
             this.tboxZONE3_D.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tboxZONE3_D.Multiline = true;
             this.tboxZONE3_D.Name = "tboxZONE3_D";
-            this.tboxZONE3_D.Size = new System.Drawing.Size(92, 39);
+            this.tboxZONE3_D.Size = new System.Drawing.Size(105, 48);
             this.tboxZONE3_D.TabIndex = 86;
             this.tboxZONE3_D.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE2_D
             // 
             this.tboxZONE2_D.Font = new System.Drawing.Font("굴림", 12F);
-            this.tboxZONE2_D.Location = new System.Drawing.Point(329, 115);
+            this.tboxZONE2_D.Location = new System.Drawing.Point(376, 144);
             this.tboxZONE2_D.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tboxZONE2_D.Multiline = true;
             this.tboxZONE2_D.Name = "tboxZONE2_D";
-            this.tboxZONE2_D.Size = new System.Drawing.Size(92, 39);
+            this.tboxZONE2_D.Size = new System.Drawing.Size(105, 48);
             this.tboxZONE2_D.TabIndex = 85;
             this.tboxZONE2_D.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tboxZONE1_D
             // 
             this.tboxZONE1_D.Font = new System.Drawing.Font("굴림", 12F);
-            this.tboxZONE1_D.Location = new System.Drawing.Point(329, 64);
+            this.tboxZONE1_D.Location = new System.Drawing.Point(376, 80);
             this.tboxZONE1_D.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tboxZONE1_D.Multiline = true;
             this.tboxZONE1_D.Name = "tboxZONE1_D";
-            this.tboxZONE1_D.Size = new System.Drawing.Size(92, 39);
+            this.tboxZONE1_D.Size = new System.Drawing.Size(105, 48);
             this.tboxZONE1_D.TabIndex = 84;
             this.tboxZONE1_D.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -266,19 +267,19 @@ namespace Temp_UI_Example
             // 
             this.label7.BackColor = System.Drawing.SystemColors.ControlDark;
             this.label7.Font = new System.Drawing.Font("굴림", 12F);
-            this.label7.Location = new System.Drawing.Point(329, 13);
+            this.label7.Location = new System.Drawing.Point(376, 16);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(91, 38);
+            this.label7.Size = new System.Drawing.Size(104, 48);
             this.label7.TabIndex = 83;
             this.label7.Text = "D";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(434, 218);
+            this.button2.Location = new System.Drawing.Point(496, 272);
             this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(147, 38);
+            this.button2.Size = new System.Drawing.Size(168, 48);
             this.button2.TabIndex = 165;
             this.button2.Text = "APPLY";
             this.button2.UseVisualStyleBackColor = true;
@@ -286,9 +287,9 @@ namespace Temp_UI_Example
             // 
             // PID
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(601, 270);
+            this.ClientSize = new System.Drawing.Size(687, 338);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.tboxZONE4_D);
             this.Controls.Add(this.tboxZONE3_D);

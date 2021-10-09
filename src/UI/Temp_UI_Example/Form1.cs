@@ -33,6 +33,7 @@ namespace Temp_UI_Example
         double[] Tune_Result = new double[4];
         double[] Substrate_Temp = new double[9];
         double[] Substrate_Temp2 = new double[4];
+        double[] PT102 = new double[100];
         private int cnt = 1;
 
         //쓰레드1 = 데이터출력, 쓰레드2 = 와치독
@@ -71,12 +72,11 @@ namespace Temp_UI_Example
         TextBox[] Temp_s;
         TextBox[] Ramp_s;
         TextBox[] Power_s;
+        TextBox[] Ctrl;
 
         //소수점 버림
         String str,str2,str3,str4;
-
-        // 에러 체크
-        // private bool WatchError1;
+        String str5 = string.Empty;
 
         int count = 0;
         public Form1()
@@ -101,10 +101,10 @@ namespace Temp_UI_Example
 
             // Array
             tb = new TextBox[] { TempTunetbox1, TempTunetbox2, TempTunetbox3, TempTunetbox4, TempTunetbox5, TempTunetbox6 };
-            double[] PT102 = new double[100];
             Temp_s = new TextBox[] { TB12, TB13, TB14, TB15 };
             Ramp_s = new TextBox[] { TB16, TB17, TB18, TB19 };
             Power_s = new TextBox[] { TB20, TB21, TB22, TB23 };
+            Ctrl = new TextBox[] { e_Ctrl_modeTB0, e_Ctrl_modeTB1, e_Ctrl_modeTB2, e_Ctrl_modeTB3 };
 
             // Data Read
             // Temp Set
@@ -112,33 +112,34 @@ namespace Temp_UI_Example
             {
                 pot3[i] = ads.ReadSymbolInfo($"gbl.slave_fTargetTemp[{i + 1}]");
                 PT102[i] = Convert.ToDouble(ads.ReadSymbol(pot3[i]));
-                Temp_s[i].Text = PT102[i].ToString();
+
+                Temp_s[i].Text = "\r\n" + PT102[i].ToString();
             }
             // Ramp Set
             for (int i = 0; i <= 3; i++)
             {
                 pot3[i] = ads.ReadSymbolInfo($"gbl.slave_fRamp_Value[{i + 1}]");
                 PT102[i] = Convert.ToDouble(ads.ReadSymbol(pot3[i]));
-                Ramp_s[i].Text = PT102[i].ToString();
+                Ramp_s[i].Text = "\r\n" + PT102[i].ToString();
             }
             // Power Set
             for (int i = 0; i <= 3; i++)
             {
                 pot3[i] = ads.ReadSymbolInfo($"gbl.slave_fPowLimit[{i + 1}]");
                 PT102[i] = Convert.ToDouble(ads.ReadSymbol(pot3[i]));
-                Power_s[i].Text = PT102[i].ToString();
+                Power_s[i].Text = "\r\n" + PT102[i].ToString();
             }
             // Target Temp
             pot3[0] = ads.ReadSymbolInfo("gbl.master_TargetTemp");
             PT102[0] = Convert.ToDouble(ads.ReadSymbol(pot3[0]));
-            TempTunetbox1.Text = PT102[0].ToString();
+            TempTunetbox1.Text = "\r\n" + PT102[0].ToString();
 
             // Gain(P)
             for (int i = 0; i < 3; i++)
             {
                 pot3[i] = ads.ReadSymbolInfo($"gbl.master_pi_gain[{i + 1}]");
                 PT102[i] = Convert.ToDouble(ads.ReadSymbol(pot3[i]));
-                TempTunetbox2.Text = PT102[i].ToString();
+                TempTunetbox2.Text = "\r\n" + PT102[i].ToString();
             }
 
             // i(적분)
@@ -146,23 +147,42 @@ namespace Temp_UI_Example
             {
                 pot3[i] = ads.ReadSymbolInfo($"gbl.master_integral_constant[{i + 1}]");
                 PT102[i] = Convert.ToDouble(ads.ReadSymbol(pot3[i]));
-                TempTunetbox3.Text = PT102[i].ToString();
+                TempTunetbox3.Text = "\r\n" + PT102[i].ToString();
             }
 
             // Tune MAX
             pot3[0] = ads.ReadSymbolInfo("gbl.master_Zone_Temp_Max");
             PT102[0] = Convert.ToDouble(ads.ReadSymbol(pot3[0]));
-            TempTunetbox4.Text = PT102[0].ToString();
+            TempTunetbox4.Text = "\r\n" + PT102[0].ToString();
 
             // Tune MIN
             pot3[0] = ads.ReadSymbolInfo("gbl.master_Zone_Temp_Min");
             PT102[0] = Convert.ToDouble(ads.ReadSymbol(pot3[0]));
-            TempTunetbox5.Text = PT102[0].ToString();
+            TempTunetbox5.Text = "\r\n" + PT102[0].ToString();
 
             // Tune Time
             pot3[0] = ads.ReadSymbolInfo("gbl.tuning_time");
+            pot3[1] = ads.ReadSymbolInfo("gbl.tune_Remaining_time");
             PT102[0] = Convert.ToDouble(ads.ReadSymbol(pot3[0]));
-            TempTunetbox6.Text = PT102[0].ToString();
+            PT102[1] = Convert.ToDouble(ads.ReadSymbol(pot3[1]));
+            str5 = String.Format("{0:0.00}", PT102[1].ToString());
+            TempTunetbox6.Text = PT102[0].ToString() + "\r\n" + "\r\n" + str5;
+
+            // e_Ctrl_Mode
+            for (int i = 0; i <= 3; i++)
+            {
+                pot3[i] = ads.ReadSymbolInfo($"gbl.slave_eCTRL_MODE[{i + 1}]");
+                PT102[i] = Convert.ToDouble(ads.ReadSymbol(pot3[i]));
+
+                if (PT102[i].ToString() == 0.ToString())
+                {
+                    Ctrl[i].Text = "\r\n" + "IDLE";
+                }
+                else if (PT102[i].ToString() == 2.ToString())
+                {
+                    Ctrl[i].Text = "\r\n" + "ACTIVE";
+                }
+            }
 
             //Tune Set 초기값
             comboBox1.SelectedIndex = 1;
@@ -378,8 +398,8 @@ namespace Temp_UI_Example
                     pot[i] = ads.ReadSymbolInfo($"gbl.slave_fPV_Value[{cnt++}]");
                     Act_Temp[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
                     str = String.Format("{0:0.00}", Act_Temp[i]);
-                    this.Controls["ActTempTB" + i].Text = str;
-
+                    this.Controls["ActTempTB" + i].Text = "\r\n" + str;
+                    //Thread.Sleep(10);
                 }
                 cnt = 1;
 
@@ -390,8 +410,8 @@ namespace Temp_UI_Example
                     pot[i] = ads.ReadSymbolInfo($"gbl.slave_fRamp_Out[{cnt++}]");
                     Work_Set[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
                     str = String.Format("{0:0.00}", Work_Set[i]);
-                    this.Controls["WorkSetTB" + i].Text = str;
-
+                    this.Controls["WorkSetTB" + i].Text = "\r\n" + str;
+                    //Thread.Sleep(10);
                 }
                 cnt = 1;
 
@@ -402,8 +422,8 @@ namespace Temp_UI_Example
                     pot[i] = ads.ReadSymbolInfo($"gbl.slave_fMV_Out[{cnt++}]");
                     Act_Power[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
                     str = String.Format("{0:0.00}", Act_Power[i]);
-                    this.Controls["ActPowerTB" + i].Text = str;
-
+                    this.Controls["ActPowerTB" + i].Text = "\r\n" + str;
+                    //Thread.Sleep(10);
                 }
                 cnt = 1;
 
@@ -414,8 +434,8 @@ namespace Temp_UI_Example
                     pot[i] = ads.ReadSymbolInfo($"gbl.tune_result[{cnt++}]");
                     Tune_Result[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
                     str = String.Format("{0:0.00}", Tune_Result[i]);
-                    this.Controls["TuneResultTB" + i].Text = str;
-
+                    this.Controls["TuneResultTB" + i].Text = "\r\n" + str;
+                    //Thread.Sleep(10);
                 }
                 cnt = 1;
 
@@ -426,16 +446,23 @@ namespace Temp_UI_Example
                     pot[i] = ads.ReadSymbolInfo($"gbl.fPV_Value_SubTC[{cnt++}]");
                     Substrate_Temp[i] = Convert.ToDouble(ads.ReadSymbol(pot[i]));
                     str = String.Format("{0:0.00}", Substrate_Temp[i]);
-                    this.Controls["SubstrateTemp" + i].Text = str;
-
+                    this.Controls["SubstrateTemp" + i].Text = "\r\n" + str;
+                    //Thread.Sleep(10);
                 }
                 cnt = 1;
 
+                pot3[0] = ads.ReadSymbolInfo("gbl.tuning_time");
+                pot3[1] = ads.ReadSymbolInfo("gbl.tune_Remaining_time");
+                PT102[0] = Convert.ToDouble(ads.ReadSymbol(pot3[0]));
+                PT102[1] = Convert.ToDouble(ads.ReadSymbol(pot3[1]));
+                str5 = String.Format("{0:0.00}", PT102[1].ToString());
+                TempTunetbox6.Text = PT102[0].ToString() + "\r\n" + "\r\n" + str5;
 
                 pot[25] = ads.ReadSymbolInfo("gbl.subTC_max");
                 pot[26] = ads.ReadSymbolInfo("gbl.subTC_min");
                 pot[27] = ads.ReadSymbolInfo("gbl.subTC_AVG");
                 pot[28] = ads.ReadSymbolInfo("gbl.subTC_dev");
+                pot[29] = ads.ReadSymbolInfo("gbl.tune_Remaining_time");
                 Substrate_Temp2[0] = Convert.ToDouble(ads.ReadSymbol(pot[25]));
                 Substrate_Temp2[1] = Convert.ToDouble(ads.ReadSymbol(pot[26]));
                 Substrate_Temp2[2] = Convert.ToDouble(ads.ReadSymbol(pot[27]));
@@ -460,7 +487,8 @@ namespace Temp_UI_Example
                 chart1.Series[8].Points.AddXY(k, Convert.ToDouble(SubstrateTemp8.Text));
 
                 k++;
-                Thread.Sleep(10000);
+                Thread.Sleep(10);
+
 
             }
         }
@@ -675,11 +703,27 @@ namespace Temp_UI_Example
             }
             else if (bError == false)
             {
-                pictureBox1.Load(@"C:\SmartFactory\Last_Project\Temp_UI_Example\Resources\꺼진등.png");
+                pictureBox1.Load(@"C:\image\녹색등.png");
             }
 
             bStart = ads.CreateVariableHandle($"gbl.slave_bstart");
             ads.WriteAny(bStart, true);
+
+            // e_Ctrl_Mode
+            for (int i = 0; i <= 3; i++)
+            {
+                pot3[i] = ads.ReadSymbolInfo($"gbl.slave_eCTRL_MODE[{i + 1}]");
+                PT102[i] = Convert.ToDouble(ads.ReadSymbol(pot3[i]));
+
+                if (PT102[i].ToString() == 0.ToString())
+                {
+                    Ctrl[i].Text = "\r\n" + "IDLE";
+                }
+                else if (PT102[i].ToString() == 2.ToString())
+                {
+                    Ctrl[i].Text = "\r\n" + "ACTIVE";
+                }
+            }
         }
 
         // 깜빡깜빡
@@ -713,12 +757,12 @@ namespace Temp_UI_Example
             // 경로 설정 검토
             for (int i = 0; i < 10; i++)
             {
-                pictureBox1.Load(@"C:\SmartFactory\Last_Project\Temp_UI_Example\Resources\켜진등.png");
+                pictureBox1.Load(@"C:\image\켜진등.png");
                 Delay(150);
-                pictureBox1.Load(@"C:\SmartFactory\Last_Project\Temp_UI_Example\Resources\꺼진등.png");
+                pictureBox1.Load(@"C:\image\꺼진등.png");
                 Delay(150);
             }
-            pictureBox1.Load(@"C:\SmartFactory\Last_Project\Temp_UI_Example\Resources\켜진등.png");
+            pictureBox1.Load(@"C:\image\켜진등.png");
         }
 
         // 쓰레드3 : 에러발생
@@ -764,6 +808,26 @@ namespace Temp_UI_Example
         {
             Error_Log log = new Error_Log();
             log.Show();
+        }
+
+        // 값 한번에 넣기
+        // Temp_Set
+        private void label18_Click(object sender, EventArgs e)
+        {
+            Temp_Set_Pop temp_set_pop = new Temp_Set_Pop();
+            temp_set_pop.Show();
+        }
+        // Ramp_Set
+        private void label6_Click(object sender, EventArgs e)
+        {
+            Ramp_Set_Pop ramp_set_pop = new Ramp_Set_Pop();
+            ramp_set_pop.Show();
+        }
+        // Power Set
+        private void label5_Click(object sender, EventArgs e)
+        {
+            Power_Set_Pop power_set_pop = new Power_Set_Pop();
+            power_set_pop.Show();
         }
     }
 }
