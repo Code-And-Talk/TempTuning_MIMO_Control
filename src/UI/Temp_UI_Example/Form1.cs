@@ -166,7 +166,8 @@ namespace Temp_UI_Example
             PT102[0] = Convert.ToDouble(ads.ReadSymbol(pot3[0]));
             PT102[1] = Convert.ToDouble(ads.ReadSymbol(pot3[1]));
             str5 = String.Format("{0:0.00}", PT102[1].ToString());
-            TempTunetbox6.Text = PT102[0].ToString() + "\r\n" + "\r\n" + str5;
+            TempTunetbox6.Text = PT102[0].ToString() + "\r\n";
+            lblRemain_Time.Text = str5;
 
             // e_Ctrl_Mode
             for (int i = 0; i <= 3; i++)
@@ -456,7 +457,7 @@ namespace Temp_UI_Example
                 PT102[0] = Convert.ToDouble(ads.ReadSymbol(pot3[0]));
                 PT102[1] = Convert.ToDouble(ads.ReadSymbol(pot3[1]));
                 str5 = String.Format("{0:0.00}", PT102[1].ToString());
-                TempTunetbox6.Text = PT102[0].ToString() + "\r\n" + "\r\n" + str5;
+                lblRemain_Time.Text = "Reamin Time = " + PT102[1].ToString();
 
                 pot[25] = ads.ReadSymbolInfo("gbl.subTC_max");
                 pot[26] = ads.ReadSymbolInfo("gbl.subTC_min");

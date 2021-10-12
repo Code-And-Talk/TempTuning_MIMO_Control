@@ -126,6 +126,7 @@ namespace Temp_UI_Example
             this.e_Ctrl_modeTB2 = new System.Windows.Forms.TextBox();
             this.e_Ctrl_modeTB3 = new System.Windows.Forms.TextBox();
             this.e_Ctrl_modeTB0 = new System.Windows.Forms.TextBox();
+            this.lblRemain_Time = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -874,7 +875,7 @@ namespace Temp_UI_Example
             this.TempTunetbox6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.TempTunetbox6.Multiline = true;
             this.TempTunetbox6.Name = "TempTunetbox6";
-            this.TempTunetbox6.Size = new System.Drawing.Size(119, 68);
+            this.TempTunetbox6.Size = new System.Drawing.Size(119, 40);
             this.TempTunetbox6.TabIndex = 192;
             this.TempTunetbox6.Text = "INT";
             this.TempTunetbox6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -1200,11 +1201,21 @@ namespace Temp_UI_Example
             this.e_Ctrl_modeTB0.Text = "double";
             this.e_Ctrl_modeTB0.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // lblRemain_Time
+            // 
+            this.lblRemain_Time.AutoSize = true;
+            this.lblRemain_Time.Location = new System.Drawing.Point(904, 632);
+            this.lblRemain_Time.Name = "lblRemain_Time";
+            this.lblRemain_Time.Size = new System.Drawing.Size(15, 15);
+            this.lblRemain_Time.TabIndex = 217;
+            this.lblRemain_Time.Text = "-";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1902, 1055);
+            this.Controls.Add(this.lblRemain_Time);
             this.Controls.Add(this.e_Ctrl_modeTB1);
             this.Controls.Add(this.e_Ctrl_modeTB2);
             this.Controls.Add(this.e_Ctrl_modeTB3);
@@ -1390,6 +1401,7 @@ namespace Temp_UI_Example
         private System.Windows.Forms.TextBox e_Ctrl_modeTB2;
         private System.Windows.Forms.TextBox e_Ctrl_modeTB3;
         private System.Windows.Forms.TextBox e_Ctrl_modeTB0;
+        private System.Windows.Forms.Label lblRemain_Time;
     }
 }
 
