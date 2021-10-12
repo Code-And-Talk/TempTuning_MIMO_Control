@@ -15,6 +15,8 @@ VAR
 	
 	m_Set_Value						 : ARRAY[1..4] OF LREAL;
 	m_fLast_Set_Value            	 : ARRAY[1..4] OF LREAL;
+	m_heatup_Trigger				 : BOOL;
+	m_Tuning_Last_Temp				 : LREAL;
 	
 	tWait_Time						 :	TON;
 (*---------------------------------------- Substrate Simulation ----------------------------------------------- *)
@@ -94,11 +96,11 @@ m_pi_gain    		 := gbl.master_pi_gain;
 m_fTargetTemp		 := gbl.master_TargetTemp;
 m_min_per		     := gbl.master_Zone_Temp_Min;
 m_max_per	         := gbl.master_Zone_Temp_Max;
+gbl.fPV_Value_SubTC  := fPV_Value_Sub ;
 gbl.subTC_max		 := glass_max ;
 gbl.subTC_min		 := glass_min ;
 gbl.subTC_dev		 := glass_dev ;
 gbl.subTC_AVG		 := glass_AVG ;
-gbl.fPV_Value_SubTC  := fPV_Value_Sub ;
 master_subTC 		 := 0 ;
 tWait_Time(IN := TRUE, PT := LREAL_TO_TIME(m_Sampling_Time) * 1000);
 
@@ -111,9 +113,9 @@ IF tWait_Time.Q THEN
 	master_subTC := 0;
 
 	FOR i:=1 TO 9 BY 1 DO
-		master_subTC := master_subTC + fPV_Value_Sub[i];
-		glass_max := MAX(glass_max, fPV_Value_Sub[i]);
-		glass_min := MIN(glass_min, fPV_Value_Sub[i]);
+		master_subTC := master_subTC + gbl.fPV_Value_SubTC[i];
+		glass_max := MAX(glass_max, gbl.fPV_Value_SubTC[i]);
+		glass_min := MIN(glass_min, gbl.fPV_Value_SubTC[i]);
 	END_FOR
 	glass_dev := glass_max - glass_min;	
 	glass_AVG := master_subTC /9;
@@ -134,9 +136,9 @@ IF tWait_Time.Q THEN
 				
 		FOR i:=1 TO 4 BY 1 DO
 			
-			mErr_Value[i] := m_fTargetTemp - Substrate_AvgTemp[i];
+			mErr_Value[i] := m_Tuning_Last_Temp - Substrate_AvgTemp[i];
 			mErr_integral_Val[i] := mErr_integral_Val[i] + (mErr_Value[i] * m_Sampling_Time);
-			master_Zone_AVG[i] := (m_pi_gain[i] * mErr_Value[i]) + (m_pi_gain[i] / m_integral_constant[i] * mErr_integral_Val[i]) + m_fTargetTemp;
+			master_Zone_AVG[i] := (m_pi_gain[i] * mErr_Value[i]) + (m_pi_gain[i] / m_integral_constant[i] * mErr_integral_Val[i]) + m_Tuning_Last_Temp; 
 			
 			m_Zone_Temp_Min := slave.s_fLast_Set_Value[i] - (slave.s_fLast_Set_Value[i] * m_min_per / 100);
 			m_Zone_Temp_Max := slave.s_fLast_Set_Value[i] + (slave.s_fLast_Set_Value[i] * m_max_per / 100);
@@ -161,22 +163,22 @@ IF tWait_Time.Q THEN
 	END_IF
 END_IF
 
-RAMPING();
+IF m_heatup_Trigger THEN
+	Ramping();
 
-(* tuning data 저장 *)
-IF rampBool THEN
-	FOR zoneIndex:=1 TO 4 BY 1 DO
-		IF gbl.tuningIndex <> 1 THEN
-			master_Zone_AVG[zoneIndex] := gbl.oldData[zoneIndex, gbl.index] + fKd * ( mErr_Value[zoneIndex] - mErr_Old_Value[zoneIndex]);
-			mErr_Old_Value[zoneIndex]  := mErr_Value[zoneIndex] ;
-		END_IF
-		gbl.newData[zoneIndex, gbl.index] := master_Zone_AVG[zoneIndex];
-	END_FOR
-	rampBool := FALSE;
-	gbl.index := gbl.index + 1 ;
+	(* tuning data 저장 *)
+	IF rampBool THEN
+		FOR zoneIndex:=1 TO 4 BY 1 DO
+			IF gbl.tuningIndex <> 1 THEN
+				master_Zone_AVG[zoneIndex] := gbl.oldData[zoneIndex, gbl.index] + fKd * ( mErr_Value[zoneIndex] - mErr_Old_Value[zoneIndex]);
+				mErr_Old_Value[zoneIndex]  := mErr_Value[zoneIndex] ;
+			END_IF
+			gbl.newData[zoneIndex, gbl.index] := master_Zone_AVG[zoneIndex];
+		END_FOR
+		rampBool := FALSE;
+		gbl.index := gbl.index + 1 ;
+	END_IF
 END_IF
-
-
 ]]></ST>
     </Implementation>
     <Action Name="RAMPING" Id="{61abb805-2c73-414c-961c-5d3ed33b63a1}">
@@ -218,15 +220,15 @@ Substrate_AvgTemp[4] := (fPV_Value_Sub[5] + fPV_Value_Sub[6] + fPV_Value_Sub[8] 
       <Implementation>
         <ST><![CDATA[fMV_Out:= gbl.slave_fPV_Value;
 
-fPV_Value_Sub[1] := fMV_Out[1] - 2.5;
-fPV_Value_Sub[2] := (fMV_Out[1] + fMV_Out[2]) / 2 - 3.4;
-fPV_Value_Sub[3] := fMV_Out[2] - 3.1;
-fPV_Value_Sub[4] := (fMV_Out[1] + fMV_Out[3]) / 2 - 3.5;
-fPV_Value_Sub[5] := (fMV_Out[1] + fMV_Out[2]+ fMV_Out[3] + fMV_Out[4]) / 4 - 4;
-fPV_Value_Sub[6] := (fMV_Out[2] + fMV_Out[4]) / 2 - 3.2;
-fPV_Value_Sub[7] := fMV_Out[3] - 2.6;
-fPV_Value_Sub[8] := (fMV_Out[3] + fMV_Out[4]) / 2 - 3.4;
-fPV_Value_Sub[9] := fMV_Out[4] - 2.1;
+gbl.fPV_Value_SubTC[1] := fMV_Out[1] - 2.5;
+gbl.fPV_Value_SubTC[2] := (fMV_Out[1] + fMV_Out[2]) / 2 - 3.4;
+gbl.fPV_Value_SubTC[3] := fMV_Out[2] - 3.1;
+gbl.fPV_Value_SubTC[4] := (fMV_Out[1] + fMV_Out[3]) / 2 - 3.5;
+gbl.fPV_Value_SubTC[5] := (fMV_Out[1] + fMV_Out[2]+ fMV_Out[3] + fMV_Out[4]) / 4 - 4;
+gbl.fPV_Value_SubTC[6] := (fMV_Out[2] + fMV_Out[4]) / 2 - 3.2;
+gbl.fPV_Value_SubTC[7] := fMV_Out[3] - 2.6;
+gbl.fPV_Value_SubTC[8] := (fMV_Out[3] + fMV_Out[4]) / 2 - 3.4;
+gbl.fPV_Value_SubTC[9] := fMV_Out[4] - 2.1;
 
 
 (*
@@ -300,8 +302,8 @@ END_FOR
       <LineId Id="451" Count="1" />
       <LineId Id="142" Count="4" />
       <LineId Id="153" Count="0" />
+      <LineId Id="1256" Count="0" />
       <LineId Id="697" Count="3" />
-      <LineId Id="704" Count="0" />
       <LineId Id="154" Count="0" />
       <LineId Id="453" Count="3" />
       <LineId Id="893" Count="0" />
@@ -325,22 +327,11 @@ END_FOR
       <LineId Id="501" Count="0" />
       <LineId Id="503" Count="0" />
       <LineId Id="164" Count="0" />
-      <LineId Id="805" Count="0" />
-      <LineId Id="31" Count="0" />
-      <LineId Id="897" Count="0" />
-      <LineId Id="896" Count="0" />
-      <LineId Id="798" Count="0" />
-      <LineId Id="785" Count="0" />
-      <LineId Id="1170" Count="0" />
-      <LineId Id="1174" Count="0" />
-      <LineId Id="1173" Count="0" />
-      <LineId Id="1172" Count="0" />
-      <LineId Id="986" Count="0" />
-      <LineId Id="786" Count="0" />
-      <LineId Id="895" Count="0" />
-      <LineId Id="1074" Count="0" />
-      <LineId Id="894" Count="0" />
       <LineId Id="899" Count="1" />
+      <LineId Id="1264" Count="0" />
+      <LineId Id="1269" Count="11" />
+      <LineId Id="1267" Count="0" />
+      <LineId Id="1265" Count="0" />
       <LineId Id="898" Count="0" />
     </LineIds>
     <LineIds Name="master.RAMPING">

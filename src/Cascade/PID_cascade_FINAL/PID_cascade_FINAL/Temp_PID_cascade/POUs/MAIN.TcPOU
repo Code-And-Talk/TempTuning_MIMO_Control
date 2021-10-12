@@ -40,6 +40,7 @@ IF gbl.slave_bsimulation = FALSE THEN
 	
 ELSE
 	slave.SIMULATION() ;
+	master.Substrate_Simulation();
 END_IF
 
 (* watch dogs : 10s 간격으로 on/ off *)
@@ -136,7 +137,8 @@ END_IF
       <LineId Id="364" Count="1" />
       <LineId Id="368" Count="0" />
       <LineId Id="366" Count="0" />
-      <LineId Id="344" Count="0" />
+      <LineId Id="659" Count="0" />
+      <LineId Id="657" Count="0" />
       <LineId Id="303" Count="0" />
       <LineId Id="168" Count="0" />
       <LineId Id="145" Count="8" />
