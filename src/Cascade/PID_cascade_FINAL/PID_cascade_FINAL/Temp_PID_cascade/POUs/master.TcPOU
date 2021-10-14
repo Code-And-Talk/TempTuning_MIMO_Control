@@ -176,6 +176,9 @@ IF bStart THEN
 		bSecondStart := TRUE;
 		bStart := FALSE;
 		gbl.isChanged := TRUE;
+		FOR i:=1 TO 4 BY 1 DO
+			gbl.slave_fTargetTemp[i] := gbl.master_TargetTemp;
+		END_FOR
 	END_IF
 END_IF
 
@@ -244,6 +247,7 @@ END_IF
 IF gbl.tuningIndex=0 THEN
 	FOR i:=1 TO 4 BY 1 DO
 		gbl.slave_fTargetTemp[i] := gbl.master_TargetTemp;
+		master_Zone_AVG[i] := gbl.slave_fPV_Value[i];
 	END_FOR
 END_IF
 
@@ -253,6 +257,7 @@ FOR zoneIndex:=1 TO 4 BY 1 DO
 		master_Zone_AVG[zoneIndex] := gbl.oldData[zoneIndex, gbl.index] + fKd * ( mErr_Value[zoneIndex] - mErr_Old_Value[zoneIndex]);
 		mErr_Old_Value[zoneIndex]  := mErr_Value[zoneIndex] ;
 		gbl.slave_fTargetTemp[zoneIndex] := gbl.heatupData[gbl.tuningCount + 1 - gbl.tuningIndex][zoneIndex, gbl.index];
+		gbl.isChanged := TRUE;
 	END_IF
 	gbl.newData[zoneIndex, gbl.index] := master_Zone_AVG[zoneIndex];
 END_FOR
@@ -390,6 +395,7 @@ END_IF]]></ST>
       <LineId Id="1728" Count="0" />
       <LineId Id="1659" Count="3" />
       <LineId Id="1746" Count="0" />
+      <LineId Id="1749" Count="2" />
       <LineId Id="1663" Count="3" />
       <LineId Id="1668" Count="1" />
       <LineId Id="1671" Count="2" />
@@ -413,11 +419,13 @@ END_IF]]></ST>
       <LineId Id="65" Count="0" />
       <LineId Id="64" Count="0" />
       <LineId Id="63" Count="0" />
+      <LineId Id="72" Count="0" />
       <LineId Id="66" Count="0" />
       <LineId Id="32" Count="0" />
       <LineId Id="67" Count="0" />
       <LineId Id="33" Count="4" />
       <LineId Id="68" Count="0" />
+      <LineId Id="73" Count="0" />
       <LineId Id="38" Count="2" />
       <LineId Id="31" Count="0" />
     </LineIds>
