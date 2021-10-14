@@ -59,6 +59,9 @@ VAR_GLOBAL
 	oldData						: ARRAY [1..4, 1..arrSize] OF LREAL;
 	tuningIndex					: INT  := 0;
 	index						: INT  := 1;
+	
+	(*=======================================BOOL=========================================*)
+	isChanged					: BOOL;
 END_VAR
 ]]></Declaration>
   </GVL>

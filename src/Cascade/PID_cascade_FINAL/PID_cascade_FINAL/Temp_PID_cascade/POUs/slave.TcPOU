@@ -66,6 +66,9 @@ VAR
 	
 	master_Zone_AVG	                 :   ARRAY[1..4] OF LREAL ;
 	
+	m_Zone_Sum						 : LREAL;
+	m_Zone_Avg						 :	LREAL;
+	
 END_VAR
 
 (* ================ Simulation Constant Parameter =======================*)
@@ -120,16 +123,29 @@ CASE System_step OF
       s_fRamp_Rate    :=  gbl.slave_fRamp_Value;
 	  
       IF gbl.slave_bStart THEN
-         FOR i:=1 TO 4 BY 1 DO
-            s_fLast_Set_Value[i] := s_fSet_Value[i];
-         END_FOR
-         FOR i:=1 TO 4 BY 1 DO
-            s_fSet_Value[i] := gbl.slave_fTargetTemp[i];
-         END_FOR
-         System_step := 1;
-         gbl.slave_bStart := FALSE;
-         ELSE
-            System_step := 0;
+		IF gbl.tuning_mode THEN
+			FOR i:=1 TO 4 BY 1 DO
+				m_Zone_Sum := m_Zone_Sum + gbl.slave_fPV_Value[i];
+			END_FOR
+				m_Zone_Avg := m_Zone_Sum / 4;
+			FOR i:=1 TO 4 BY 1 DO
+				s_fLast_Set_Value[i] := gbl.slave_fPV_Value[i];
+				s_fSet_Value[i] := m_Zone_Avg;
+			END_FOR
+		ELSE
+			FOR i:=1 TO 4 BY 1 DO
+				s_fLast_Set_Value[i] := s_fSet_Value[i];
+			END_FOR
+			s_fSet_Value := gbl.slave_fTargetTemp;
+		END_IF
+        System_step := 1;
+        gbl.slave_bStart := FALSE;
+      ELSE
+        System_step := 0;
+		IF gbl.isChanged THEN
+			s_fSet_Value := gbl.slave_fTargetTemp;
+			gbl.isChanged := FALSE;
+		END_IF
       END_IF
       
 
@@ -337,9 +353,29 @@ END_FOR
       </Implementation>
     </Action>
     <LineIds Name="slave">
-      <LineId Id="1153" Count="41" />
-      <LineId Id="1309" Count="0" />
-      <LineId Id="1195" Count="113" />
+      <LineId Id="1153" Count="40" />
+      <LineId Id="1414" Count="0" />
+      <LineId Id="1394" Count="0" />
+      <LineId Id="1195" Count="0" />
+      <LineId Id="1383" Count="0" />
+      <LineId Id="1398" Count="1" />
+      <LineId Id="1417" Count="0" />
+      <LineId Id="1397" Count="0" />
+      <LineId Id="1418" Count="0" />
+      <LineId Id="1384" Count="0" />
+      <LineId Id="1416" Count="0" />
+      <LineId Id="1405" Count="0" />
+      <LineId Id="1386" Count="0" />
+      <LineId Id="1406" Count="0" />
+      <LineId Id="1387" Count="0" />
+      <LineId Id="1407" Count="0" />
+      <LineId Id="1419" Count="0" />
+      <LineId Id="1385" Count="0" />
+      <LineId Id="1202" Count="3" />
+      <LineId Id="1420" Count="1" />
+      <LineId Id="1423" Count="0" />
+      <LineId Id="1422" Count="0" />
+      <LineId Id="1206" Count="102" />
       <LineId Id="225" Count="0" />
     </LineIds>
     <LineIds Name="slave.DEFAULT_PARA_SET">
