@@ -92,6 +92,16 @@ namespace Temp_UI_Example
             thread1.IsBackground = true;
             thread2.IsBackground = true;
 
+            // chart 확대 축소
+            chart1.ChartAreas[0].CursorX.IsUserEnabled = Enabled;
+            chart1.ChartAreas[0].CursorY.IsUserEnabled = Enabled;
+            chart1.ChartAreas[0].CursorX.LineWidth = 3;
+            chart1.ChartAreas[0].CursorY.LineWidth = 3;
+            chart1.ChartAreas[0].CursorX.Interval = 0;
+            chart1.ChartAreas[0].CursorY.Interval = 0;
+            chart1.ChartAreas[0].CursorX.IsUserSelectionEnabled = Enabled;
+            chart1.ChartAreas[0].CursorX.AutoScroll = true;
+            chart1.ChartAreas[0].CursorY.IsUserSelectionEnabled = Enabled;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -488,8 +498,6 @@ namespace Temp_UI_Example
 
                 k++;
                 Thread.Sleep(10);
-
-
             }
         }
 
