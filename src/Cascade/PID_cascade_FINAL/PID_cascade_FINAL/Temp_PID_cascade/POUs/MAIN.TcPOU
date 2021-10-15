@@ -94,6 +94,13 @@ IF gbl.tuning_mode THEN
 	  
 	ELSE
 	  reverseSignal_tune := TRUE;
+	  IF gbl.bRestart THEN
+		  gbl.oldData	  := gbl.newData ;
+		  reverseSignal_tune  := FALSE;
+		  gbl.tuning_mode := FALSE;
+		  gbl.bRestart := FALSE;
+		  gbl.tuning_mode := TRUE;
+	  END_IF
     END_IF
 	
     OffTimer_tune(IN := reverseSignal_tune, PT := T#0S); // IN이 TRUE에서 FALSE가 되자마자 시간이 흐름, PT와 같아지면 Q가 FALSE
@@ -174,7 +181,12 @@ END_IF
       <LineId Id="685" Count="2" />
       <LineId Id="684" Count="0" />
       <LineId Id="467" Count="0" />
-      <LineId Id="253" Count="2" />
+      <LineId Id="253" Count="1" />
+      <LineId Id="703" Count="0" />
+      <LineId Id="708" Count="0" />
+      <LineId Id="704" Count="3" />
+      <LineId Id="702" Count="0" />
+      <LineId Id="255" Count="0" />
       <LineId Id="468" Count="0" />
       <LineId Id="256" Count="3" />
       <LineId Id="688" Count="0" />
