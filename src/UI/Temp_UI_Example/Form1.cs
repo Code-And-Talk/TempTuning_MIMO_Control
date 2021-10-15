@@ -76,7 +76,7 @@ namespace Temp_UI_Example
 
         //소수점 버림
         String str,str2,str3,str4;
-        String str5;
+        String str5, str6;
 
         int count = 0;
         public Form1()
@@ -171,12 +171,21 @@ namespace Temp_UI_Example
 
             // Tune Time
             pot3[0] = ads.ReadSymbolInfo("gbl.tuning_time");
-            pot3[1] = ads.ReadSymbolInfo("gbl.tune_Remaining_time");
+            //pot3[1] = ads.ReadSymbolInfo("gbl.tune_Remaining_time");
             PT102[0] = Convert.ToDouble(ads.ReadSymbol(pot3[0]));
-            PT102[1] = Convert.ToDouble(ads.ReadSymbol(pot3[1]));
-            str5 = String.Format("{0:0.00}", PT102[1]);
+            //PT102[1] = (Convert.ToDouble(ads.ReadSymbol(pot3[1])) / 60000);
+            ////PT102[2] = (Convert.ToDouble(ads.ReadSymbol(pot3[1])) % 60);
+            ////str5 = String.Format("{0:0.000}", PT102[1]);
+            //str5 = PT102[1].ToString();
+            //str5 = str5.Substring(0, 1);
+            ////str6 = String.Format("{0:00}", PT102[2]);
+            //str6 = (PT102[1] % 60).ToString();
+            ////str6 = PT102[1].ToString();
+            //str6 = str6.Substring(2, 2);
+            //String str7 = str5 + ":" + str6;
             TempTunetbox6.Text = PT102[0].ToString() + "\r\n";
-            lblRemain_Time.Text = str5;
+            //lblRemain_Time.Text = "Reamin Time = " + str7;
+
 
             // e_Ctrl_Mode
             for (int i = 0; i <= 3; i++)
@@ -461,12 +470,17 @@ namespace Temp_UI_Example
                 }
                 cnt = 1;
 
-                pot3[0] = ads.ReadSymbolInfo("gbl.tuning_time");
+                // 남은 시간 표시하기
                 pot3[1] = ads.ReadSymbolInfo("gbl.tune_Remaining_time");
-                PT102[0] = Convert.ToDouble(ads.ReadSymbol(pot3[0]));
-                PT102[1] = (Convert.ToDouble(ads.ReadSymbol(pot3[1])) / 60) * 0.001;
-                str5 = String.Format("{0:0.00}", PT102[1]);
-                lblRemain_Time.Text = "Reamin Time = " + str5;
+                pot3[2] = ads.ReadSymbolInfo("gbl.tune_Remaining_time");
+                PT102[1] = (Convert.ToDouble(ads.ReadSymbol(pot3[1])) / 60000);
+                PT102[2] = ((Convert.ToDouble(ads.ReadSymbol(pot3[2])) * 0.001) % 60);
+                str5 = String.Format("{0:0.000}", PT102[1]);
+                str5 = str5.Substring(0, 1);
+                str6 = String.Format("{0:00}", PT102[2]);
+                str6 = str6.Substring(0, 2);
+                String str7 = str5 + ":" + str6;
+                lblRemain_Time.Text = "Remain Time = " + str7;
 
                 pot[25] = ads.ReadSymbolInfo("gbl.subTC_max");
                 pot[26] = ads.ReadSymbolInfo("gbl.subTC_min");
