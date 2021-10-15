@@ -40,7 +40,7 @@ namespace Temp_UI_Example
             this.label6.Font = new System.Drawing.Font("굴림", 12F);
             this.label6.Location = new System.Drawing.Point(8, 8);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(136, 72);
+            this.label6.Size = new System.Drawing.Size(136, 56);
             this.label6.TabIndex = 85;
             this.label6.Text = "ALL Ramp Set";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -49,19 +49,19 @@ namespace Temp_UI_Example
             // 
             this.ALL_TB16.BackColor = System.Drawing.SystemColors.Info;
             this.ALL_TB16.Font = new System.Drawing.Font("굴림", 12F);
-            this.ALL_TB16.Location = new System.Drawing.Point(8, 88);
+            this.ALL_TB16.Location = new System.Drawing.Point(8, 72);
             this.ALL_TB16.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ALL_TB16.Multiline = true;
             this.ALL_TB16.Name = "ALL_TB16";
-            this.ALL_TB16.Size = new System.Drawing.Size(136, 80);
+            this.ALL_TB16.Size = new System.Drawing.Size(136, 64);
             this.ALL_TB16.TabIndex = 129;
             this.ALL_TB16.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(152, 128);
+            this.button1.Location = new System.Drawing.Point(8, 144);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(88, 40);
+            this.button1.Size = new System.Drawing.Size(136, 40);
             this.button1.TabIndex = 130;
             this.button1.Text = "APPLY";
             this.button1.UseVisualStyleBackColor = true;
@@ -71,12 +71,13 @@ namespace Temp_UI_Example
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(247, 183);
+            this.ClientSize = new System.Drawing.Size(152, 189);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.ALL_TB16);
             this.Controls.Add(this.label6);
             this.Name = "Ramp_Set_Pop";
             this.Text = "Ramp_Set_Pop";
+            this.Load += new System.EventHandler(this.Ramp_Set_Pop_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

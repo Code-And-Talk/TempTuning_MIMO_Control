@@ -16,6 +16,10 @@ namespace Temp_UI_Example
         // 통신 객체 정의
         private TcAdsClient ads = new TcAdsClient();
 
+        // ADS 정보를 읽기 위한 인터페이스 정의
+        private ITcAdsSymbol pot;
+        double PT101;
+
         private int ALL_Temp_Set;
         public Temp_Set_Pop()
         {
@@ -30,10 +34,22 @@ namespace Temp_UI_Example
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // DataWrite
             for (int i = 0; i <= 3; i++)
             {
                 ALL_Temp_Set = ads.CreateVariableHandle($"gbl.slave_fTargetTemp[{i + 1}]");
                 ads.WriteAny(ALL_Temp_Set, double.Parse(All_TB12.Text));
+            }
+        }
+
+        private void Temp_Set_Pop_Load(object sender, EventArgs e)
+        {
+            // PLC에 있는 값 읽어오기
+            for (int i = 0; i <= 3; i++)
+            {
+                pot = ads.ReadSymbolInfo($"gbl.slave_fTargetTemp[{i + 1}]");
+                PT101 = Convert.ToDouble(ads.ReadSymbol(pot));
+                All_TB12.Text = "\r\n" + PT101.ToString();
             }
         }
     }

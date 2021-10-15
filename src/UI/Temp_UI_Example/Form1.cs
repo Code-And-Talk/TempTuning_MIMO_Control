@@ -76,7 +76,7 @@ namespace Temp_UI_Example
 
         //소수점 버림
         String str,str2,str3,str4;
-        String str5 = string.Empty;
+        String str5;
 
         int count = 0;
         public Form1()
@@ -112,7 +112,6 @@ namespace Temp_UI_Example
             {
                 pot3[i] = ads.ReadSymbolInfo($"gbl.slave_fTargetTemp[{i + 1}]");
                 PT102[i] = Convert.ToDouble(ads.ReadSymbol(pot3[i]));
-
                 Temp_s[i].Text = "\r\n" + PT102[i].ToString();
             }
             // Ramp Set
@@ -165,7 +164,7 @@ namespace Temp_UI_Example
             pot3[1] = ads.ReadSymbolInfo("gbl.tune_Remaining_time");
             PT102[0] = Convert.ToDouble(ads.ReadSymbol(pot3[0]));
             PT102[1] = Convert.ToDouble(ads.ReadSymbol(pot3[1]));
-            str5 = String.Format("{0:0.00}", PT102[1].ToString());
+            str5 = String.Format("{0:0.00}", PT102[1]);
             TempTunetbox6.Text = PT102[0].ToString() + "\r\n";
             lblRemain_Time.Text = str5;
 
@@ -455,9 +454,9 @@ namespace Temp_UI_Example
                 pot3[0] = ads.ReadSymbolInfo("gbl.tuning_time");
                 pot3[1] = ads.ReadSymbolInfo("gbl.tune_Remaining_time");
                 PT102[0] = Convert.ToDouble(ads.ReadSymbol(pot3[0]));
-                PT102[1] = Convert.ToDouble(ads.ReadSymbol(pot3[1]));
-                str5 = String.Format("{0:0.00}", PT102[1].ToString());
-                lblRemain_Time.Text = "Reamin Time = " + PT102[1].ToString();
+                PT102[1] = (Convert.ToDouble(ads.ReadSymbol(pot3[1])) / 60) * 0.001;
+                str5 = String.Format("{0:0.00}", PT102[1]);
+                lblRemain_Time.Text = "Reamin Time = " + str5;
 
                 pot[25] = ads.ReadSymbolInfo("gbl.subTC_max");
                 pot[26] = ads.ReadSymbolInfo("gbl.subTC_min");
@@ -816,18 +815,24 @@ namespace Temp_UI_Example
         private void label18_Click(object sender, EventArgs e)
         {
             Temp_Set_Pop temp_set_pop = new Temp_Set_Pop();
+            temp_set_pop.StartPosition = FormStartPosition.Manual;
+            temp_set_pop.Location = new Point(420, 75);
             temp_set_pop.Show();
         }
         // Ramp_Set
         private void label6_Click(object sender, EventArgs e)
         {
             Ramp_Set_Pop ramp_set_pop = new Ramp_Set_Pop();
+            ramp_set_pop.StartPosition = FormStartPosition.Manual;
+            ramp_set_pop.Location = new Point(547, 75);
             ramp_set_pop.Show();
         }
         // Power Set
         private void label5_Click(object sender, EventArgs e)
         {
             Power_Set_Pop power_set_pop = new Power_Set_Pop();
+            power_set_pop.StartPosition = FormStartPosition.Manual;
+            power_set_pop.Location = new Point(674, 75);
             power_set_pop.Show();
         }
     }

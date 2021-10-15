@@ -16,6 +16,10 @@ namespace Temp_UI_Example
         // 통신 객체 정의
         private TcAdsClient ads = new TcAdsClient();
 
+        // ADS 정보를 읽기 위한 인터페이스 정의
+        private ITcAdsSymbol pot;
+        double PT101;
+
         private int ALL_Remp_Set;
         public Ramp_Set_Pop()
         {
@@ -34,6 +38,17 @@ namespace Temp_UI_Example
             {
                 ALL_Remp_Set = ads.CreateVariableHandle($"gbl.slave_fRamp_Value[{i + 1}]");
                 ads.WriteAny(ALL_Remp_Set, double.Parse(ALL_TB16.Text));
+            }
+        }
+
+        private void Ramp_Set_Pop_Load(object sender, EventArgs e)
+        {
+            // PLC에 있는 값 읽어오기
+            for (int i = 0; i <= 3; i++)
+            {
+                pot = ads.ReadSymbolInfo($"gbl.slave_fRamp_Value[{i + 1}]");
+                PT101 = Convert.ToDouble(ads.ReadSymbol(pot));
+                ALL_TB16.Text = "\r\n" + PT101.ToString();
             }
         }
     }
