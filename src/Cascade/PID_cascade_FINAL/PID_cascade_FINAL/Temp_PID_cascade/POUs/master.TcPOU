@@ -232,7 +232,6 @@ END_FOR
 
 IF gbl.isDropping THEN
 	IF m_Zone_Min <= m_Heatup_Start_Temp_Max THEN
-		m_Tune_On := TRUE;
 		gbl.slave_bstart := TRUE;
 		gbl.bRestart := TRUE;
 		gbl.tuningIndex := gbl.tuningIndex + 1;
@@ -243,6 +242,11 @@ IF gbl.isDropping THEN
 	  	END_IF
 		gbl.isDropping := FALSE;
 	END_IF
+END_IF
+
+IF gbl.slave_bstart THEN
+	m_tune_On := TRUE;
+	bStart := TRUE;
 END_IF
 
 //gbl.slave_fTargetTemp := master_Zone_AVG;]]></ST>
@@ -462,7 +466,6 @@ END_IF]]></ST>
       <LineId Id="1754" Count="0" />
       <LineId Id="1753" Count="0" />
       <LineId Id="1755" Count="0" />
-      <LineId Id="1757" Count="0" />
       <LineId Id="1797" Count="0" />
       <LineId Id="1786" Count="1" />
       <LineId Id="1793" Count="0" />
@@ -472,6 +475,8 @@ END_IF]]></ST>
       <LineId Id="1796" Count="0" />
       <LineId Id="1777" Count="0" />
       <LineId Id="1756" Count="0" />
+      <LineId Id="1889" Count="3" />
+      <LineId Id="1888" Count="0" />
       <LineId Id="1705" Count="0" />
       <LineId Id="1449" Count="0" />
     </LineIds>

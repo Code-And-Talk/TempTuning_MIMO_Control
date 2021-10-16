@@ -72,10 +72,14 @@ IF gbl.tuning_mode THEN
 	  reverseSignal_tune  := FALSE;
 	  gbl.tune_result 	  := gbl.slave_fPV_Value;
 	  
+	  (*
 	  IF gbl.tuningIndex <> 0 THEN
 		  gbl.heatupData[gbl.tuningCount + 1 - gbl.tuningIndex] := gbl.oldData;
 		  gbl.heatupData[gbl.tuningCount - gbl.tuningIndex] 	:= gbl.newData;
 	  END_IF
+	  *)
+	  
+	  gbl.heatupData[gbl.tuningCount - gbl.tuningIndex] 	:= gbl.newData;
 	  
 	  gbl.oldData	  := gbl.newData ;
 	  gbl.tuningIndex := gbl.tuningIndex + 1 ;
@@ -165,10 +169,13 @@ END_IF
       <LineId Id="252" Count="0" />
       <LineId Id="387" Count="0" />
       <LineId Id="584" Count="0" />
+      <LineId Id="734" Count="0" />
       <LineId Id="424" Count="0" />
       <LineId Id="421" Count="0" />
       <LineId Id="426" Count="0" />
       <LineId Id="418" Count="0" />
+      <LineId Id="735" Count="0" />
+      <LineId Id="732" Count="1" />
       <LineId Id="464" Count="0" />
       <LineId Id="415" Count="0" />
       <LineId Id="683" Count="0" />
