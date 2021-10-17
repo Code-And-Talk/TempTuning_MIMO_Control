@@ -62,6 +62,8 @@ VAR_GLOBAL
 	
 	(*=======================================BOOL=========================================*)
 	isChanged					: BOOL;
+	isDropping					: BOOL;
+	bRestart					: BOOL;
 END_VAR
 ]]></Declaration>
   </GVL>

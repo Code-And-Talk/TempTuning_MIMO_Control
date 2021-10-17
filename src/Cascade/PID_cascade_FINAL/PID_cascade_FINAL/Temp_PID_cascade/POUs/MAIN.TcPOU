@@ -72,10 +72,14 @@ IF gbl.tuning_mode THEN
 	  reverseSignal_tune  := FALSE;
 	  gbl.tune_result 	  := gbl.slave_fPV_Value;
 	  
+	  (*
 	  IF gbl.tuningIndex <> 0 THEN
 		  gbl.heatupData[gbl.tuningCount + 1 - gbl.tuningIndex] := gbl.oldData;
 		  gbl.heatupData[gbl.tuningCount - gbl.tuningIndex] 	:= gbl.newData;
 	  END_IF
+	  *)
+	  
+	  gbl.heatupData[gbl.tuningCount + 1 - gbl.tuningIndex] 	:= gbl.newData;
 	  
 	  gbl.oldData	  := gbl.newData ;
 	  gbl.tuningIndex := gbl.tuningIndex + 1 ;
@@ -94,6 +98,14 @@ IF gbl.tuning_mode THEN
 	  
 	ELSE
 	  reverseSignal_tune := TRUE;
+	  IF gbl.bRestart THEN
+		  gbl.oldData	  := gbl.newData ;
+		  reverseSignal_tune  := FALSE;
+		  gbl.tuning_mode := FALSE;
+		  gbl.bRestart := FALSE;
+		  gbl.tuning_mode := TRUE;
+		  gbl.heatupData[gbl.tuningCount + 1 - gbl.tuningIndex] 	:= gbl.newData;
+	  END_IF
     END_IF
 	
     OffTimer_tune(IN := reverseSignal_tune, PT := T#0S); // IN이 TRUE에서 FALSE가 되자마자 시간이 흐름, PT와 같아지면 Q가 FALSE
@@ -158,10 +170,13 @@ END_IF
       <LineId Id="252" Count="0" />
       <LineId Id="387" Count="0" />
       <LineId Id="584" Count="0" />
+      <LineId Id="734" Count="0" />
       <LineId Id="424" Count="0" />
       <LineId Id="421" Count="0" />
       <LineId Id="426" Count="0" />
       <LineId Id="418" Count="0" />
+      <LineId Id="735" Count="0" />
+      <LineId Id="732" Count="1" />
       <LineId Id="464" Count="0" />
       <LineId Id="415" Count="0" />
       <LineId Id="683" Count="0" />
@@ -174,7 +189,13 @@ END_IF
       <LineId Id="685" Count="2" />
       <LineId Id="684" Count="0" />
       <LineId Id="467" Count="0" />
-      <LineId Id="253" Count="2" />
+      <LineId Id="253" Count="1" />
+      <LineId Id="703" Count="0" />
+      <LineId Id="708" Count="0" />
+      <LineId Id="704" Count="3" />
+      <LineId Id="759" Count="0" />
+      <LineId Id="702" Count="0" />
+      <LineId Id="255" Count="0" />
       <LineId Id="468" Count="0" />
       <LineId Id="256" Count="3" />
       <LineId Id="688" Count="0" />
