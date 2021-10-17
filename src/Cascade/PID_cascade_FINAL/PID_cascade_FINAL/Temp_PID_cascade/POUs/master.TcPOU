@@ -232,7 +232,6 @@ END_FOR
 
 IF gbl.isDropping THEN
 	IF m_Zone_Min <= m_Heatup_Start_Temp_Max THEN
-		gbl.slave_bstart := TRUE;
 		gbl.bRestart := TRUE;
 		gbl.tuningIndex := gbl.tuningIndex + 1;
 		gbl.index := 1;
@@ -242,14 +241,7 @@ IF gbl.isDropping THEN
 	  	END_IF
 		gbl.isDropping := FALSE;
 	END_IF
-END_IF
-
-IF gbl.slave_bstart THEN
-	m_tune_On := TRUE;
-	bStart := TRUE;
-END_IF
-
-//gbl.slave_fTargetTemp := master_Zone_AVG;]]></ST>
+END_IF]]></ST>
     </Implementation>
     <Action Name="HEATUP" Id="{61abb805-2c73-414c-961c-5d3ed33b63a1}">
       <Implementation>
@@ -295,6 +287,9 @@ FOR zoneIndex:=1 TO 4 BY 1 DO
 	IF gbl.tuningIndex <> 0 THEN
 		master_Zone_AVG[zoneIndex] := gbl.oldData[zoneIndex, gbl.index] + fKd * ( mErr_Value[zoneIndex] - mErr_Old_Value[zoneIndex]);
 		mErr_Old_Value[zoneIndex]  := mErr_Value[zoneIndex] ;
+		IF gbl.heatupData[gbl.tuningCount + 1 - gbl.tuningIndex][zoneIndex, gbl.index]=0 THEN
+			continue;
+		END_IF
 		gbl.slave_fTargetTemp[zoneIndex] := gbl.heatupData[gbl.tuningCount + 1 - gbl.tuningIndex][zoneIndex, gbl.index];
 		gbl.isChanged := TRUE;
 	END_IF
@@ -420,7 +415,9 @@ END_IF]]></ST>
       <LineId Id="1712" Count="0" />
       <LineId Id="1723" Count="1" />
       <LineId Id="1773" Count="0" />
-      <LineId Id="1606" Count="22" />
+      <LineId Id="1606" Count="19" />
+      <LineId Id="1985" Count="0" />
+      <LineId Id="1627" Count="1" />
       <LineId Id="1634" Count="3" />
       <LineId Id="1744" Count="0" />
       <LineId Id="1741" Count="2" />
@@ -466,7 +463,6 @@ END_IF]]></ST>
       <LineId Id="1754" Count="0" />
       <LineId Id="1753" Count="0" />
       <LineId Id="1755" Count="0" />
-      <LineId Id="1797" Count="0" />
       <LineId Id="1786" Count="1" />
       <LineId Id="1793" Count="0" />
       <LineId Id="1792" Count="0" />
@@ -475,10 +471,6 @@ END_IF]]></ST>
       <LineId Id="1796" Count="0" />
       <LineId Id="1777" Count="0" />
       <LineId Id="1756" Count="0" />
-      <LineId Id="1889" Count="3" />
-      <LineId Id="1888" Count="0" />
-      <LineId Id="1705" Count="0" />
-      <LineId Id="1449" Count="0" />
     </LineIds>
     <LineIds Name="master.HEATUP">
       <LineId Id="2" Count="0" />
@@ -496,6 +488,8 @@ END_IF]]></ST>
       <LineId Id="67" Count="0" />
       <LineId Id="33" Count="4" />
       <LineId Id="68" Count="0" />
+      <LineId Id="75" Count="1" />
+      <LineId Id="74" Count="0" />
       <LineId Id="73" Count="0" />
       <LineId Id="38" Count="2" />
       <LineId Id="31" Count="0" />

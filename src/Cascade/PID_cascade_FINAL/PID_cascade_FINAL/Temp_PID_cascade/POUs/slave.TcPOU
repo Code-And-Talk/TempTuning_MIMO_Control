@@ -150,6 +150,9 @@ CASE System_step OF
 			s_fSet_Value := gbl.slave_fTargetTemp;
 			gbl.isChanged := FALSE;
 		END_IF
+		IF gbl.bRestart THEN
+			gbl.slave_bstart := TRUE;
+		END_IF
 		(*
 		IF gbl.isDropping THEN
 			s_fLast_Set_Value := gbl.slave_fPV_Value;
@@ -388,8 +391,10 @@ END_FOR
       <LineId Id="1436" Count="1" />
       <LineId Id="1435" Count="0" />
       <LineId Id="1421" Count="0" />
-      <LineId Id="1423" Count="0" />
+      <LineId Id="1595" Count="0" />
       <LineId Id="1422" Count="0" />
+      <LineId Id="1598" Count="1" />
+      <LineId Id="1597" Count="0" />
       <LineId Id="1433" Count="0" />
       <LineId Id="1424" Count="0" />
       <LineId Id="1428" Count="0" />
