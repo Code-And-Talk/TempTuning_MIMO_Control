@@ -16,14 +16,17 @@ VAR
 	m_Set_Value						 : ARRAY[1..4] OF LREAL;
 	m_fLast_Set_Value            	 : ARRAY[1..4] OF LREAL;
 	m_Heatup_On				 		 : BOOL;
-	m_Tuning_Set_Temp				 : LREAL;
+	m_Tuning_Set_Temp				 : ARRAY[1..4] OF LREAL;
+	m_Tuning_Set_Temp_Sum			 : LREAL;
+	m_Tuning_Set_Temp_Avg			 : LREAL;
 	m_Tune_On						 : BOOL;
 	bStart							 : BOOL;
 	bSecondStart					 : BOOL;
 	bThirdStart						 : BOOL;
 	m_Heatup_Start_Temp				 : ARRAY[1..4] OF LREAL;
 	m_Heatup_End_Temp				 : ARRAY[1..4] OF LREAL;
-	m_Heatup_Start_Temp_Max			 : LREAL;
+	m_Heatup_Start_Temp_Sum			 : LREAL;
+	m_Heatup_Start_Temp_Avg			 : LREAL;
 	m_Zone_Sum						 : LREAL;
 	m_Zone_Avg						 : LREAL; // ActTemp(fPV_Value) 평균
 	m_Zone_Max						 : LREAL;
@@ -60,6 +63,7 @@ VAR
 	m_Last_Zone_Temp_AVG		   :	ARRAY[1..4] OF LREAL; 
 	
 	i							   :	INT;
+	j							   : 	INT;
 	
 	fbCTRL_RAMP_GENERATOR		   :    ARRAY[1..4] OF FB_CTRL_RAMP_GENERATOR;
 	stCTRL_RAMP_GENERATOR_PARAMS   :    ARRAY[1..4] OF ST_CTRL_RAMP_GENERATOR_PARAMS;
@@ -114,7 +118,6 @@ master_subTC := 0;
 m_Zone_Max := 0;
 m_Zone_Min := 1000;
 m_Zone_Dev := 0;
-m_Heatup_Start_Temp_Max	:= 0;
 
 FOR i:=1 TO 9 BY 1 DO
 	master_subTC := master_subTC + gbl.fPV_Value_SubTC[i];
@@ -137,34 +140,35 @@ IF glass_dev <= 10 THEN
 END_IF
 
 IF gbl.slave_bstart THEN
+	IF gbl.tuningIndex=0 THEN
+		m_Zone_Sum := 0;
+		FOR i:=1 TO 4 BY 1 DO
+			m_Zone_Sum := m_Zone_Sum + gbl.slave_fPV_Value[i];
+		END_FOR
+		m_Zone_Avg := m_Zone_Sum / 4;
+		FOR i:=1 TO 4 BY 1 DO
+			m_Tuning_Set_Temp[i] := m_Zone_Avg;
+		END_FOR
+	ELSE
+		m_Tuning_Set_Temp := m_Heatup_Start_Temp;
+	END_IF
+	m_Tuning_Set_Temp_Sum := 0;
+	FOR i:=1 TO 4 BY 1 DO
+		m_Tuning_Set_Temp_Sum := m_Tuning_Set_Temp_Sum + m_Tuning_Set_Temp[i];
+	END_FOR
+	m_Tuning_Set_Temp_Avg := m_Tuning_Set_Temp_Sum / 4;
+	m_Zone_Temp_Min := m_Tuning_Set_Temp_Avg - (m_Tuning_Set_Temp_Avg * m_min_per / 100);
+	m_Zone_Temp_Max := m_Tuning_Set_Temp_Avg + (m_Tuning_Set_Temp_Avg * m_max_per / 100);
 	m_tune_On := TRUE;
 	bStart := TRUE;
 END_IF
 
 IF m_Tune_On THEN
-	m_Zone_Sum := 0;
-	FOR i:=1 TO 4 BY 1 DO
-		m_Zone_Sum := m_Zone_Sum + gbl.slave_fPV_Value[i];
-	END_FOR
-	m_Zone_Avg := m_Zone_Sum / 4;
-	m_Tuning_Set_Temp := m_Zone_Avg;
-	m_Zone_Temp_Min := m_Tuning_Set_Temp - (m_Tuning_Set_Temp * m_min_per / 100);
-	m_Zone_Temp_Max := m_Tuning_Set_Temp + (m_Tuning_Set_Temp * m_max_per / 100);
 	IF tWait_Time.Q THEN
 		tWait_Time(IN := FALSE);
 		Tuning();
 	END_IF
 END_IF
-
-(*
-IF bStart THEN
-	IF gbl.subTC_dev <= 2 THEN
-		m_Tuning_Set_Temp := m_fTargetTemp;
-		bSecondStart := TRUE;
-		bStart := FALSE;
-	END_IF
-END_IF
-*)
 
 FOR i:=1 TO 4 BY 1 DO
 	m_Zone_Max := MAX(m_Zone_Max, gbl.slave_fPV_Value[i]);
@@ -173,15 +177,22 @@ END_FOR
 m_Zone_Dev := m_Zone_Max - m_Zone_Min;
 
 IF bStart THEN
-	IF m_Zone_Dev <= 2 THEN
+	IF glass_dev <= 2.5 THEN
 		m_Heatup_On := TRUE;
 		m_Tune_On := FALSE;
-		m_Heatup_Start_Temp := gbl.slave_fPV_Value;
+		IF gbl.tuningIndex=0 THEN
+			m_Heatup_Start_Temp := gbl.slave_fPV_Value;
+		END_IF
 		bSecondStart := TRUE;
 		bStart := FALSE;
 		gbl.isChanged := TRUE;
 		FOR i:=1 TO 4 BY 1 DO
 			gbl.slave_fTargetTemp[i] := gbl.master_TargetTemp;
+		END_FOR
+		FOR i:=1 TO 4 BY 1 DO
+			FOR j:=1 TO gbl.arrSize BY 1 DO
+				gbl.newData[i, j] := 0;
+			END_FOR
 		END_FOR
 	END_IF
 END_IF
@@ -195,50 +206,58 @@ IF m_Heatup_On THEN
 	END_IF
 END_IF
 
-(*
 IF bSecondStart THEN
-	IF gbl.master_TargetTemp <= gbl.subTC_max THEN
-		m_Heatup_On := TRUE;
-		m_Tune_On := FALSE;
-		bSecondStart := FALSE;
-	END_IF
-END_IF
-*)
-
-IF bSecondStart THEN
-	IF gbl.master_TargetTemp <= m_Zone_Max THEN
+	IF gbl.master_TargetTemp <= glass_AVG THEN
+		IF gbl.tuningIndex=0 THEN			
+			FOR i:=1 TO 4 BY 1 DO
+				m_Tuning_Set_Temp[i] := gbl.master_TargetTemp;
+			END_FOR
+		ELSE
+			m_Tuning_Set_Temp := m_Heatup_End_Temp;
+		END_IF
+		m_Tuning_Set_Temp_Sum := 0;
+		FOR i:=1 TO 4 BY 1 DO
+			m_Tuning_Set_Temp_Sum := m_Tuning_Set_Temp_Sum + m_Tuning_Set_Temp[i];
+		END_FOR
+		m_Tuning_Set_Temp_Avg := m_Tuning_Set_Temp_Sum / 4;
+		m_Zone_Temp_Min := m_Tuning_Set_Temp_Avg - (m_Tuning_Set_Temp_Avg * m_min_per / 100);
+		m_Zone_Temp_Max := m_Tuning_Set_Temp_Avg + (m_Tuning_Set_Temp_Avg * m_max_per / 100);
 		m_Tune_On := TRUE;
 		m_Heatup_On := FALSE;
 		bThirdStart := TRUE;
 		bSecondStart := FALSE;
-		gbl.isChanged := TRUE;
 	END_IF
 END_IF
 
 IF bThirdStart THEN
-	IF m_Zone_Dev <= 2 THEN
+	IF glass_dev <= 2.5 THEN
 		m_Tune_On := FALSE;
+		bThirdStart := FALSE;
+		IF gbl.tuningIndex=gbl.tuningCount THEN
+			gbl.tuningIndex := 0;
+			gbl.tuning_mode := FALSE;
+			RETURN;
+		END_IF
 		gbl.isDropping := TRUE;
 		gbl.isChanged := TRUE;
-		bThirdStart := FALSE;
-		m_Heatup_End_Temp := gbl.slave_fPV_Value;
+		IF gbl.tuningIndex=0 THEN
+			m_Heatup_End_Temp := gbl.slave_fPV_Value;
+		END_IF
 		gbl.slave_fTargetTemp := m_Heatup_Start_Temp;
 	END_IF
 END_IF
 
+m_Heatup_Start_Temp_Sum := 0;
 FOR i:=1 TO 4 BY 1 DO
-	m_Heatup_Start_Temp_Max := MAX(m_Heatup_Start_Temp_Max, m_Heatup_Start_Temp[i]);
+	m_Heatup_Start_Temp_Sum := m_Heatup_Start_Temp_Sum + m_Heatup_Start_Temp[i];
 END_FOR
+m_Heatup_Start_Temp_Avg := m_Heatup_Start_Temp_Sum / 4;
 
 IF gbl.isDropping THEN
-	IF m_Zone_Min <= m_Heatup_Start_Temp_Max THEN
+	IF glass_AVG <= m_Heatup_Start_Temp_Avg THEN
 		gbl.bRestart := TRUE;
 		gbl.tuningIndex := gbl.tuningIndex + 1;
 		gbl.index := 1;
-		IF gbl.tuningIndex = 4 THEN
-		  gbl.tuningIndex := 0;
-		  gbl.tuning_mode := FALSE;
-	  	END_IF
 		gbl.isDropping := FALSE;
 	END_IF
 END_IF]]></ST>
@@ -392,9 +411,9 @@ END_FOR
 			
 	FOR i:=1 TO 4 BY 1 DO
 		
-		mErr_Value[i] := m_Tuning_Set_Temp - Substrate_AvgTemp[i];
+		mErr_Value[i] := m_Tuning_Set_Temp[i] - Substrate_AvgTemp[i];
 		mErr_integral_Val[i] := mErr_integral_Val[i] + (mErr_Value[i] * m_Sampling_Time);
-		master_Zone_AVG[i] := (m_pi_gain[i] * mErr_Value[i]) + (m_pi_gain[i] / m_integral_constant[i] * mErr_integral_Val[i]) + m_Tuning_Set_Temp; 
+		master_Zone_AVG[i] := (m_pi_gain[i] * mErr_Value[i]) + (m_pi_gain[i] / m_integral_constant[i] * mErr_integral_Val[i]) + m_Tuning_Set_Temp[i]; 
 		
 		m_Last_Zone_Temp_AVG[i] := master_Zone_AVG[i];
 		
@@ -407,6 +426,7 @@ END_FOR
 		END_IF
 	END_FOR	
 	gbl.slave_fTargetTemp := master_Zone_AVG;
+	gbl.isChanged := TRUE;
 END_IF]]></ST>
       </Implementation>
     </Action>
@@ -414,60 +434,72 @@ END_IF]]></ST>
       <LineId Id="1588" Count="17" />
       <LineId Id="1712" Count="0" />
       <LineId Id="1723" Count="1" />
-      <LineId Id="1773" Count="0" />
       <LineId Id="1606" Count="19" />
       <LineId Id="1985" Count="0" />
-      <LineId Id="1627" Count="1" />
-      <LineId Id="1634" Count="3" />
-      <LineId Id="1744" Count="0" />
-      <LineId Id="1741" Count="2" />
-      <LineId Id="1740" Count="0" />
-      <LineId Id="1780" Count="0" />
-      <LineId Id="1638" Count="16" />
+      <LineId Id="2054" Count="6" />
+      <LineId Id="2066" Count="2" />
+      <LineId Id="2064" Count="1" />
+      <LineId Id="1627" Count="0" />
+      <LineId Id="2096" Count="0" />
+      <LineId Id="2088" Count="0" />
+      <LineId Id="2090" Count="1" />
+      <LineId Id="2089" Count="0" />
+      <LineId Id="2083" Count="0" />
+      <LineId Id="2087" Count="0" />
+      <LineId Id="1628" Count="0" />
+      <LineId Id="1634" Count="2" />
+      <LineId Id="2044" Count="0" />
+      <LineId Id="1640" Count="4" />
       <LineId Id="1717" Count="2" />
       <LineId Id="1721" Count="0" />
       <LineId Id="1720" Count="0" />
       <LineId Id="1722" Count="0" />
       <LineId Id="1655" Count="2" />
       <LineId Id="1728" Count="0" />
-      <LineId Id="1659" Count="3" />
+      <LineId Id="1659" Count="0" />
+      <LineId Id="2010" Count="2" />
+      <LineId Id="1661" Count="1" />
       <LineId Id="1746" Count="0" />
       <LineId Id="1749" Count="2" />
+      <LineId Id="2000" Count="1" />
+      <LineId Id="2003" Count="1" />
+      <LineId Id="2002" Count="0" />
       <LineId Id="1663" Count="3" />
       <LineId Id="1668" Count="1" />
       <LineId Id="1671" Count="2" />
       <LineId Id="1675" Count="1" />
-      <LineId Id="1706" Count="0" />
-      <LineId Id="1677" Count="7" />
-      <LineId Id="1707" Count="0" />
       <LineId Id="1686" Count="2" />
+      <LineId Id="2069" Count="0" />
+      <LineId Id="2074" Count="2" />
+      <LineId Id="2080" Count="0" />
+      <LineId Id="2082" Count="0" />
+      <LineId Id="2097" Count="0" />
+      <LineId Id="2105" Count="5" />
+      <LineId Id="2104" Count="0" />
       <LineId Id="1761" Count="0" />
       <LineId Id="1690" Count="0" />
       <LineId Id="1762" Count="0" />
-      <LineId Id="1691" Count="0" />
-      <LineId Id="1747" Count="0" />
-      <LineId Id="1692" Count="1" />
+      <LineId Id="1691" Count="2" />
       <LineId Id="1758" Count="1" />
       <LineId Id="1763" Count="0" />
       <LineId Id="1768" Count="0" />
+      <LineId Id="1994" Count="1" />
+      <LineId Id="1998" Count="1" />
+      <LineId Id="1996" Count="1" />
       <LineId Id="1765" Count="0" />
       <LineId Id="1795" Count="0" />
-      <LineId Id="1767" Count="0" />
-      <LineId Id="1782" Count="0" />
+      <LineId Id="2007" Count="2" />
       <LineId Id="1784" Count="0" />
       <LineId Id="1766" Count="0" />
       <LineId Id="1764" Count="0" />
-      <LineId Id="1774" Count="0" />
-      <LineId Id="1772" Count="0" />
-      <LineId Id="1775" Count="1" />
+      <LineId Id="2028" Count="0" />
+      <LineId Id="2030" Count="3" />
+      <LineId Id="2029" Count="0" />
       <LineId Id="1754" Count="0" />
       <LineId Id="1753" Count="0" />
-      <LineId Id="1755" Count="0" />
+      <LineId Id="2025" Count="0" />
       <LineId Id="1786" Count="1" />
       <LineId Id="1793" Count="0" />
-      <LineId Id="1792" Count="0" />
-      <LineId Id="1790" Count="1" />
-      <LineId Id="1788" Count="0" />
       <LineId Id="1796" Count="0" />
       <LineId Id="1777" Count="0" />
       <LineId Id="1756" Count="0" />
@@ -515,6 +547,7 @@ END_IF]]></ST>
       <LineId Id="57" Count="0" />
       <LineId Id="52" Count="0" />
       <LineId Id="55" Count="0" />
+      <LineId Id="74" Count="0" />
       <LineId Id="1" Count="0" />
     </LineIds>
   </POU>

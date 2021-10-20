@@ -72,14 +72,13 @@ IF gbl.tuning_mode THEN
 	  reverseSignal_tune  := FALSE;
 	  gbl.tune_result 	  := gbl.slave_fPV_Value;
 	  
-	  (*
-	  IF gbl.tuningIndex <> 0 THEN
-		  gbl.heatupData[gbl.tuningCount + 1 - gbl.tuningIndex] := gbl.oldData;
-		  gbl.heatupData[gbl.tuningCount - gbl.tuningIndex] 	:= gbl.newData;
-	  END_IF
-	  *)
-	  
 	  gbl.heatupData[gbl.tuningCount + 1 - gbl.tuningIndex] 	:= gbl.newData;
+
+	  FOR i:=1 TO 4 BY 1 DO
+		  FOR j:=1 TO gbl.arrSize BY 1 DO
+		  	gbl.oldData[i, j] := 0;
+		  END_FOR
+	  END_FOR
 	  
 	  gbl.oldData	  := gbl.newData ;
 	  gbl.tuningIndex := gbl.tuningIndex + 1 ;
@@ -99,6 +98,11 @@ IF gbl.tuning_mode THEN
 	ELSE
 	  reverseSignal_tune := TRUE;
 	  IF gbl.bRestart THEN
+		  FOR i:=1 TO 4 BY 1 DO
+		  	FOR j:=1 TO gbl.arrSize BY 1 DO
+				gbl.oldData[i, j] := 0;
+		  	END_FOR
+		  END_FOR
 		  gbl.oldData	  := gbl.newData ;
 		  reverseSignal_tune  := FALSE;
 		  gbl.tuning_mode := FALSE;
@@ -169,15 +173,12 @@ END_IF
       <LineId Id="250" Count="0" />
       <LineId Id="252" Count="0" />
       <LineId Id="387" Count="0" />
-      <LineId Id="584" Count="0" />
-      <LineId Id="734" Count="0" />
-      <LineId Id="424" Count="0" />
-      <LineId Id="421" Count="0" />
-      <LineId Id="426" Count="0" />
-      <LineId Id="418" Count="0" />
-      <LineId Id="735" Count="0" />
       <LineId Id="732" Count="1" />
-      <LineId Id="464" Count="0" />
+      <LineId Id="766" Count="0" />
+      <LineId Id="765" Count="0" />
+      <LineId Id="762" Count="2" />
+      <LineId Id="760" Count="0" />
+      <LineId Id="767" Count="0" />
       <LineId Id="415" Count="0" />
       <LineId Id="683" Count="0" />
       <LineId Id="465" Count="0" />
@@ -191,6 +192,8 @@ END_IF
       <LineId Id="467" Count="0" />
       <LineId Id="253" Count="1" />
       <LineId Id="703" Count="0" />
+      <LineId Id="769" Count="3" />
+      <LineId Id="768" Count="0" />
       <LineId Id="708" Count="0" />
       <LineId Id="704" Count="3" />
       <LineId Id="759" Count="0" />

@@ -79,13 +79,7 @@ VAR CONSTANT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[(*
-IF gbl.slave_bsimulation THEN
-   SIMULATION();
-END_IF
-*)
-
-IF gbl.slave_bError THEN
+      <ST><![CDATA[IF gbl.slave_bError THEN
    gbl.slave_bEmergency_Stop := TRUE ;
 END_IF
 
@@ -144,22 +138,13 @@ CASE System_step OF
       ELSE
         System_step := 0;
 		IF gbl.isChanged THEN
-			IF gbl.isDropping THEN
-				s_fLast_Set_Value := gbl.slave_fPV_Value;
-			END_IF
+			s_fLast_Set_Value := gbl.slave_fPV_Value;
 			s_fSet_Value := gbl.slave_fTargetTemp;
 			gbl.isChanged := FALSE;
 		END_IF
 		IF gbl.bRestart THEN
 			gbl.slave_bstart := TRUE;
 		END_IF
-		(*
-		IF gbl.isDropping THEN
-			s_fLast_Set_Value := gbl.slave_fPV_Value;
-			s_fSet_Value := gbl.slave_fTargetTemp;
-			gbl.isDropping := FALSE;
-		END_IF
-		*)
       END_IF
       
 
@@ -367,7 +352,7 @@ END_FOR
       </Implementation>
     </Action>
     <LineIds Name="slave">
-      <LineId Id="1153" Count="40" />
+      <LineId Id="1159" Count="34" />
       <LineId Id="1414" Count="0" />
       <LineId Id="1394" Count="0" />
       <LineId Id="1195" Count="0" />
@@ -388,20 +373,12 @@ END_FOR
       <LineId Id="1385" Count="0" />
       <LineId Id="1202" Count="3" />
       <LineId Id="1420" Count="0" />
-      <LineId Id="1436" Count="1" />
-      <LineId Id="1435" Count="0" />
+      <LineId Id="1605" Count="0" />
       <LineId Id="1421" Count="0" />
       <LineId Id="1595" Count="0" />
       <LineId Id="1422" Count="0" />
       <LineId Id="1598" Count="1" />
       <LineId Id="1597" Count="0" />
-      <LineId Id="1433" Count="0" />
-      <LineId Id="1424" Count="0" />
-      <LineId Id="1428" Count="0" />
-      <LineId Id="1425" Count="0" />
-      <LineId Id="1429" Count="0" />
-      <LineId Id="1426" Count="0" />
-      <LineId Id="1434" Count="0" />
       <LineId Id="1206" Count="102" />
       <LineId Id="225" Count="0" />
     </LineIds>
