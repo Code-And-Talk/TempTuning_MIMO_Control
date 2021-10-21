@@ -99,6 +99,15 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[Substrate_AVG();
 
+IF gbl.bTimeOver THEN
+	m_Tune_On := FALSE;
+	bStart := FALSE;
+	m_Heatup_On := FALSE;
+	bSecondStart := FALSE;
+	bThirdStart := FALSE;
+	gbl.slave_bstart := TRUE;
+END_IF
+
 m_integral_constant  := gbl.master_integral_constant;
 m_pi_gain    		 := gbl.master_pi_gain;
 m_fTargetTemp		 := gbl.master_TargetTemp;
@@ -159,6 +168,9 @@ IF gbl.slave_bstart THEN
 	m_Tuning_Set_Temp_Avg := m_Tuning_Set_Temp_Sum / 4;
 	m_Zone_Temp_Min := m_Tuning_Set_Temp_Avg - (m_Tuning_Set_Temp_Avg * m_min_per / 100);
 	m_Zone_Temp_Max := m_Tuning_Set_Temp_Avg + (m_Tuning_Set_Temp_Avg * m_max_per / 100);
+	FOR i:=1 TO 4 BY 1 DO
+		mErr_integral_Val[i] := 0;
+	END_FOR
 	m_tune_On := TRUE;
 	bStart := TRUE;
 END_IF
@@ -233,9 +245,10 @@ IF bThirdStart THEN
 	IF glass_dev <= 2.5 THEN
 		m_Tune_On := FALSE;
 		bThirdStart := FALSE;
-		IF gbl.tuningIndex=gbl.tuningCount THEN
+		IF gbl.tuningIndex = (gbl.tuningCount-1) THEN
 			gbl.tuningIndex := 0;
 			gbl.tuning_mode := FALSE;
+			gbl.heatupData[gbl.tuningCount + 1 - gbl.tuningIndex - 1] 	:= gbl.newData;
 			RETURN;
 		END_IF
 		gbl.isDropping := TRUE;
@@ -419,10 +432,10 @@ END_FOR
 		
 		IF master_Zone_AVG[i] < m_Zone_Temp_Min THEN
 			master_Zone_AVG[i] := m_Zone_Temp_Min;
-			mErr_integral_Val[i] :=  mErr_integral_Val[i] - mErr_Value[i]* m_Sampling_Time;
+			mErr_integral_Val[i] :=  0;
 		ELSIF master_Zone_AVG[i] > m_Zone_Temp_Max THEN
 			master_Zone_AVG[i] := m_Zone_Temp_Max; 
-			mErr_integral_Val[i] :=  mErr_integral_Val[i] - mErr_Value[i]* m_Sampling_Time;
+			mErr_integral_Val[i] :=  0;
 		END_IF
 	END_FOR	
 	gbl.slave_fTargetTemp := master_Zone_AVG;
@@ -431,7 +444,11 @@ END_IF]]></ST>
       </Implementation>
     </Action>
     <LineIds Name="master">
-      <LineId Id="1588" Count="17" />
+      <LineId Id="1588" Count="0" />
+      <LineId Id="2223" Count="2" />
+      <LineId Id="2227" Count="4" />
+      <LineId Id="2226" Count="0" />
+      <LineId Id="1589" Count="16" />
       <LineId Id="1712" Count="0" />
       <LineId Id="1723" Count="1" />
       <LineId Id="1606" Count="19" />
@@ -446,6 +463,8 @@ END_IF]]></ST>
       <LineId Id="2089" Count="0" />
       <LineId Id="2083" Count="0" />
       <LineId Id="2087" Count="0" />
+      <LineId Id="2122" Count="0" />
+      <LineId Id="2124" Count="1" />
       <LineId Id="1628" Count="0" />
       <LineId Id="1634" Count="2" />
       <LineId Id="2044" Count="0" />
@@ -485,6 +504,7 @@ END_IF]]></ST>
       <LineId Id="1768" Count="0" />
       <LineId Id="1994" Count="1" />
       <LineId Id="1998" Count="1" />
+      <LineId Id="2232" Count="0" />
       <LineId Id="1996" Count="1" />
       <LineId Id="1765" Count="0" />
       <LineId Id="1795" Count="0" />
@@ -547,7 +567,7 @@ END_IF]]></ST>
       <LineId Id="57" Count="0" />
       <LineId Id="52" Count="0" />
       <LineId Id="55" Count="0" />
-      <LineId Id="74" Count="0" />
+      <LineId Id="75" Count="0" />
       <LineId Id="1" Count="0" />
     </LineIds>
   </POU>

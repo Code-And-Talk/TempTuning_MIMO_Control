@@ -90,10 +90,12 @@ IF gbl.tuning_mode THEN
 	  END_FOR
 	  
 	  gbl.index := 1;
-	  IF gbl.tuningIndex = 4 THEN
+	  IF gbl.tuningIndex >= (gbl.tuningCount-1) THEN
 		  gbl.tuningIndex := 0;
 		  gbl.tuning_mode := FALSE;
 	  END_IF
+	  
+	  gbl.bTimeOver := TRUE;
 	  
 	ELSE
 	  reverseSignal_tune := TRUE;
@@ -190,6 +192,7 @@ END_IF
       <LineId Id="685" Count="2" />
       <LineId Id="684" Count="0" />
       <LineId Id="467" Count="0" />
+      <LineId Id="798" Count="1" />
       <LineId Id="253" Count="1" />
       <LineId Id="703" Count="0" />
       <LineId Id="769" Count="3" />

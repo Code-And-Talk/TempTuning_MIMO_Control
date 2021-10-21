@@ -64,6 +64,7 @@ VAR_GLOBAL
 	isChanged					: BOOL;
 	isDropping					: BOOL;
 	bRestart					: BOOL;
+	bTimeOver					: BOOL;
 END_VAR
 ]]></Declaration>
   </GVL>
