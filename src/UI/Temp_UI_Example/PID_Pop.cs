@@ -31,7 +31,8 @@ namespace Temp_UI_Example
         private void Run()
         {
             // TwinCAT 연동
-            ads.Connect(851);
+            //ads.Connect(851);
+            ads.Connect("5.94.115.233.1.1", 851);
         }
 
         private void button1_Click(object sender, EventArgs e)

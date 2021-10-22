@@ -393,7 +393,8 @@ namespace Temp_UI_Example
         //TwinCat3 연동
         private void Run()
         {
-            ads.Connect(851); //연결 포트
+            //ads.Connect(851); //연결 포트
+            ads.Connect("5.94.115.233.1.1", 851);
 
             if (ads.IsConnected == true)
             {
@@ -475,10 +476,10 @@ namespace Temp_UI_Example
                 pot3[2] = ads.ReadSymbolInfo("gbl.tune_Remaining_time");
                 PT102[1] = (Convert.ToDouble(ads.ReadSymbol(pot3[1])) / 60000);
                 PT102[2] = ((Convert.ToDouble(ads.ReadSymbol(pot3[2])) * 0.001) % 60);
-                str5 = String.Format("{0:0.000}", PT102[1]);
-                str5 = str5.Substring(0, 1);
+                str5 = String.Format("{0:0}", PT102[1]);
+                //str5 = str5.Substring(0, 1);
                 str6 = String.Format("{0:00}", PT102[2]);
-                str6 = str6.Substring(0, 2);
+                //str6 = str6.Substring(0, 2);
                 String str7 = str5 + ":" + str6;
                 lblRemain_Time.Text = "Remain Time = " + str7;
 
