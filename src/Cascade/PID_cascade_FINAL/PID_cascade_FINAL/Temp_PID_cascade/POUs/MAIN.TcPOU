@@ -111,6 +111,7 @@ IF gbl.tuning_mode THEN
 		  gbl.bRestart := FALSE;
 		  gbl.tuning_mode := TRUE;
 		  gbl.heatupData[gbl.tuningCount + 1 - gbl.tuningIndex] 	:= gbl.newData;
+		  gbl.tune_result := gbl.slave_fPV_Value;
 	  END_IF
     END_IF
 	
@@ -200,6 +201,7 @@ END_IF
       <LineId Id="708" Count="0" />
       <LineId Id="704" Count="3" />
       <LineId Id="759" Count="0" />
+      <LineId Id="800" Count="0" />
       <LineId Id="702" Count="0" />
       <LineId Id="255" Count="0" />
       <LineId Id="468" Count="0" />
