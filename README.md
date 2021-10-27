@@ -5,6 +5,8 @@
  
  (ILC : Iterative Learning Control, MIMO : Multi Input Multi Output)
  
+ 개발팀 : [CAT (Code & Talk)](https://github.com/Code-And-Talk) : [박정란](https://github.com/uiop1370)(팀장), [이승수](https://github.com/seungsu-lee-dev), [이종원](https://github.com/LJ-W), [이홍기](https://github.com/Hong-code-maker)
+ 
  사용 언어 : Structured Text (ST), C#
  
  사용 소프트웨어 : TwinCAT3 (The Windows Control and Automation Technology)
@@ -16,8 +18,6 @@
  사용 통신 기술 : EtherCAT (Ethernet for Control Automation Technology)
  
  개발기간 : 2021년 7월 17일 ~ 2021년 10월 23일
- 
- 개발팀 : CAT (Code & Talk)
 
  주요 기능
 
@@ -32,3 +32,5 @@
  - UI에서 실시간 온도를 차트로 확인, 에러 발생 시 UI에서 적색 등으로 확인, 이전 에러 Log 확인 가능
 
  - 비상 시 버튼을 눌러 제어를 중지하여 온도를 서서히 내릴 수 있음
+
+GitHub URL : https://github.com/Code-And-Talk/TempTuning_MIMO_Control
