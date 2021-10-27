@@ -1,0 +1,23 @@
+zone set말고 glass 편차 기준으로 바꾸기
+
+150도에서 튜닝 - 현재 slave set value 150 lastsetvalue 90
+150 150
+
+heatupstarttemp heatupendtemp는 1st run만?
+
+dropping 끝나고 slave setvalue를 heatupstarttemp로 맞추기
+
+튜닝 끝나고 lastsetvalue 튜닝된 온도
+
+2nd heatup 끝난 후 tune_on에서
+slave setvalue 0 lastsetvalue 91 93 100 97됨
+
+-> 현재 온도에서 150 혹은 heatupendtemp로 튜닝해야함
+
+2nd run 90 tuning에서 편차 2 밑 너무 오래 걸림 -> 2.5?
+
+----------
+
+튜닝할 때 시작, 타겟 온도를 90 90 혹은 150 150으로 바꿀지
+타겟이 올라가던 온도, 내려가던 온도이던 것을 그대로 놔둘지
+-> 고민해볼 것

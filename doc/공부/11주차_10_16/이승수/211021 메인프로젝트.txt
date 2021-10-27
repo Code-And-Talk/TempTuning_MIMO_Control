@@ -1,0 +1,13 @@
+시간 다 돼면 timer_tune TRUE면
+master bool 다 FALSE
+gbl.slavebstart TRUE
+
++avg 범위?
+
+-------------------------
+
+PLC CASCADE 끝
+
+UI
+remain time 분 두 자리 나오는 코드 commit
+하드웨어 연결 시 포트 구현 코드 commit

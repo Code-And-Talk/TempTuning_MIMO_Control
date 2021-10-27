@@ -1,0 +1,12 @@
+dropping때 heatupstarttempmax 대신에 avg로 바꾸기
+2회차부터 tuningsettemp를 heatupstarttemp, heatupendtemp로 하기
+-> 1회차만 tuningsettemp 계산
+
+slavebstart true일 때 gbl.tuningmode true일 때 
+=ischanged true일 때와 똑같이 setvalue lastsetvalue 대입
+- X
+
+//tuning시마다 ischanged := true
+//setvalue를 
+
+ heatupstarttemp avg*0.9 <  < 1.1

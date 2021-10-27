@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="MAIN" Id="{4cfba27f-4e25-4683-8582-70d8eb7287b3}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	BeTest:BOOL;
+	NTest1:INT;
+	NTest2:INT;
+	NTest3:INT;
+	NTest4:INT;
+	NTest5:INT;
+	NTest6:INT;
+	DTest:REAL;
+	cnt: INT;
+	NTest: INT;
+	aaaa: ARRAY [1..5] OF INT;
+	tttt: ARRAY [1..5] OF INT;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF BeTest THEN
+	NTest := NTest1 := NTest2 := 10;
+	DTest := INT_TO_REAL( NTest);
+ELSE 
+	NTest := 10;
+END_IF
+FOR	cnt:=10 TO 1 BY 2 DO
+	NTest:=NTest+1;
+	
+END_FOR
+aaaa:=tttt;]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="35" Count="0" />
+      <LineId Id="39" Count="6" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="63" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

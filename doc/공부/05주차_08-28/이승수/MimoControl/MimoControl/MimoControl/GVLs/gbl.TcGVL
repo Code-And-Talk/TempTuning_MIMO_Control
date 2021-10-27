@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <GVL Name="gbl" Id="{20df8115-e928-4073-8aca-33e5f56da5c4}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	bRampingEnable : BOOL;	
+
+	fRampingValue:LREAL; 
+	fTargetTemp : LREAL;
+	
+	fSetManual					:			LREAL;	
+	eCTRL_MODE	: E_CTRL_MODE;
+	bStart:BOOL;
+	P_Value:ARRAY[1..4] OF LREAL:= [3, 3, 3, 3];
+	I_Value:ARRAY[1..4] OF TIME:= [T#5S, T#5S, T#5S, T#5S];
+	D_Value:ARRAY[1..4] OF TIME:= [T#50S, T#50S, T#50S, T#50S];
+	fPowerLimit:REAL;
+	
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

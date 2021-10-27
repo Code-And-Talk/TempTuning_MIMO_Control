@@ -1,0 +1,38 @@
+tune_mode true
+timer 작동
+1분이 되면 tune_mode false, master x
+
+다시 tune_mode true
+timer 작동
+
+
+----
+onTimer : rising edge, offTimer : falling edge
+
+onTimer : IN이 FALSE에서 TRUE가 되자마자 시간이 흐름, PT만큼 시간이 흐르면 Q가 TRUE
+IN이 FALSE면 Q는 FALSE
+
+offTimer : IN이 TRUE에서 FALSE가 되자마자 시간이 흐름, PT만큼 시간이 흐르면 Q가 FALSE
+IN이 TRUE면 Q가 TRUE
+
+onTimer IN을 리셋시키기 위해서는 falling edge가 필요
+
+프로그램 순서
+
+tune_mode가 TRUE
+
+onTimer IN : FALSE->TRUE
+시간이 흐름
+if onTimer.Q ==TRUE면 IN을 TOF로 리셋, tune_mode:=FALSE
+
+tune_time이 지나고
+다시 tune_mode를 TRUE로 해주면 onTimer가 다시 작동해야함
+onTimer IN이 FALSE에서 TRUE가 되어야함
+
+offTimer.Q가 FALSE가 되려면 IN TRUE->FALSE
+reverseSignal_tune TRUE->FALSE
+
+1. 시간이 다 되면 onTimer를 리셋
+
+
+2. tune_mode가 다시 TRUE가 되면 onTimer 작동

@@ -1,7 +1,0 @@
-Zmin, Zmax, range 배열로 해야할지
-glass 온도 측정하는지 or 계산해야하는지
-비상정지모드 - 멈추지 않고 계속 돌아가게 - 멈추면 위험하니까 - 비상정지모드일 때 case step에서 못 넘어가게 하면 안되나?
--> IDLE모드로 바뀌었는데 ACTIVE로 다시 바뀜 -> ?
-cycle time, task time- 계산? 제어가 된다면 -> rampingValue 사용 이유
-master에서 glass 온도 제어를 위해서 tempController, ramping 해야하는지
-출력해야할게 glass인데 일단 구한 게 Zone의 set값이고 Zone 4개의 Set을 조절하여 Glass 4개의 평균값이 되도록 PI 제어해야한다고 적혀있음.

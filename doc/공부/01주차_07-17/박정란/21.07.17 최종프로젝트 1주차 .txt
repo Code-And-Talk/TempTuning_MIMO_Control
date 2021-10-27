@@ -1,0 +1,20 @@
+◇ 프로젝트명 : ILC(자가학습기능)를 이용한 Temp Tuning 및 MIMO System Modeling 제어
+
+▷ MIMO : Multi Input Multi Outputt 시스템
+              무선통신의 용량을 높이기 위한 스마트 안테나 기술
+▷ PID : Proportional Integral Differential 제어
+           비례, 적분, 미분 3가지룰 조합으로 하는제어
+▷ ILC : Interactive Learning Control  기법, 
+           머신러닝을 이용한 자가학습 기법
+
+▷ 사용언어 : ST (Structured Test) 언어 
+▷ 사용 프로그램 : Twin CAT / Ether CAT
+▷ 사용하드웨어 : Beckhoff PLC (window  기반)
+      - PLC : Programmable Logic Controller, 프로그램이 가능한 논리제어 장치 
+                산업현장에서 자동제어 및 감시를 하기위한 제어장치
+
+ - 기존 PID알고리즘 + new PI 제어
+
+ - 목적 :  over shoot 최소화  ****
+
+

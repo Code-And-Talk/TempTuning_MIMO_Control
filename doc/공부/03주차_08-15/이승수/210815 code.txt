@@ -1,0 +1,177 @@
+DUT_TEST01.TEST01:=2;
+DUT_TEST01.TEST02:=2.2;
+
+FOR i:=1 TO 10 BY 1 DO nArray[i]:=10;
+END_FOR
+
+memset(ADR(nArray), 0, SIZEOF(nArray));
+
+IF bTest01 THEN
+	nResult := nValue01+nValue02;
+	bTest01 := FALSE;
+ELSIF bTest01 = FALSE THEN
+	nResult := 0;
+	nValue01 := 0;
+	nValue02 := 0;
+ELSE 
+	;
+END_IF
+
+FOR i:=1 TO 10 DO 
+i:=i+2;
+	
+END_FOR
+
+CASE STEP OF
+	0:
+	(*초기 DAta Init *)
+		IF nResult >= 20 OR nResult < 25 THEN
+			STEP := 10;
+		END_IF
+	10:
+		IF nResult = 22 THEN
+			STEP := 20;
+		ELSIF nResult = 23 THEN
+			STEP := 30;
+		ELSE
+			STEP := 0;
+		END_IF
+	20:
+		STEP := 30;
+	30:
+		STEP := 100;
+END_CASE
+
+---
+
+Function Block 만들기
+
+Program, Function Block 폴더 분리
+
+FB_PLUS 생성
+
+---
+
+FUNCTION_BLOCK FB_PLUS
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+
+---
+
+fb_Plus(inValue01:=Value01, inValue02:=Value02, outSum=>Result);
+
+---
+
+하나의 펑션블록으로 사칙연산하게 만들기
+
+---
+
+fb_Op(inValue01:=Value01, inValue02:=Value02, operandNum:=num, outSum=>Result);
+
+---
+
+Val01_Local:=inValue01;
+Val02_Local:=inValue02;
+CASE operandNum OF
+	1:
+		Sum_Local:=Val01_Local+Val02_Local;
+	2:
+		Sum_Local:=Val01_Local-Val02_Local;
+	3:
+		Sum_Local:=Val01_Local*Val02_Local;
+	4:
+		IF Val02_Local=0 THEN
+			;
+			ELSE
+				Sum_Local:=Val01_Local/Val02_Local;
+		END_IF
+END_CASE
+
+outSum:=Sum_Local;
+
+---
+
+Val01_Local:=inValue01;
+Val02_Local:=inValue02;
+CASE operandNum OF
+	1:
+		Sum_Local:=Val01_Local+Val02_Local;
+	2:
+		Sum_Local:=Val01_Local-Val02_Local;
+	3:
+		Sum_Local:=Val01_Local*Val02_Local;
+	4:
+		IF Val02_Local=0 THEN
+			nCnt := nCnt + 1;
+			Sum_Local := Sum_Local_Old;
+			
+			IF nCnt > 10 THEN
+				nCnt := 0;
+				bError_Local := TRUE;
+				(* ALARM *)
+			END_IF
+		ELSE
+				Sum_Local:=Val01_Local/Val02_Local;
+				bError_Local := FALSE;
+		END_IF
+END_CASE
+
+bError := bError_Local;
+outSum:=Sum_Local_Old:= Sum_Local;
+
+---
+
+펑션블록 10개 선언
+
+	fb_Op1,
+	fb_Op2,
+	fb_Op3,
+	fb_Op4,
+	fb_Op5,
+	fb_Op6,
+	fb_Op7,
+	fb_Op8,
+	fb_Op9,
+	fb_Op10:FB_OP;
+
+fbArray:Array[1..10] OF FB_OP;
+
+배열로 하면 for문으로 접근 가능
+
+---
+
+FOR i:=1 TO 10 BY 1 DO
+	  fbArray[i](inValue01		:=	Value01,
+	  			 inValue02		:=	Value02,
+				 operandNum	:=	num,
+		   	     outSum		=>	Result,
+	  			 outMsg		=> 	msg
+	  );
+	
+END_FOR
+
+---
+
+이차원 배열
+
+---
+
+arr:ARRAY[1..10,1..10] OF UINT;
+j:UINT;
+cnt:UINT:=1;
+
+---
+
+cnt:=1;
+IF cnt <= 100 THEN
+	FOR i:=1 TO 10 BY 1 DO
+		FOR j:=1 TO 10 BY 1 DO
+			arr[i,j]:=cnt;
+			cnt:=cnt+1;
+		END_FOR
+	END_FOR
+END_IF

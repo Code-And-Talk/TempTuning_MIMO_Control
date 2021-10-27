@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="FB_MINUS" Id="{815f6a34-fb5e-4537-b9a2-0473ecdd39dc}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_MINUS
+VAR_INPUT
+	inValue01:REAL;
+	inValue02:REAL;
+END_VAR
+VAR_OUTPUT
+	outSum:REAL;
+END_VAR
+VAR
+	Val01_Local:REAL;
+	Val02_Local:REAL;
+	Sum_Local:REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Val01_Local:=inValue01;
+Val02_Local:=inValue02;
+
+Sum_Local:=Val01_Local-Val02_Local;
+
+outSum:=Sum_Local;]]></ST>
+    </Implementation>
+    <LineIds Name="FB_MINUS">
+      <LineId Id="21" Count="4" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
