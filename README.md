@@ -34,3 +34,33 @@
  - 비상 시 버튼을 눌러 제어를 중지하여 온도를 서서히 내릴 수 있음
 
 GitHub URL : https://github.com/Code-And-Talk/TempTuning_MIMO_Control
+
+![슬라이드1](https://user-images.githubusercontent.com/68325847/140008969-96e24c14-f16c-4dbf-a5f6-2ed9bc4dd50f.PNG)
+
+![슬라이드2](https://user-images.githubusercontent.com/68325847/140008975-c7f5cee6-c9af-4d3b-8966-39eab8773ce8.PNG)
+
+![슬라이드3](https://user-images.githubusercontent.com/68325847/140008978-2183d48a-2b11-4f00-a1f3-711e0440b380.PNG)
+
+![슬라이드4](https://user-images.githubusercontent.com/68325847/140008983-2c49c132-6b7a-41cd-83e6-7f0306d4bbe8.gif)
+
+![슬라이드5](https://user-images.githubusercontent.com/68325847/140008984-e1c2b8f3-0bff-45de-ad28-b44ce429a152.gif)
+
+![슬라이드6](https://user-images.githubusercontent.com/68325847/140008988-1e633f82-69b0-4e9b-81a0-194616df4f6d.PNG)
+
+![슬라이드7](https://user-images.githubusercontent.com/68325847/140008994-8ec28845-a1cb-4287-b974-3f3ffa74b034.gif)
+
+![슬라이드8](https://user-images.githubusercontent.com/68325847/140009020-8ce9901d-ca03-455c-9606-fe04f6f2de76.gif)
+
+![슬라이드9](https://user-images.githubusercontent.com/68325847/140009026-021ba9f3-c450-4d51-a85c-8ca611a19a97.gif)
+
+![슬라이드10](https://user-images.githubusercontent.com/68325847/140009027-ae86e9da-3c86-433e-8b15-270f44f1b782.gif)
+
+![슬라이드11](https://user-images.githubusercontent.com/68325847/140009030-e1058733-46ee-443d-9d1a-a3e621986ea4.gif)
+
+[![슬라이드12](https://user-images.githubusercontent.com/68325847/140009034-a2c26514-34e5-4f8d-8676-7cc036674b2c.PNG)](https://youtu.be/vrP4LwtEAl0)
+
+https://youtu.be/vrP4LwtEAl0
+
+![슬라이드13](https://user-images.githubusercontent.com/68325847/140009036-73282141-b57e-4892-b11b-391336ee604a.PNG)
+
+![슬라이드14](https://user-images.githubusercontent.com/68325847/140009040-98a4afb4-041e-41fc-94c3-7f6f0135b41d.PNG)
