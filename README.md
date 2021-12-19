@@ -9,11 +9,11 @@
  
  사용 언어 : Structured Text (ST), C#
  
- 사용 소프트웨어 : TwinCAT3 (The Windows Control and Automation Technology)
+ 사용 소프트웨어 : TwinCAT3 (The Windows Control and Automation Technology) ([TC1200](https://www.beckhoff.com/ko-kr/products/automation/twincat/tc1xxx-twincat-3-base/tc1200.html))
  
  사용 IDE : Visual Studio
  
- 사용 하드웨어 : Beckhoff PLC
+ 사용 하드웨어 : Beckhoff PLC ([CX8110](https://www.beckhoff.com/ko-kr/products/ipc/embedded-pcs/cx8100-arm-cortex-a9/cx8110.html))
  
  사용 통신 기술 : EtherCAT (Ethernet for Control Automation Technology)
  
